@@ -96,20 +96,13 @@ const Dashboard = () => {
     try {
       const stocks = await stockService.getStocksByShop(shopId);
 
-      console.log("Stock Debug - Products:", products); // Debug
-      console.log("Stock Debug - Raw Stocks:", stocks); // Debug
-
       // Enrich stock with product details
       const enrichedStocks = stocks.map((stock) => {
         const product = products.find((p) => p.id === stock.productId);
-
-        // Debug specific mapping failures
-        if (!product) console.warn("Missing product for stock:", stock);
-
         return {
           ...stock,
           productName: product?.name || "Unknown",
-          price: product?.price || 0,
+          price: product?.sellingPrice || 0,
           sku: product?.sku || "",
         };
       });
