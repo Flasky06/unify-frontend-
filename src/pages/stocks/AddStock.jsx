@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { PageHeader } from "../components/layout/PageHeader";
-import Button from "../components/ui/Button";
-import Modal from "../components/ui/Modal";
-import Table from "../components/ui/Table";
-import Input from "../components/ui/Input";
-import { stockService } from "../services/stockService";
-import { productService } from "../services/productService";
-import { shopService } from "../services/shopService";
+import { PageHeader } from "../../components/layout/PageHeader";
+import Button from "../../components/ui/Button";
+import Modal from "../../components/ui/Modal";
+import Table from "../../components/ui/Table";
+import Input from "../../components/ui/Input";
+import { stockService } from "../../services/stockService";
+import { productService } from "../../services/productService";
+import { shopService } from "../../services/shopService";
 
 const AddStock = () => {
   const [products, setProducts] = useState([]);
