@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { PageHeader } from "../../components/layout/PageHeader";
 import Button from "../../components/ui/Button";
 import Modal from "../../components/ui/Modal";
 import Table from "../../components/ui/Table";
@@ -154,11 +153,6 @@ const AddStock = () => {
 
   return (
     <div className="p-6">
-      <PageHeader
-        title="Add Stock"
-        subtitle="Select a product and add it to a shop"
-      />
-
       {error && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
           <p className="text-sm text-red-600">{error}</p>
