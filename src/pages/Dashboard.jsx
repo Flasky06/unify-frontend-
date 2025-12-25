@@ -173,6 +173,7 @@ const Dashboard = () => {
           productId: item.productId,
           quantity: item.quantity,
         })),
+        paymentMethod: "CASH",
       };
 
       await saleService.createSale(saleData);
