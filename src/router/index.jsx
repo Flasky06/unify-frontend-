@@ -17,6 +17,7 @@ import { ShopList } from "../pages/shops/ShopList";
 import StockList from "../pages/stocks/StockList";
 import AddStock from "../pages/stocks/AddStock";
 import SalesHistory from "../pages/sales/SalesHistory";
+import SalesByItem from "../pages/sales/SalesByItem";
 
 export const router = createBrowserRouter([
   {
@@ -87,6 +88,10 @@ export const router = createBrowserRouter([
       {
         path: "sales",
         element: <SalesHistory />,
+      },
+      {
+        path: "sales/items",
+        element: <SalesByItem />,
       },
     ],
   },

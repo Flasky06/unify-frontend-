@@ -164,7 +164,10 @@ export const Sidebar = () => {
           />
         </svg>
       ),
-      children: [{ name: "Sales History", path: "/sales" }],
+      children: [
+        { name: "Sales History", path: "/sales" },
+        { name: "Sales By Item", path: "/sales/items" },
+      ],
     },
     {
       name: "User Mgmt",
