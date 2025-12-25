@@ -83,6 +83,14 @@ const StockList = () => {
     }
   };
 
+    setFormData({
+      shopId: "",
+      productId: "",
+      quantity: 0,
+      buyingPrice: "",
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -91,12 +99,17 @@ const StockList = () => {
       if (editingStock) {
         await stockService.updateStock(editingStock.id, {
           quantity: parseInt(formData.quantity),
+          // typically we don't update buying price on simple quantity edit, 
+          // but if user wants to, we could add it. The requirement said "added or incremented".
+          // The backend updateStockDTO does NOT have buyingPrice yet, only quantity.
+          // So for Edit, we stick to quantity.
         });
       } else {
         await stockService.createStock({
           shopId: parseInt(formData.shopId),
           productId: parseInt(formData.productId),
           quantity: parseInt(formData.quantity),
+          buyingPrice: formData.buyingPrice ? parseFloat(formData.buyingPrice) : null,
         });
       }
       setIsModalOpen(false);
@@ -110,38 +123,6 @@ const StockList = () => {
       setLoading(false);
     }
   };
-
-  const handleEdit = (stock) => {
-    setEditingStock(stock);
-    setFormData({
-      shopId: stock.shopId,
-      productId: stock.productId,
-      quantity: stock.quantity,
-    });
-    setIsModalOpen(true);
-  };
-
-  const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this stock entry?")) return;
-
-    setLoading(true);
-    try {
-      await stockService.deleteStock(id);
-      fetchStocks();
-    } catch (error) {
-      console.error("Failed to delete stock:", error);
-      alert(error.message || "Failed to delete stock");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const resetForm = () => {
-    setFormData({
-      shopId: "",
-      productId: "",
-      quantity: 0,
-    });
   };
 
   const getProductName = (productId) => {
