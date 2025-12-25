@@ -196,182 +196,126 @@ const Dashboard = () => {
   if (!user) return null;
 
   return (
-    <div className="flex h-[calc(100vh-100px)] gap-6">
-      {/* Left: Inventory Section */}
-      <div className="flex-1 flex flex-col bg-white rounded-lg shadow overflow-hidden">
-        {/* Header */}
-        <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-          <div className="flex items-center gap-4">
-            <h2 className="text-lg font-bold text-gray-800">Shop Inventory</h2>
-            <select
-              value={selectedShopId}
-              onChange={(e) => setSelectedShopId(e.target.value)}
-              className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500"
-            >
-              {shops.map((shop) => (
-                <option key={shop.id} value={shop.id}>
-                  {shop.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="w-64">
+    <div className="flex flex-col h-[calc(100vh-100px)]">
+      {/* Header & Controls */}
+      <div className="bg-white p-4 rounded-lg shadow mb-6 flex justify-between items-center">
+        <div className="flex items-center gap-4">
+          <h2 className="text-xl font-bold text-gray-800">Shop Inventory</h2>
+          <select
+            value={selectedShopId}
+            onChange={(e) => setSelectedShopId(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 min-w-[200px]"
+          >
+            {shops.map((shop) => (
+              <option key={shop.id} value={shop.id}>
+                {shop.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex items-center gap-4">
+           <div className="w-72">
             <Input
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-        </div>
-
-        {/* Product Grid/Table */}
-        <div className="flex-1 overflow-auto p-4">
-          {loading ? (
-            <div className="text-center py-10 text-gray-500">
-              Loading inventory...
-            </div>
-          ) : inventory.length === 0 ? (
-            <div className="text-center py-10 text-gray-500">
-              No stock available in this shop. Add stock to start selling.
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredInventory.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => addToCart(item)}
-                  className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:shadow-md hover:border-blue-300 transition-all bg-white group"
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 line-clamp-1">
-                      {item.productName}
-                    </h3>
-                    <span className="text-xs font-mono bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                      Qty: {item.quantity}
-                    </span>
-                  </div>
-                  <div className="text-sm text-gray-500 mb-2 truncate">
-                    SKU: {item.sku || "N/A"}
-                  </div>
-                  <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold text-green-600">
-                      KSH {item.price.toLocaleString()}
-                    </span>
-                    <button className="text-blue-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                      Add +
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Right: Cart Section */}
-      <div className="w-96 flex flex-col bg-white rounded-lg shadow overflow-hidden border-l border-gray-200">
-        <div className="p-4 border-b border-gray-200 bg-gray-50">
-          <h2 className="text-lg font-bold text-gray-800">Current Sale</h2>
-          <p className="text-sm text-gray-500">
-            {cart.reduce((a, b) => a + b.quantity, 0)} items
-          </p>
-        </div>
-
-        <div className="flex-1 overflow-auto p-4 space-y-4">
-          {cart.length === 0 ? (
-            <div className="text-center py-10 text-gray-400 flex flex-col items-center">
-              <svg
-                className="w-12 h-12 mb-2 opacity-50"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1}
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-              <p>Cart is empty</p>
-              <p className="text-xs">Select items from the left to add</p>
-            </div>
-          ) : (
-            cart.map((item) => (
-              <div
-                key={item.productId}
-                className="flex justify-between items-center border-b border-gray-100 pb-3"
-              >
-                <div className="flex-1 min-w-0 pr-3">
-                  <h4 className="font-medium text-gray-900 truncate">
-                    {item.productName}
-                  </h4>
-                  <div className="text-xs text-gray-500">
-                    KSH {item.price.toLocaleString()} x {item.quantity}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() =>
-                      updateCartQuantity(item.productId, item.quantity - 1)
-                    }
-                    className="w-6 h-6 flex items-center justify-center rounded bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  >
-                    -
-                  </button>
-                  <span className="w-8 text-center text-sm font-medium">
-                    {item.quantity}
-                  </span>
-                  <button
-                    onClick={() =>
-                      updateCartQuantity(item.productId, item.quantity + 1)
-                    }
-                    className="w-6 h-6 flex items-center justify-center rounded bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  >
-                    +
-                  </button>
-                  <button
-                    onClick={() => removeFromCart(item.productId)}
-                    className="ml-2 text-red-400 hover:text-red-600"
-                  >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        <div className="p-4 border-t border-gray-200 bg-gray-50">
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-gray-600">Total Amount</span>
-            <span className="text-2xl font-bold text-gray-900">
-              KSH {calculateTotal().toLocaleString()}
-            </span>
-          </div>
-          <Button
-            onClick={handleCheckout}
-            disabled={cart.length === 0 || processing}
-            className="w-full py-3 text-lg"
+          <button 
+            onClick={() => setCartModalOpen(true)}
+            className="relative p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2 shadow-sm"
           >
-            {processing ? "Processing..." : "Complete Sale"}
-          </Button>
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <span className="font-semibold">{cart.reduce((a, b) => a + b.quantity, 0)} Items</span>
+            {cart.length > 0 && (
+               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full border-2 border-white">
+                 {cart.reduce((a, b) => a + b.quantity, 0)}
+               </span>
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Full Width Table */}
+      <div className="bg-white rounded-lg shadow flex-1 overflow-hidden flex flex-col">
+          <div className="flex-1 overflow-auto">
+             <Table 
+                columns={columns} 
+                data={filteredInventory} 
+                loading={loading}
+                emptyMessage="No stock available. Add items to stock to begin."
+              />
+          </div>
+      </div>
+
+      {/* Cart Modal */}
+      <Modal
+        isOpen={isCartModalOpen}
+        onClose={() => setCartModalOpen(false)}
+        title="Current Sale Cart"
+      >
+        <div className="flex flex-col h-[500px]">
+          <div className="flex-1 overflow-auto space-y-4 pr-2">
+            {cart.length === 0 ? (
+               <div className="text-center py-20 text-gray-400">
+                  <p>Your cart is empty.</p>
+               </div>
+            ) : (
+              cart.map((item) => (
+                <div key={item.productId} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                   <div>
+                      <h4 className="font-semibold text-gray-900">{item.productName}</h4>
+                      <p className="text-sm text-gray-500">KSH {item.price.toLocaleString()}</p>
+                   </div>
+                   <div className="flex items-center gap-3">
+                      <div className="flex items-center bg-white border border-gray-200 rounded-lg">
+                        <button 
+                          onClick={() => updateCartQuantity(item.productId, item.quantity - 1)}
+                          className="px-3 py-1 hover:bg-gray-100 text-gray-600 font-bold"
+                        >-</button>
+                        <span className="px-2 font-medium w-8 text-center">{item.quantity}</span>
+                        <button 
+                          onClick={() => updateCartQuantity(item.productId, item.quantity + 1)}
+                          className="px-3 py-1 hover:bg-gray-100 text-gray-600 font-bold"
+                        >+</button>
+                      </div>
+                      <button 
+                        onClick={() => removeFromCart(item.productId)}
+                        className="text-red-500 hover:bg-red-50 p-2 rounded-full transition"
+                      >
+                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                         </svg>
+                      </button>
+                   </div>
+                </div>
+              ))
+            )}
+          </div>
+          
+          <div className="mt-4 pt-4 border-t border-gray-200">
+             <div className="flex justify-between items-center mb-6">
+                <span className="text-lg font-medium text-gray-600">Total Amount</span>
+                <span className="text-3xl font-bold text-gray-900">KSH {calculateTotal().toLocaleString()}</span>
+             </div>
+             <div className="flex gap-4">
+                <Button variant="outline" onClick={() => setCartModalOpen(false)} className="flex-1">
+                  Continue Shopping
+                </Button>
+                <Button 
+                   onClick={handleCheckout} 
+                   disabled={cart.length === 0 || processing}
+                   className="flex-[2] py-3 text-lg"
+                >
+                  {processing ? "Processing..." : "Complete Sale"}
+                </Button>
+             </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
-};
 
 export default Dashboard;
