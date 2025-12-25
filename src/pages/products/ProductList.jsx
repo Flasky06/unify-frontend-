@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { PageHeader } from "../../components/layout/PageHeader";
 import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
@@ -27,6 +26,10 @@ export const ProductList = () => {
   });
   const [error, setError] = useState(null);
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+
   // Fetch products, brands, and categories on mount
   useEffect(() => {
     fetchData();
@@ -49,6 +52,19 @@ export const ProductList = () => {
       setLoading(false);
     }
   };
+
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.sku.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesBrand = selectedBrand
+      ? product.brandId.toString() === selectedBrand
+      : true;
+    const matchesCategory = selectedCategory
+      ? product.categoryId.toString() === selectedCategory
+      : true;
+    return matchesSearch && matchesBrand && matchesCategory;
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -190,11 +206,47 @@ export const ProductList = () => {
   ];
 
   return (
-    <div>
-      <PageHeader
-        title="Products"
-        subtitle="Manage your product inventory"
-        actions={
+    <div className="p-6">
+      <div className="flex flex-col gap-6">
+        {/* Header Actions */}
+        <div className="flex justify-between items-center">
+          <div className="flex gap-4 flex-1">
+            <div className="w-64">
+              <Input
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <div className="w-48">
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option value="">All Categories</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="w-48">
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                value={selectedBrand}
+                onChange={(e) => setSelectedBrand(e.target.value)}
+              >
+                <option value="">All Brands</option>
+                {brands.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
           <Button onClick={openCreateModal}>
             <svg
               className="w-5 h-5 mr-2"
@@ -211,21 +263,21 @@ export const ProductList = () => {
             </svg>
             Add Product
           </Button>
-        }
-      />
+        </div>
 
-      <div className="bg-white rounded-lg shadow">
-        {loading ? (
-          <div className="p-8 text-center text-gray-500">
-            Loading products...
-          </div>
-        ) : (
-          <Table
-            columns={columns}
-            data={products}
-            emptyMessage="No products found. Create one to get started."
-          />
-        )}
+        <div className="bg-white rounded-lg shadow">
+          {loading ? (
+            <div className="p-8 text-center text-gray-500">
+              Loading products...
+            </div>
+          ) : (
+            <Table
+              columns={columns}
+              data={filteredProducts}
+              emptyMessage="No products found matching your criteria."
+            />
+          )}
+        </div>
       </div>
 
       <Modal
