@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
+import Table from "../components/ui/Table";
+import Modal from "../components/ui/Modal";
 import { useAuth } from "../hooks/useAuth";
 import { shopService } from "../services/shopService";
 import { productService } from "../services/productService";
@@ -16,7 +18,44 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [products, setProducts] = useState([]); // Needed to map product details
+  const [products, setProducts] = useState([]);
+  const [isCartModalOpen, setCartModalOpen] = useState(false);
+
+  // ... [fetch logic]
+
+  const columns = [
+    { header: "Product", accessor: "productName" },
+    { header: "SKU", accessor: "sku" },
+    {
+      header: "Stock",
+      accessor: "quantity",
+      render: (row) => (
+        <span
+          className={`font-mono ${
+            row.quantity < 10 ? "text-red-600 font-bold" : ""
+          }`}
+        >
+          {row.quantity}
+        </span>
+      ),
+    },
+    {
+      header: "Price",
+      accessor: "price",
+      render: (row) => `KSH ${row.price.toLocaleString()}`,
+    },
+    {
+      header: "Action",
+      render: (row) => (
+        <button
+          onClick={() => addToCart(row)}
+          className="px-3 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 text-sm font-medium transition"
+        >
+          Add
+        </button>
+      ),
+    },
+  ];
 
   // Fetch Shops and Products on mount
   useEffect(() => {

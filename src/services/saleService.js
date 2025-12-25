@@ -25,4 +25,20 @@ export const saleService = {
   getSaleById: async (id) => {
     return await apiFetch(`/sales/${id}`);
   },
+
+  /**
+   * Get sales by Shop
+   */
+  getSalesByShop: async (shopId) => {
+    return await apiFetch(`/sales/shop/${shopId}`);
+  },
+
+  /**
+   * Cancel a sale
+   */
+  cancelSale: async (saleId) => {
+    return await apiFetch(`/sales/${saleId}/cancel`, {
+      method: "PUT",
+    });
+  },
 };
