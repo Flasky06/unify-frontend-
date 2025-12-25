@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { PageHeader } from "../../components/layout/PageHeader";
 import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
@@ -13,6 +12,8 @@ export const BrandList = () => {
   const [editingBrand, setEditingBrand] = useState(null);
   const [formData, setFormData] = useState({ name: "", description: "" });
   const [error, setError] = useState(null);
+
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Fetch brands on mount
   useEffect(() => {
@@ -31,6 +32,13 @@ export const BrandList = () => {
       setLoading(false);
     }
   };
+
+  const filteredBrands = brands.filter(
+    (brand) =>
+      brand.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (brand.description &&
+        brand.description.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -113,11 +121,17 @@ export const BrandList = () => {
   ];
 
   return (
-    <div>
-      <PageHeader
-        title="Brands"
-        subtitle="Manage product brands"
-        actions={
+    <div className="p-6">
+      <div className="flex flex-col gap-6">
+        {/* Header Actions */}
+        <div className="flex justify-between items-center">
+          <div className="flex-1 max-w-md">
+            <Input
+              placeholder="Search brands..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
           <Button onClick={openCreateModal}>
             <svg
               className="w-5 h-5 mr-2"
@@ -134,19 +148,21 @@ export const BrandList = () => {
             </svg>
             Add Brand
           </Button>
-        }
-      />
+        </div>
 
-      <div className="bg-white rounded-lg shadow">
-        {loading ? (
-          <div className="p-8 text-center text-gray-500">Loading brands...</div>
-        ) : (
-          <Table
-            columns={columns}
-            data={brands}
-            emptyMessage="No brands found. Create one to get started."
-          />
-        )}
+        <div className="bg-white rounded-lg shadow">
+          {loading ? (
+            <div className="p-8 text-center text-gray-500">
+              Loading brands...
+            </div>
+          ) : (
+            <Table
+              columns={columns}
+              data={filteredBrands}
+              emptyMessage="No brands found. Create one to get started."
+            />
+          )}
+        </div>
       </div>
 
       <Modal
