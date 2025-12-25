@@ -15,9 +15,8 @@ const StockList = () => {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingStock, setEditingStock] = useState(null);
-  const [viewMode, setViewMode] = useState("all"); // all, byShop, byProduct
+  const [viewMode, setViewMode] = useState("all"); // all, byShop
   const [selectedShopId, setSelectedShopId] = useState("");
-  const [selectedProductId, setSelectedProductId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
   const [formData, setFormData] = useState({
@@ -35,20 +34,20 @@ const StockList = () => {
 
   // Fetch stocks based on view mode
   useEffect(() => {
-    fetchStocks();
-  }, [viewMode, selectedShopId, selectedProductId]);
+    if (shops.length > 0) {
+      fetchStocks();
+    }
+  }, [viewMode, selectedShopId, shops.length]);
 
   const fetchStocks = async () => {
     setLoading(true);
     try {
       let data;
       if (viewMode === "byShop" && selectedShopId) {
+        // Filter by specific shop
         data = await stockService.getStocksByShop(selectedShopId);
-      } else if (viewMode === "byProduct" && selectedProductId) {
-        data = await stockService.getStocksByProduct(selectedProductId);
       } else {
-        // For "all" view, we'll need to get stocks for all shops
-        // Since there's no getAllStocks endpoint, we'll fetch by first shop or show empty
+        // Default: Show all stocks across all shops
         if (shops.length > 0) {
           const allStocks = await Promise.all(
             shops.map((shop) => stockService.getStocksByShop(shop.id))
@@ -237,12 +236,15 @@ const StockList = () => {
         }
       />
 
-      {/* View Mode Selector */}
+      {/* Filter by Shop */}
       <div className="mb-6 flex gap-4 items-center">
         <div className="flex gap-2">
           <Button
             variant={viewMode === "all" ? "primary" : "outline"}
-            onClick={() => setViewMode("all")}
+            onClick={() => {
+              setViewMode("all");
+              setSelectedShopId("");
+            }}
           >
             All Stocks
           </Button>
@@ -250,13 +252,7 @@ const StockList = () => {
             variant={viewMode === "byShop" ? "primary" : "outline"}
             onClick={() => setViewMode("byShop")}
           >
-            By Shop
-          </Button>
-          <Button
-            variant={viewMode === "byProduct" ? "primary" : "outline"}
-            onClick={() => setViewMode("byProduct")}
-          >
-            By Product
+            Filter by Shop
           </Button>
         </div>
 
@@ -270,21 +266,6 @@ const StockList = () => {
             {shops.map((shop) => (
               <option key={shop.id} value={shop.id}>
                 {shop.name}
-              </option>
-            ))}
-          </select>
-        )}
-
-        {viewMode === "byProduct" && (
-          <select
-            value={selectedProductId}
-            onChange={(e) => setSelectedProductId(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="">Select Product</option>
-            {products.map((product) => (
-              <option key={product.id} value={product.id}>
-                {product.name}
               </option>
             ))}
           </select>
