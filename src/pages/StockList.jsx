@@ -191,7 +191,7 @@ const StockList = () => {
             size="sm"
             onClick={() => handleEdit(row._stock)}
           >
-            Edit
+            Update Stock
           </Button>
           <Button
             variant="outline"
@@ -281,7 +281,11 @@ const StockList = () => {
           setEditingStock(null);
           resetForm();
         }}
-        title={editingStock ? "Edit Stock" : "Add Stock"}
+        title={
+          editingStock
+            ? `Update Stock - ${getProductName(editingStock.productId)}`
+            : "Add Stock"
+        }
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -327,6 +331,15 @@ const StockList = () => {
               ))}
             </select>
           </div>
+
+          {editingStock && (
+            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-800">
+                <span className="font-semibold">Current Stock:</span>{" "}
+                {editingStock.quantity} units
+              </p>
+            </div>
+          )}
 
           <Input
             label="Quantity"
