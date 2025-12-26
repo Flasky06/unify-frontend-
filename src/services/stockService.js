@@ -52,9 +52,39 @@ export const stockService = {
   /**
    * Delete stock entry
    */
+  /**
+   * Delete stock entry
+   */
   deleteStock: async (id) => {
     return await apiFetch(`/stocks/${id}`, {
       method: "DELETE",
     });
+  },
+
+  initiateTransfer: async (transferData) => {
+    return await apiFetch("/stocks/transfer/initiate", {
+      method: "POST",
+      body: transferData,
+    });
+  },
+
+  acknowledgeTransfer: async (transferId) => {
+    return await apiFetch(`/stocks/transfer/${transferId}/acknowledge`, {
+      method: "POST",
+    });
+  },
+
+  cancelTransfer: async (transferId) => {
+    return await apiFetch(`/stocks/transfer/${transferId}/cancel`, {
+      method: "POST",
+    });
+  },
+
+  getIncomingTransfers: async (shopId) => {
+    return await apiFetch(`/stocks/shop/${shopId}/incoming-transfers`);
+  },
+
+  getOutgoingTransfers: async (shopId) => {
+    return await apiFetch(`/stocks/shop/${shopId}/outgoing-transfers`);
   },
 };

@@ -14,13 +14,24 @@ const StockList = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const [stocks, setStocks] = useState([]);
+  const [transfers, setTransfers] = useState([]);
   const [products, setProducts] = useState([]);
   const [shops, setShops] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingStock, setEditingStock] = useState(null);
-  const [viewMode, setViewMode] = useState("all"); // all, byShop
+  const [viewMode, setViewMode] = useState("all"); // 'all', 'byShop', 'transfers'
+  const [transferTab, setTransferTab] = useState("incoming"); // 'incoming', 'outgoing'
   const [selectedShopId, setSelectedShopId] = useState("");
+
+  // Transfer Logic States
+  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
+  const [transferData, setTransferData] = useState({
+    sourceShopId: "",
+    destinationShopId: "",
+    productId: "",
+    quantity: 0,
+  });
 
   const [formData, setFormData] = useState({
     shopId: "",
@@ -31,7 +42,9 @@ const StockList = () => {
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     stockId: null,
+    action: "delete", // 'delete', 'cancelTransfer'
   });
+
   const [toast, setToast] = useState({
     isOpen: false,
     message: "",
@@ -43,14 +56,58 @@ const StockList = () => {
     fetchProducts();
     fetchShops();
     fetchStocks();
+
+    // Set default shop for Shop Manager
+    if (user?.role === "SHOP_MANAGER" && user?.shop) {
+      setSelectedShopId(user.shop.id);
+      // Also set source shop for transfer default
+      setTransferData((prev) => ({ ...prev, sourceShopId: user.shop.id }));
+    }
   }, []);
 
   // Fetch stocks based on view mode
   useEffect(() => {
-    if (shops.length > 0) {
-      fetchStocks();
+    if (viewMode === "transfers") {
+      fetchTransfers();
+    } else {
+      if (shops.length > 0) {
+        fetchStocks();
+      }
     }
-  }, [viewMode, selectedShopId, shops.length]);
+  }, [viewMode, selectedShopId, shops.length, transferTab]);
+
+  const fetchTransfers = async () => {
+    // Need a selected shop context for transfers usually, or load all for owner?
+    // For now, let's assume if Owner selects "All Shops", we might need to iterate.
+    // Or we force selecting a shop to view transfers.
+    // Let's force shop selection for Transfers view if not Shop Manager.
+
+    const shopIdToUse = selectedShopId || (user.shop ? user.shop.id : null);
+    if (!shopIdToUse) {
+      if (user.role === "BUSINESS_OWNER" || user.role === "BUSINESS_MANAGER") {
+        // Maybe alert or show empty if no shop selected
+        // Better: Show transfers for ALL shops? Backend doesn't support "getAllTransfers" yet.
+        // We'll require shop selection.
+        return;
+      }
+      return;
+    }
+
+    setLoading(true);
+    try {
+      let data = [];
+      if (transferTab === "incoming") {
+        data = await stockService.getIncomingTransfers(shopIdToUse);
+      } else {
+        data = await stockService.getOutgoingTransfers(shopIdToUse);
+      }
+      setTransfers(data);
+    } catch (err) {
+      console.error("Failed to fetch transfers", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchStocks = async () => {
     setLoading(true);
@@ -105,18 +162,13 @@ const StockList = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleStockSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       if (editingStock) {
         await stockService.updateStock(editingStock.id, {
           quantity: parseInt(formData.quantity),
-          // typically we don't update buying price on simple quantity edit,
-          // but if user wants to, we could add it. The requirement said "added or incremented".
-          // The backend updateStockDTO does NOT have buyingPrice yet, only quantity.
-          // So for Edit, we stick to quantity.
         });
       } else {
         await stockService.createStock({
@@ -134,20 +186,90 @@ const StockList = () => {
       fetchStocks();
       setToast({
         isOpen: true,
-        message: editingStock
-          ? "Stock updated successfully"
-          : "Stock added successfully",
+        message: editingStock ? "Stock updated" : "Stock added",
         type: "success",
       });
     } catch (error) {
-      console.error("Failed to save stock:", error);
-      setToast({
-        isOpen: true,
-        message: error.message || "Failed to save stock",
-        type: "error",
-      });
+      setToast({ isOpen: true, message: error.message, type: "error" });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleTransferSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await stockService.initiateTransfer({
+        sourceShopId: parseInt(transferData.sourceShopId),
+        destinationShopId: parseInt(transferData.destinationShopId),
+        productId: parseInt(transferData.productId),
+        quantity: parseInt(transferData.quantity),
+      });
+      setIsTransferModalOpen(false);
+      setTransferData({
+        sourceShopId: user.shop ? user.shop.id : "",
+        destinationShopId: "",
+        productId: "",
+        quantity: 0,
+      });
+
+      setToast({
+        isOpen: true,
+        message: "Transfer Initiated",
+        type: "success",
+      });
+
+      // Switch to transfers view if not already
+      if (viewMode === "transfers" && transferTab === "outgoing") {
+        fetchTransfers();
+      } else {
+        setViewMode("transfers");
+        setTransferTab("outgoing");
+      }
+    } catch (err) {
+      setToast({ isOpen: true, message: err.message, type: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAcknowledge = async (id) => {
+    try {
+      await stockService.acknowledgeTransfer(id);
+      setToast({
+        isOpen: true,
+        message: "Transfer Acknowledged",
+        type: "success",
+      });
+      fetchTransfers();
+    } catch (err) {
+      setToast({ isOpen: true, message: err.message, type: "error" });
+    }
+  };
+
+  const handleCancelTransfer = async (id) => {
+    try {
+      await stockService.cancelTransfer(id);
+      setToast({
+        isOpen: true,
+        message: "Transfer Cancelled",
+        type: "success",
+      });
+      fetchTransfers();
+    } catch (err) {
+      setToast({ isOpen: true, message: err.message, type: "error" });
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await stockService.deleteStock(id);
+      setToast({ isOpen: true, message: "Stock deleted", type: "success" });
+      setConfirmDialog({ isOpen: false, stockId: null });
+      fetchStocks();
+    } catch (err) {
+      setToast({ isOpen: true, message: err.message, type: "error" });
     }
   };
 
@@ -160,13 +282,6 @@ const StockList = () => {
     const shop = shops.find((s) => s.id === shopId);
     return shop ? shop.name : "Unknown";
   };
-
-  const filteredStocks = stocks.filter((stock) => {
-    const productName = getProductName(stock.productId).toLowerCase();
-    const shopName = getShopName(stock.shopId).toLowerCase();
-    const search = searchTerm.toLowerCase();
-    return productName.includes(search) || shopName.includes(search);
-  });
 
   const columns = [
     { header: "Product", accessor: "productName" },
@@ -187,7 +302,6 @@ const StockList = () => {
         </span>
       ),
     },
-    // Hide Actions for SALES_REP
     ...(user?.role === "SALES_REP"
       ? []
       : [
@@ -198,17 +312,29 @@ const StockList = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
-                  onClick={() => handleEdit(row._stock)}
+                  className="text-blue-600 hover:bg-blue-50"
+                  onClick={() => {
+                    setEditingStock(row._stock);
+                    setFormData({
+                      shopId: row.shopId,
+                      productId: row.productId,
+                      quantity: row.quantity,
+                    });
+                    setIsModalOpen(true);
+                  }}
                 >
                   Update
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                  className="text-red-600 hover:bg-red-50"
                   onClick={() =>
-                    setConfirmDialog({ isOpen: true, stockId: row._stock.id })
+                    setConfirmDialog({
+                      isOpen: true,
+                      stockId: row.id,
+                      action: "delete",
+                    })
                   }
                 >
                   Delete
@@ -219,39 +345,100 @@ const StockList = () => {
         ]),
   ];
 
-  const tableData = filteredStocks.map((stock) => ({
-    id: stock.id,
-    productName: getProductName(stock.productId),
-    shopName: getShopName(stock.shopId),
-    quantity: stock.quantity,
-    _stock: stock, // Store full stock object for actions
-  }));
+  const transferColumns = [
+    { header: "Product", accessor: "productName" },
+    { header: "From", accessor: "sourceShopName" },
+    { header: "To", accessor: "destinationShopName" },
+    { header: "Qty", accessor: "quantity" },
+    {
+      header: "Status",
+      render: (row) => (
+        <span className="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
+          {row.status}
+        </span>
+      ),
+    },
+    {
+      header: "Date",
+      render: (row) => new Date(row.createdAt).toLocaleDateString(),
+    },
+    {
+      header: "Actions",
+      render: (row) => (
+        <div className="flex gap-2">
+          {transferTab === "incoming" && (
+            <Button
+              variant="success"
+              size="sm"
+              onClick={() => handleAcknowledge(row.id)}
+            >
+              Receive
+            </Button>
+          )}
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={() => handleCancelTransfer(row.id)}
+          >
+            Cancel
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
+  const tableData =
+    viewMode === "transfers"
+      ? transfers
+      : stocks.map((stock) => ({
+          id: stock.id,
+          productName: getProductName(stock.productId),
+          shopName: getShopName(stock.shopId),
+          quantity: stock.quantity,
+          shopId: stock.shopId,
+          productId: stock.productId,
+          _stock: stock,
+        }));
 
   return (
     <div>
-      {/* Add Stock Button */}
-      {user?.role !== "SALES_REP" && (
-        <div className="mb-4 flex justify-end">
-          <Button variant="success" onClick={() => navigate("/stocks/add")}>
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            Add Stock
+      <div className="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex gap-2">
+          <Button
+            variant={
+              viewMode === "all" || viewMode === "byShop"
+                ? "primary"
+                : "outline"
+            }
+            onClick={() => setViewMode("all")}
+          >
+            Stock List
+          </Button>
+          <Button
+            variant={viewMode === "transfers" ? "primary" : "outline"}
+            onClick={() => setViewMode("transfers")}
+          >
+            Transfers
           </Button>
         </div>
-      )}
 
-      {/* Filter and Search */}
+        <div className="flex gap-2">
+          {user?.role !== "SALES_REP" && (
+            <>
+              <Button
+                variant="outline"
+                onClick={() => setIsTransferModalOpen(true)}
+              >
+                Initiate Transfer
+              </Button>
+              <Button variant="success" onClick={() => setIsModalOpen(true)}>
+                Add Stock
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
+
       <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:items-end">
         <div className="w-full lg:w-64">
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -262,37 +449,66 @@ const StockList = () => {
             onChange={(e) => {
               const value = e.target.value;
               setSelectedShopId(value);
-              setViewMode(value ? "byShop" : "all");
+              if (viewMode !== "transfers") {
+                setViewMode(value ? "byShop" : "all");
+              }
             }}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
           >
-            <option value="">All Shops</option>
-            {shops.map((shop) => (
-              <option key={shop.id} value={shop.id}>
-                {shop.name}
-              </option>
-            ))}
+            <option value="">
+              {user.role === "SHOP_MANAGER" ? user.shop?.name : "All Shops"}
+            </option>
+            {user.role !== "SHOP_MANAGER" &&
+              shops.map((shop) => (
+                <option key={shop.id} value={shop.id}>
+                  {shop.name}
+                </option>
+              ))}
           </select>
         </div>
+      </div>
 
-        <div className="w-full lg:flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Search
-          </label>
-          <Input
-            placeholder="Search by product or shop name..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+      {viewMode === "transfers" && (
+        <div className="flex border-b border-gray-200 mb-4">
+          <button
+            className={`py-2 px-4 font-medium ${
+              transferTab === "incoming"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+            onClick={() => setTransferTab("incoming")}
+          >
+            Incoming
+          </button>
+          <button
+            className={`py-2 px-4 font-medium ${
+              transferTab === "outgoing"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+            onClick={() => setTransferTab("outgoing")}
+          >
+            Outgoing
+          </button>
         </div>
-      </div>
+      )}
 
-      {/* Stock Table */}
       <div className="bg-white rounded-lg shadow">
-        <Table columns={columns} data={tableData} loading={loading} />
+        <Table
+          columns={viewMode === "transfers" ? transferColumns : columns}
+          data={tableData}
+          loading={loading}
+        />
+        {viewMode === "transfers" && tableData.length === 0 && !loading && (
+          <div className="p-8 text-center text-gray-500">
+            {!selectedShopId
+              ? "Please select a shop to view transfers"
+              : "No transfers found"}
+          </div>
+        )}
       </div>
 
-      {/* Add/Edit Modal */}
+      {/* Add/Edit Stock Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => {
@@ -300,13 +516,9 @@ const StockList = () => {
           setEditingStock(null);
           resetForm();
         }}
-        title={
-          editingStock
-            ? `Update Stock - ${getProductName(editingStock.productId)}`
-            : "Add Stock"
-        }
+        title={editingStock ? "Update Stock" : "Add Stock"}
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleStockSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Shop
@@ -316,9 +528,9 @@ const StockList = () => {
               onChange={(e) =>
                 setFormData({ ...formData, shopId: e.target.value })
               }
-              disabled={editingStock}
+              disabled={editingStock || user.role === "SHOP_MANAGER"}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg"
             >
               <option value="">Select Shop</option>
               {shops.map((shop) => (
@@ -328,7 +540,6 @@ const StockList = () => {
               ))}
             </select>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Product
@@ -340,7 +551,7 @@ const StockList = () => {
               }
               disabled={editingStock}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg"
             >
               <option value="">Select Product</option>
               {products.map((product) => (
@@ -350,16 +561,6 @@ const StockList = () => {
               ))}
             </select>
           </div>
-
-          {editingStock && (
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-blue-800">
-                <span className="font-semibold">Current Stock:</span>{" "}
-                {editingStock.quantity} units
-              </p>
-            </div>
-          )}
-
           <Input
             label="Quantity"
             type="number"
@@ -370,7 +571,6 @@ const StockList = () => {
             required
             min="0"
           />
-
           {!editingStock && (
             <Input
               label="Buying Price (Cost Price) - Optional"
@@ -388,33 +588,133 @@ const StockList = () => {
             <Button
               type="button"
               variant="outline"
-              onClick={() => {
-                setIsModalOpen(false);
-                setEditingStock(null);
-                resetForm();
-              }}
+              onClick={() => setIsModalOpen(false)}
             >
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Saving..." : editingStock ? "Update" : "Create"}
+              {loading ? "Saving..." : "Save"}
             </Button>
           </div>
         </form>
       </Modal>
 
-      {/* Confirm Dialog */}
+      {/* Initiate Transfer Modal */}
+      <Modal
+        isOpen={isTransferModalOpen}
+        onClose={() => setIsTransferModalOpen(false)}
+        title="Initiate Stock Transfer"
+      >
+        <form onSubmit={handleTransferSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Source Shop (From)
+            </label>
+            <select
+              value={transferData.sourceShopId}
+              onChange={(e) =>
+                setTransferData({
+                  ...transferData,
+                  sourceShopId: e.target.value,
+                })
+              }
+              disabled={user.role === "SHOP_MANAGER"}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50"
+            >
+              <option value="">Select Source Shop</option>
+              {shops.map((shop) => (
+                <option key={shop.id} value={shop.id}>
+                  {shop.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Destination Shop (To)
+            </label>
+            <select
+              value={transferData.destinationShopId}
+              onChange={(e) =>
+                setTransferData({
+                  ...transferData,
+                  destinationShopId: e.target.value,
+                })
+              }
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            >
+              <option value="">Select Destination Shop</option>
+              {shops
+                .filter((s) => s.id !== parseInt(transferData.sourceShopId))
+                .map((shop) => (
+                  <option key={shop.id} value={shop.id}>
+                    {shop.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Product
+            </label>
+            <select
+              value={transferData.productId}
+              onChange={(e) =>
+                setTransferData({ ...transferData, productId: e.target.value })
+              }
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            >
+              <option value="">Select Product</option>
+              {products.map((product) => (
+                <option key={product.id} value={product.id}>
+                  {product.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <Input
+            label="Quantity"
+            type="number"
+            value={transferData.quantity}
+            onChange={(e) =>
+              setTransferData({ ...transferData, quantity: e.target.value })
+            }
+            required
+            min="1"
+          />
+
+          <div className="flex justify-end gap-3 pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsTransferModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Sending..." : "Transfer"}
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
       <ConfirmDialog
         isOpen={confirmDialog.isOpen}
-        onClose={() => setConfirmDialog({ isOpen: false, stockId: null })}
-        onConfirm={() => handleDelete(confirmDialog.stockId)}
+        onClose={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
+        onConfirm={() => {
+          if (confirmDialog.action === "delete") {
+            handleDelete(confirmDialog.stockId);
+          }
+        }}
         title="Delete Stock"
-        message="Are you sure you want to delete this stock entry?"
+        message="Are you sure?"
         confirmText="Delete"
         variant="danger"
       />
 
-      {/* Toast Notification */}
       <Toast
         isOpen={toast.isOpen}
         onClose={() => setToast({ ...toast, isOpen: false })}
