@@ -187,7 +187,6 @@ const StockList = () => {
         </span>
       ),
     },
-    },
     // Hide Actions for SALES_REP
     ...(user?.role === "SALES_REP"
       ? []
@@ -231,24 +230,26 @@ const StockList = () => {
   return (
     <div>
       {/* Add Stock Button */}
-      {user?.role !== "SALES_REP" && <div className="mb-4 flex justify-end">
-        <Button variant="success" onClick={() => navigate("/stocks/add")}>
-          <svg
-            className="w-5 h-5 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          Add Stock
-        </Button>
-      </div>}
+      {user?.role !== "SALES_REP" && (
+        <div className="mb-4 flex justify-end">
+          <Button variant="success" onClick={() => navigate("/stocks/add")}>
+            <svg
+              className="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            Add Stock
+          </Button>
+        </div>
+      )}
 
       {/* Filter and Search */}
       <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:items-end">
