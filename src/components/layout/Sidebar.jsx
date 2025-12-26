@@ -210,9 +210,38 @@ export const Sidebar = ({ isOpen, onClose }) => {
   ];
 
   // Filter navigation based on user role
+  // Filter navigation based on user role
   const getFilteredBusinessNav = () => {
-    // SHOP_MANAGER and SALES_REP restrictions
-    if (user?.role === "SHOP_MANAGER" || user?.role === "SALES_REP") {
+    // SALES_REP: Very restricted
+    if (user?.role === "SALES_REP") {
+      return businessNav.map((item) => {
+        // Disable User Management, Shop Management, and Product Management (All)
+        if (
+          item.name === "User Management" ||
+          item.name === "Shop Management" ||
+          item.name === "Product Management"
+        ) {
+          return { ...item, disabled: true };
+        }
+
+        // Stock Management: Disable 'Add Stock' only
+        if (item.name === "Stock Management") {
+          return {
+            ...item,
+            children: item.children.map((child) => {
+              if (child.name === "Add Stock") {
+                return { ...child, disabled: true };
+              }
+              return child;
+            }),
+          };
+        }
+        return item;
+      });
+    }
+
+    // SHOP_MANAGER: Moderate restriction
+    if (user?.role === "SHOP_MANAGER") {
       return businessNav.map((item) => {
         // Disable User Management and Shop Management
         if (
@@ -237,6 +266,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
         return item;
       });
     }
+
     return businessNav;
   };
 
