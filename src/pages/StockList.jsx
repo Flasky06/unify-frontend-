@@ -217,8 +217,8 @@ const StockList = () => {
       </div>
 
       {/* Filter and Search */}
-      <div className="mb-6 flex gap-4 items-end">
-        <div className="w-64">
+      <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end">
+        <div className="w-full lg:w-64">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Filter by Shop
           </label>
@@ -253,7 +253,9 @@ const StockList = () => {
       </div>
 
       {/* Stock Table */}
-      <Table columns={columns} data={tableData} loading={loading} />
+      <div className="bg-white rounded-lg shadow">
+        <Table columns={columns} data={tableData} loading={loading} />
+      </div>
 
       {/* Add/Edit Modal */}
       <Modal

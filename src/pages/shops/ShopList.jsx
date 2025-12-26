@@ -134,15 +134,15 @@ export const ShopList = () => {
     <div className="p-6">
       <div className="flex flex-col gap-6">
         {/* Header Actions */}
-        <div className="flex justify-between items-center">
-          <div className="flex-1 max-w-md">
+        <div className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center">
+          <div className="flex-1 w-full lg:max-w-md">
             <Input
               placeholder="Search shops..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Button onClick={openCreateModal}>
+          <Button onClick={openCreateModal} className="w-full lg:w-auto">
             <svg
               className="w-5 h-5 mr-2"
               fill="none"

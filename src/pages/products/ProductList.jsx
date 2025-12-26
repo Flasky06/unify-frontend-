@@ -209,16 +209,16 @@ export const ProductList = () => {
     <div className="p-6">
       <div className="flex flex-col gap-6">
         {/* Header Actions */}
-        <div className="flex justify-between items-center">
-          <div className="flex gap-4 flex-1">
-            <div className="w-64">
+        <div className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center">
+          <div className="flex flex-col gap-4 flex-1 lg:flex-row">
+            <div className="w-full lg:w-64">
               <Input
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="w-48">
+            <div className="w-full lg:w-48">
               <select
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={selectedCategory}
@@ -232,7 +232,7 @@ export const ProductList = () => {
                 ))}
               </select>
             </div>
-            <div className="w-48">
+            <div className="w-full lg:w-48">
               <select
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={selectedBrand}
@@ -247,7 +247,7 @@ export const ProductList = () => {
               </select>
             </div>
           </div>
-          <Button onClick={openCreateModal}>
+          <Button onClick={openCreateModal} className="w-full lg:w-auto">
             <svg
               className="w-5 h-5 mr-2"
               fill="none"

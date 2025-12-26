@@ -1,7 +1,10 @@
+import { Spinner } from "./Spinner";
+
 const Table = ({
   columns,
   data,
   onRowClick,
+  loading = false,
   emptyMessage = "No data available",
 }) => {
   return (
@@ -14,6 +17,7 @@ const Table = ({
                 <th
                   key={index}
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50"
+                  style={{ minWidth: column.width || "auto" }}
                 >
                   {column.header}
                 </th>
@@ -21,7 +25,19 @@ const Table = ({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td
+                  colSpan={columns.length}
+                  className="px-6 py-12 text-center text-gray-500"
+                >
+                  <div className="flex justify-center items-center gap-3">
+                    <Spinner size="sm" />
+                    <span>Loading data...</span>
+                  </div>
+                </td>
+              </tr>
+            ) : data.length === 0 ? (
               <tr>
                 <td
                   colSpan={columns.length}

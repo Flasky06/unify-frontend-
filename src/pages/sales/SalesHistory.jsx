@@ -173,12 +173,12 @@ const SalesHistory = () => {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-end mb-6">
-        <div>
+      <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:justify-between lg:items-end">
+        <div className="flex-1">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">
             Sales History
           </h1>
-          <div className="w-80">
+          <div className="max-w-md">
             <Input
               placeholder="Search by sale no, shop, status..."
               value={searchTerm}
@@ -187,7 +187,7 @@ const SalesHistory = () => {
           </div>
         </div>
 
-        <div className="w-64">
+        <div className="w-full lg:w-64">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Filter by Shop
           </label>
