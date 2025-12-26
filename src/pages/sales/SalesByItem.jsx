@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Input from "../../components/ui/Input";
 import Table from "../../components/ui/Table";
 import { saleService } from "../../services/saleService";
 import { shopService } from "../../services/shopService";
@@ -7,6 +8,7 @@ const SalesByItem = () => {
   const [sales, setSales] = useState([]);
   const [shops, setShops] = useState([]);
   const [selectedShopId, setSelectedShopId] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [aggregatedData, setAggregatedData] = useState([]);
 
@@ -71,12 +73,9 @@ const SalesByItem = () => {
               productId: item.productId,
               productName: item.productName || "Unknown",
               quantitySold: 0,
-              totalRevenue: 0,
             };
           }
           productStats[item.productId].quantitySold += item.quantity;
-          productStats[item.productId].totalRevenue +=
-            item.price * item.quantity;
         });
       }
     });
@@ -96,17 +95,27 @@ const SalesByItem = () => {
         <span className="font-semibold text-gray-700">{row.quantitySold}</span>
       ),
     },
-    {
-      header: "Total Revenue",
-      accessor: "totalRevenue",
-      render: (row) => `KSH ${row.totalRevenue.toLocaleString()}`,
-    },
   ];
+
+  const filteredData = aggregatedData.filter((item) =>
+    item.productName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Sales by Item</h1>
+      <div className="flex justify-between items-end mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            Sales by Item
+          </h1>
+          <div className="w-80">
+            <Input
+              placeholder="Search by product name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
 
         <div className="w-64">
           <select
@@ -127,7 +136,7 @@ const SalesByItem = () => {
       <div className="bg-white rounded-lg shadow">
         <Table
           columns={columns}
-          data={aggregatedData}
+          data={filteredData}
           loading={loading}
           emptyMessage="No item sales data found."
         />

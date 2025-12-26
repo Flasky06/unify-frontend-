@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
@@ -10,6 +11,7 @@ const SalesHistory = () => {
   const [sales, setSales] = useState([]);
   const [shops, setShops] = useState([]);
   const [selectedShopId, setSelectedShopId] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedSale, setSelectedSale] = useState(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
@@ -159,12 +161,105 @@ const SalesHistory = () => {
     },
   ];
 
+  const filteredSales = sales.filter((sale) => {
+    const search = searchTerm.toLowerCase();
+    return (
+      sale.saleNumber?.toLowerCase().includes(search) ||
+      sale.shopName?.toLowerCase().includes(search) ||
+      sale.paymentMethod?.toLowerCase().includes(search) ||
+      sale.status?.toLowerCase().includes(search)
+    );
+  });
+
+  const columns = [
+    { header: "Sale No", accessor: "saleNumber" },
+    {
+      header: "Date",
+      accessor: "saleDate",
+      render: (row) =>
+        format(
+          new Date(
+            row.saleDate.endsWith("Z") ? row.saleDate : row.saleDate + "Z"
+          ),
+          "MMM dd, yyyy HH:mm"
+        ),
+    },
+    { header: "Shop", accessor: "shopName" },
+    {
+      header: "Items",
+      render: (row) => (row.items ? row.items.length : 0),
+    },
+    {
+      header: "Total",
+      accessor: "total",
+      render: (row) => `KSH ${row.total.toLocaleString()}`,
+    },
+    {
+      header: "Payment",
+      accessor: "paymentMethod",
+      render: (row) => (
+        <span className="px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">
+          {row.paymentMethod?.replace("_", " ")}
+        </span>
+      ),
+    },
+    {
+      header: "Status",
+      accessor: "status",
+      render: (row) => (
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+            row.status === "COMPLETED"
+              ? "bg-green-100 text-green-800"
+              : row.status === "CANCELLED"
+              ? "bg-red-100 text-red-800"
+              : "bg-yellow-100 text-yellow-800"
+          }`}
+        >
+          {row.status}
+        </span>
+      ),
+    },
+    {
+      header: "Actions",
+      render: (row) => (
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => openDetails(row)}>
+            View
+          </Button>
+          {row.status !== "CANCELLED" && (
+            <button
+              onClick={() => handleCancelSale(row.id)}
+              className="text-red-600 hover:text-red-800 text-sm font-medium"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Sales History</h1>
+      <div className="flex justify-between items-end mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            Sales History
+          </h1>
+          <div className="w-80">
+            <Input
+              placeholder="Search by sale no, shop, status..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
 
         <div className="w-64">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Filter by Shop
+          </label>
           <select
             value={selectedShopId}
             onChange={(e) => setSelectedShopId(e.target.value)}
@@ -183,7 +278,7 @@ const SalesHistory = () => {
       <div className="bg-white rounded-lg shadow">
         <Table
           columns={columns}
-          data={sales}
+          data={filteredSales}
           loading={loading}
           emptyMessage="No sales found."
         />
@@ -205,7 +300,14 @@ const SalesHistory = () => {
               <div>
                 <p className="text-gray-500">Date</p>
                 <p className="font-medium">
-                  {format(new Date(selectedSale.saleDate), "PPpp")}
+                  {format(
+                    new Date(
+                      selectedSale.saleDate.endsWith("Z")
+                        ? selectedSale.saleDate
+                        : selectedSale.saleDate + "Z"
+                    ),
+                    "PPpp"
+                  )}
                 </p>
               </div>
               <div>
@@ -248,11 +350,13 @@ const SalesHistory = () => {
                     <tr key={idx}>
                       <td className="py-2 px-3">{item.productName}</td>
                       <td className="py-2 px-3 text-right">
-                        {item.price?.toLocaleString()}
+                        {(item.unitPrice || 0).toLocaleString()}
                       </td>
                       <td className="py-2 px-3 text-center">{item.quantity}</td>
                       <td className="py-2 px-3 text-right">
-                        {(item.price * item.quantity).toLocaleString()}
+                        {(
+                          (item.unitPrice || 0) * item.quantity
+                        ).toLocaleString()}
                       </td>
                     </tr>
                   ))}
