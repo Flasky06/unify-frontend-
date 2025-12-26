@@ -55,4 +55,20 @@ export const userService = {
   deleteBusinessOwner: async (id) => {
     await api.delete(`/users/business-owners/${id}`);
   },
+
+  /**
+   * Get all employees for my business (BUSINESS_OWNER only)
+   */
+  getEmployees: async () => {
+    const data = await api.get("/users/my-business/employees");
+    return data;
+  },
+
+  /**
+   * Create employee for my business (BUSINESS_OWNER only)
+   */
+  createEmployee: async (userData) => {
+    const data = await api.post("/users/my-business/employees", userData);
+    return data;
+  },
 };

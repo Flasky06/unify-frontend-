@@ -3,6 +3,7 @@ import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
+import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
 import { saleService } from "../../services/saleService";
 import { shopService } from "../../services/shopService";
 import { format } from "date-fns";
@@ -15,6 +16,15 @@ const SalesHistory = () => {
   const [loading, setLoading] = useState(false);
   const [selectedSale, setSelectedSale] = useState(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    saleId: null,
+  });
+  const [toast, setToast] = useState({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
 
   useEffect(() => {
     fetchShops();
@@ -70,13 +80,6 @@ const SalesHistory = () => {
   };
 
   const handleCancelSale = async (saleId) => {
-    if (
-      !confirm(
-        "Are you sure you want to cancel this sale? This action cannot be undone."
-      )
-    )
-      return;
-
     try {
       await saleService.cancelSale(saleId);
       // Refresh list
@@ -86,10 +89,18 @@ const SalesHistory = () => {
       if (selectedSale && selectedSale.id === saleId) {
         setIsDetailsModalOpen(false);
       }
-      alert("Sale cancelled successfully.");
+      setToast({
+        isOpen: true,
+        message: "Sale cancelled successfully.",
+        type: "success",
+      });
     } catch (error) {
       console.error("Failed to cancel sale", error);
-      alert("Failed to cancel sale: " + error.message);
+      setToast({
+        isOpen: true,
+        message: `Failed to cancel sale: ${error.message}`,
+        type: "error",
+      });
     }
   };
 
@@ -151,7 +162,7 @@ const SalesHistory = () => {
           </Button>
           {row.status !== "CANCELLED" && (
             <button
-              onClick={() => handleCancelSale(row.id)}
+              onClick={() => setConfirmDialog({ isOpen: true, saleId: row.id })}
               className="text-red-600 hover:text-red-800 text-sm font-medium"
             >
               Cancel
@@ -293,7 +304,9 @@ const SalesHistory = () => {
               {selectedSale.status !== "CANCELLED" && (
                 <Button
                   variant="outline"
-                  onClick={() => handleCancelSale(selectedSale.id)}
+                  onClick={() =>
+                    setConfirmDialog({ isOpen: true, saleId: selectedSale.id })
+                  }
                   className="text-red-600 border-red-200 hover:bg-red-50"
                 >
                   Cancel Sale
@@ -306,6 +319,25 @@ const SalesHistory = () => {
           </div>
         )}
       </Modal>
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog({ isOpen: false, saleId: null })}
+        onConfirm={() => handleCancelSale(confirmDialog.saleId)}
+        title="Cancel Sale"
+        message="Are you sure you want to cancel this sale? This action cannot be undone."
+        confirmText="Yes, Cancel Sale"
+        variant="danger"
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        isOpen={toast.isOpen}
+        onClose={() => setToast({ ...toast, isOpen: false })}
+        message={toast.message}
+        type={toast.type}
+      />
     </div>
   );
 };

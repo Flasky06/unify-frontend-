@@ -4,6 +4,7 @@ import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import { shopService } from "../../services/shopService";
+import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
 
 export const ShopList = () => {
   const [shops, setShops] = useState([]);
@@ -15,6 +16,15 @@ export const ShopList = () => {
     location: "",
   });
   const [error, setError] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    shopId: null,
+  });
+  const [toast, setToast] = useState({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -52,19 +62,38 @@ export const ShopList = () => {
       }
       fetchShops();
       closeModal();
+      setToast({
+        isOpen: true,
+        message: editingShop
+          ? "Shop updated successfully"
+          : "Shop created successfully",
+        type: "success",
+      });
     } catch (err) {
       setError(err.message || "Operation failed");
+      setToast({
+        isOpen: true,
+        message: err.message || "Operation failed",
+        type: "error",
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this shop?")) {
-      try {
-        await shopService.delete(id);
-        fetchShops();
-      } catch (err) {
-        alert(err.message || "Failed to delete shop");
-      }
+    try {
+      await shopService.delete(id);
+      fetchShops();
+      setToast({
+        isOpen: true,
+        message: "Shop deleted successfully",
+        type: "success",
+      });
+    } catch (err) {
+      setToast({
+        isOpen: true,
+        message: err.message || "Failed to delete shop",
+        type: "error",
+      });
     }
   };
 
@@ -120,7 +149,7 @@ export const ShopList = () => {
             className="text-red-600 border-red-200 hover:bg-red-50"
             onClick={(e) => {
               e.stopPropagation();
-              handleDelete(shop.id);
+              setConfirmDialog({ isOpen: true, shopId: shop.id });
             }}
           >
             Delete
@@ -215,6 +244,25 @@ export const ShopList = () => {
           </div>
         </form>
       </Modal>
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog({ isOpen: false, shopId: null })}
+        onConfirm={() => handleDelete(confirmDialog.shopId)}
+        title="Delete Shop"
+        message="Are you sure you want to delete this shop? This cannot be undone."
+        confirmText="Delete"
+        variant="danger"
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        isOpen={toast.isOpen}
+        onClose={() => setToast({ ...toast, isOpen: false })}
+        message={toast.message}
+        type={toast.type}
+      />
     </div>
   );
 };

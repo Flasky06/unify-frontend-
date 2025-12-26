@@ -100,6 +100,11 @@ const useAuthStore = create(
         return user?.role === "SUPER_ADMIN";
       },
 
+      isBusinessManager: () => {
+        const { user } = get();
+        return user?.role === "BUSINESS_MANAGER";
+      },
+
       canManage: () => {
         const { user } = get();
         return ["BUSINESS_OWNER", "BUSINESS_MANAGER"].includes(user?.role);

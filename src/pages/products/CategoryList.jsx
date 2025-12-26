@@ -4,6 +4,7 @@ import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import { categoryService } from "../../services/categoryService";
+import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
 
 export const CategoryList = () => {
   const [categories, setCategories] = useState([]);
@@ -12,6 +13,15 @@ export const CategoryList = () => {
   const [editingCategory, setEditingCategory] = useState(null);
   const [formData, setFormData] = useState({ name: "", description: "" });
   const [error, setError] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    categoryId: null,
+  });
+  const [toast, setToast] = useState({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -50,19 +60,38 @@ export const CategoryList = () => {
       }
       fetchCategories();
       closeModal();
+      setToast({
+        isOpen: true,
+        message: editingCategory
+          ? "Category updated successfully"
+          : "Category created successfully",
+        type: "success",
+      });
     } catch (err) {
       setError(err.message || "Operation failed");
+      setToast({
+        isOpen: true,
+        message: err.message || "Operation failed",
+        type: "error",
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this category?")) {
-      try {
-        await categoryService.delete(id);
-        fetchCategories();
-      } catch (err) {
-        alert(err.message || "Failed to delete category");
-      }
+    try {
+      await categoryService.delete(id);
+      fetchCategories();
+      setToast({
+        isOpen: true,
+        message: "Category deleted successfully",
+        type: "success",
+      });
+    } catch (err) {
+      setToast({
+        isOpen: true,
+        message: err.message || "Failed to delete category",
+        type: "error",
+      });
     }
   };
 
@@ -112,7 +141,7 @@ export const CategoryList = () => {
             className="text-red-600 border-red-200 hover:bg-red-50"
             onClick={(e) => {
               e.stopPropagation();
-              handleDelete(category.id);
+              setConfirmDialog({ isOpen: true, categoryId: category.id });
             }}
           >
             Delete
@@ -212,6 +241,25 @@ export const CategoryList = () => {
           </div>
         </form>
       </Modal>
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog({ isOpen: false, categoryId: null })}
+        onConfirm={() => handleDelete(confirmDialog.categoryId)}
+        title="Delete Category"
+        message="Are you sure you want to delete this category?"
+        confirmText="Delete"
+        variant="danger"
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        isOpen={toast.isOpen}
+        onClose={() => setToast({ ...toast, isOpen: false })}
+        message={toast.message}
+        type={toast.type}
+      />
     </div>
   );
 };

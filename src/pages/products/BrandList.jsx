@@ -4,6 +4,7 @@ import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import { brandService } from "../../services/brandService";
+import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
 
 export const BrandList = () => {
   const [brands, setBrands] = useState([]);
@@ -12,6 +13,15 @@ export const BrandList = () => {
   const [editingBrand, setEditingBrand] = useState(null);
   const [formData, setFormData] = useState({ name: "", description: "" });
   const [error, setError] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    brandId: null,
+  });
+  const [toast, setToast] = useState({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -51,19 +61,38 @@ export const BrandList = () => {
       }
       fetchBrands();
       closeModal();
+      setToast({
+        isOpen: true,
+        message: editingBrand
+          ? "Brand updated successfully"
+          : "Brand created successfully",
+        type: "success",
+      });
     } catch (err) {
       setError(err.message || "Operation failed");
+      setToast({
+        isOpen: true,
+        message: err.message || "Operation failed",
+        type: "error",
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this brand?")) {
-      try {
-        await brandService.delete(id);
-        fetchBrands();
-      } catch (err) {
-        alert(err.message || "Failed to delete brand");
-      }
+    try {
+      await brandService.delete(id);
+      fetchBrands();
+      setToast({
+        isOpen: true,
+        message: "Brand deleted successfully",
+        type: "success",
+      });
+    } catch (err) {
+      setToast({
+        isOpen: true,
+        message: err.message || "Failed to delete brand",
+        type: "error",
+      });
     }
   };
 
@@ -110,7 +139,7 @@ export const BrandList = () => {
             className="text-red-600 border-red-200 hover:bg-red-50"
             onClick={(e) => {
               e.stopPropagation();
-              handleDelete(brand.id);
+              setConfirmDialog({ isOpen: true, brandId: brand.id });
             }}
           >
             Delete
@@ -210,6 +239,25 @@ export const BrandList = () => {
           </div>
         </form>
       </Modal>
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog({ isOpen: false, brandId: null })}
+        onConfirm={() => handleDelete(confirmDialog.brandId)}
+        title="Delete Brand"
+        message="Are you sure you want to delete this brand?"
+        confirmText="Delete"
+        variant="danger"
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        isOpen={toast.isOpen}
+        onClose={() => setToast({ ...toast, isOpen: false })}
+        message={toast.message}
+        type={toast.type}
+      />
     </div>
   );
 };

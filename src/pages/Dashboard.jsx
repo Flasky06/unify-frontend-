@@ -8,6 +8,7 @@ import { shopService } from "../services/shopService";
 import { productService } from "../services/productService";
 import { stockService } from "../services/stockService";
 import { saleService } from "../services/saleService";
+import { Toast } from "../components/ui/ConfirmDialog";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -20,6 +21,11 @@ const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState([]);
   const [isCartModalOpen, setCartModalOpen] = useState(false);
+  const [toast, setToast] = useState({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
 
   // ... [fetch logic]
 
@@ -125,7 +131,11 @@ const Dashboard = () => {
       if (existing) {
         // Check stock limit
         if (existing.quantity >= stockItem.quantity) {
-          alert("Cannot add more than available stock!");
+          setToast({
+            isOpen: true,
+            message: "Cannot add more than available stock!",
+            type: "warning",
+          });
           return prev;
         }
         return prev.map((item) =>
@@ -157,7 +167,11 @@ const Dashboard = () => {
       prev.map((item) => {
         if (item.productId === productId) {
           if (newQty > item.maxStock) {
-            alert(`Only ${item.maxStock} units available`);
+            setToast({
+              isOpen: true,
+              message: `Only ${item.maxStock} units available`,
+              type: "warning",
+            });
             return item;
           }
           return { ...item, quantity: newQty };
@@ -185,13 +199,22 @@ const Dashboard = () => {
       };
 
       await saleService.createSale(saleData);
-      alert("Sale processed successfully!");
+      await saleService.createSale(saleData);
+      setToast({
+        isOpen: true,
+        message: "Sale processed successfully!",
+        type: "success",
+      });
       setCart([]);
       setCheckoutModalOpen(false);
       fetchInventory(selectedShopId); // Refresh stock
     } catch (err) {
       console.error(" Checkout failed", err);
-      alert(err.message || "Failed to process sale");
+      setToast({
+        isOpen: true,
+        message: err.message || "Failed to process sale",
+        type: "error",
+      });
     } finally {
       setProcessing(false);
     }
@@ -490,6 +513,14 @@ const Dashboard = () => {
           </div>
         </div>
       </Modal>
+
+      {/* Toast Notification */}
+      <Toast
+        isOpen={toast.isOpen}
+        onClose={() => setToast({ ...toast, isOpen: false })}
+        message={toast.message}
+        type={toast.type}
+      />
     </div>
   );
 };

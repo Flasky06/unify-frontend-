@@ -84,7 +84,7 @@ export const Sidebar = () => {
       ),
     },
     {
-      name: "Shop Mgmt",
+      name: "Shop Management",
       icon: (
         <svg
           className="w-5 h-5"
@@ -103,7 +103,7 @@ export const Sidebar = () => {
       children: [{ name: "Shops", path: "/shops" }],
     },
     {
-      name: "Product Mgmt",
+      name: "Product Management",
       icon: (
         <svg
           className="w-5 h-5"
@@ -126,7 +126,7 @@ export const Sidebar = () => {
       ],
     },
     {
-      name: "Stock Mgmt",
+      name: "Stock Management",
       icon: (
         <svg
           className="w-5 h-5"
@@ -148,7 +148,7 @@ export const Sidebar = () => {
       ],
     },
     {
-      name: "Sales Mgmt",
+      name: "Sales Management",
       icon: (
         <svg
           className="w-5 h-5"
@@ -170,7 +170,7 @@ export const Sidebar = () => {
       ],
     },
     {
-      name: "User Mgmt",
+      name: "User Management",
       icon: (
         <svg
           className="w-5 h-5"

@@ -6,6 +6,7 @@ import Input from "../../components/ui/Input";
 import { productService } from "../../services/productService";
 import { brandService } from "../../services/brandService";
 import { categoryService } from "../../services/categoryService";
+import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
 
 export const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -25,6 +26,15 @@ export const ProductList = () => {
     active: true,
   });
   const [error, setError] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    productId: null,
+  });
+  const [toast, setToast] = useState({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
@@ -85,19 +95,38 @@ export const ProductList = () => {
       }
       fetchData();
       closeModal();
+      setToast({
+        isOpen: true,
+        message: editingProduct
+          ? "Product updated successfully"
+          : "Product created successfully",
+        type: "success",
+      });
     } catch (err) {
       setError(err.message || "Operation failed");
+      setToast({
+        isOpen: true,
+        message: err.message || "Operation failed",
+        type: "error",
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      try {
-        await productService.delete(id);
-        fetchData();
-      } catch (err) {
-        alert(err.message || "Failed to delete product");
-      }
+    try {
+      await productService.delete(id);
+      fetchData();
+      setToast({
+        isOpen: true,
+        message: "Product deleted successfully",
+        type: "success",
+      });
+    } catch (err) {
+      setToast({
+        isOpen: true,
+        message: err.message || "Failed to delete product",
+        type: "error",
+      });
     }
   };
 
@@ -195,7 +224,7 @@ export const ProductList = () => {
             className="text-red-600 border-red-200 hover:bg-red-50"
             onClick={(e) => {
               e.stopPropagation();
-              handleDelete(product.id);
+              setConfirmDialog({ isOpen: true, productId: product.id });
             }}
           >
             Delete
@@ -416,6 +445,25 @@ export const ProductList = () => {
           </div>
         </form>
       </Modal>
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog({ isOpen: false, productId: null })}
+        onConfirm={() => handleDelete(confirmDialog.productId)}
+        title="Delete Product"
+        message="Are you sure you want to delete this product?"
+        confirmText="Delete"
+        variant="danger"
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        isOpen={toast.isOpen}
+        onClose={() => setToast({ ...toast, isOpen: false })}
+        message={toast.message}
+        type={toast.type}
+      />
     </div>
   );
 };

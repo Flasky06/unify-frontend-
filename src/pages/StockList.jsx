@@ -4,6 +4,7 @@ import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Modal from "../components/ui/Modal";
 import Table from "../components/ui/Table";
+import { ConfirmDialog, Toast } from "../components/ui/ConfirmDialog";
 import { stockService } from "../services/stockService";
 import { productService } from "../services/productService";
 import { shopService } from "../services/shopService";
@@ -23,6 +24,16 @@ const StockList = () => {
     shopId: "",
     productId: "",
     quantity: 0,
+  });
+
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    stockId: null,
+  });
+  const [toast, setToast] = useState({
+    isOpen: false,
+    message: "",
+    type: "success",
   });
 
   // Fetch initial data
@@ -119,9 +130,20 @@ const StockList = () => {
       setEditingStock(null);
       resetForm();
       fetchStocks();
+      setToast({
+        isOpen: true,
+        message: editingStock
+          ? "Stock updated successfully"
+          : "Stock added successfully",
+        type: "success",
+      });
     } catch (error) {
       console.error("Failed to save stock:", error);
-      alert(error.message || "Failed to save stock");
+      setToast({
+        isOpen: true,
+        message: error.message || "Failed to save stock",
+        type: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -177,7 +199,9 @@ const StockList = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleDelete(row._stock.id)}
+            onClick={() =>
+              setConfirmDialog({ isOpen: true, stockId: row._stock.id })
+            }
           >
             Delete
           </Button>
@@ -367,6 +391,25 @@ const StockList = () => {
           </div>
         </form>
       </Modal>
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog({ isOpen: false, stockId: null })}
+        onConfirm={() => handleDelete(confirmDialog.stockId)}
+        title="Delete Stock"
+        message="Are you sure you want to delete this stock entry?"
+        confirmText="Delete"
+        variant="danger"
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        isOpen={toast.isOpen}
+        onClose={() => setToast({ ...toast, isOpen: false })}
+        message={toast.message}
+        type={toast.type}
+      />
     </div>
   );
 };
