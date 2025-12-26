@@ -211,9 +211,27 @@ export const Sidebar = ({ isOpen, onClose }) => {
 
   // Filter navigation based on user role
   const getFilteredBusinessNav = () => {
-    // SHOP_MANAGER and SALES_REP cannot access User Management
+    // SHOP_MANAGER and SALES_REP restrictions
     if (user?.role === "SHOP_MANAGER" || user?.role === "SALES_REP") {
-      return businessNav.filter((item) => item.name !== "User Management");
+      return businessNav
+        .filter((item) => {
+          // Exclude User Management and Shop Management (since they manage 1 shop via context, not list)
+          return (
+            item.name !== "User Management" && item.name !== "Shop Management"
+          );
+        })
+        .map((item) => {
+          // For Product Management, show only Products, hide Categories/Brands
+          if (item.name === "Product Management") {
+            return {
+              ...item,
+              children: item.children.filter(
+                (child) => child.name === "Products"
+              ),
+            };
+          }
+          return item;
+        });
     }
     return businessNav;
   };
