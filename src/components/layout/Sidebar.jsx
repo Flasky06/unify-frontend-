@@ -209,7 +209,16 @@ export const Sidebar = () => {
     },
   ];
 
-  const navigation = isSuperAdmin() ? superAdminNav : businessNav;
+  // Filter navigation based on user role
+  const getFilteredBusinessNav = () => {
+    // SHOP_MANAGER and SALES_REP cannot access User Management
+    if (user?.role === "SHOP_MANAGER" || user?.role === "SALES_REP") {
+      return businessNav.filter((item) => item.name !== "User Management");
+    }
+    return businessNav;
+  };
+
+  const navigation = isSuperAdmin() ? superAdminNav : getFilteredBusinessNav();
 
   const renderNavItem = (item) => {
     if (item.children) {
