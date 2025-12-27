@@ -4,12 +4,14 @@ import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import { serviceProductService } from "../../services/serviceProductService";
+import { serviceCategoryService } from "../../services/serviceCategoryService";
 import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
 import useAuthStore from "../../store/authStore";
 
 export const ServiceList = () => {
   const { user } = useAuthStore();
   const [services, setServices] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingService, setEditingService] = useState(null);
@@ -19,6 +21,7 @@ export const ServiceList = () => {
     price: "",
     unit: "",
     minimumQuantity: 1,
+    categoryId: "",
     active: true,
   });
   const [error, setError] = useState(null);
@@ -32,10 +35,11 @@ export const ServiceList = () => {
     type: "success",
   });
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [selectedCategory]);
 
   const fetchData = async () => {
     try {
@@ -45,8 +49,13 @@ export const ServiceList = () => {
         throw new Error("Business ID not found");
       }
 
-      const servicesData = await serviceProductService.getAll(businessId);
+      const [servicesData, categoriesData] = await Promise.all([
+        serviceProductService.getAll(businessId, selectedCategory || null),
+        serviceCategoryService.getAll(businessId),
+      ]);
+
       setServices(servicesData || []);
+      setCategories(categoriesData || []);
     } catch (err) {
       console.error("Failed to fetch data", err);
       setToast({
@@ -75,6 +84,7 @@ export const ServiceList = () => {
         ...formData,
         price: parseFloat(formData.price),
         minimumQuantity: parseInt(formData.minimumQuantity),
+        categoryId: formData.categoryId ? parseInt(formData.categoryId) : null,
       };
 
       if (editingService) {
@@ -127,6 +137,7 @@ export const ServiceList = () => {
       price: "",
       unit: "per service",
       minimumQuantity: 1,
+      categoryId: "",
       active: true,
     });
     setError(null);
@@ -141,6 +152,7 @@ export const ServiceList = () => {
       price: service.price,
       unit: service.unit,
       minimumQuantity: service.minimumQuantity,
+      categoryId: service.categoryId || "",
       active: service.active,
     });
     setError(null);
@@ -156,6 +168,7 @@ export const ServiceList = () => {
       price: "",
       unit: "",
       minimumQuantity: 1,
+      categoryId: "",
       active: true,
     });
     setError(null);
@@ -179,11 +192,16 @@ export const ServiceList = () => {
   const columns = [
     { header: "Name", accessor: "name", truncate: true, maxWidth: "200px" },
     {
+      header: "Category",
+      accessor: "categoryName",
+      render: (service) => service.categoryName || "-",
+    },
+    {
       header: "Price",
       accessor: "price",
       render: (service) => (
         <span>
-          {service.price.toLocaleString()} KSh{" "}
+          {service.price} KSh{" "}
           <span className="text-xs text-gray-500">{service.unit}</span>
         </span>
       ),
@@ -256,6 +274,20 @@ export const ServiceList = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+        <div className="w-full md:w-64">
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">All Categories</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <Table
@@ -291,6 +323,26 @@ export const ServiceList = () => {
               required
               placeholder="e.g., Shoe Cleaning"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Category
+            </label>
+            <select
+              value={formData.categoryId}
+              onChange={(e) =>
+                setFormData({ ...formData, categoryId: e.target.value })
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">Select Category</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

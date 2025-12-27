@@ -289,7 +289,11 @@ const Dashboard = () => {
 
   const serviceColumns = [
     { header: "Service", accessor: "name" },
-
+    {
+      header: "Category",
+      accessor: "categoryName",
+      render: (service) => service.categoryName || "-",
+    },
     {
       header: "Price",
       accessor: "price",
