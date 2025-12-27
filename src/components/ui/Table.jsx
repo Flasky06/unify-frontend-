@@ -77,21 +77,11 @@ const Table = ({
                     {columns.map((column, colIndex) => (
                       <td
                         key={colIndex}
-                        className="px-6 py-4 text-sm text-gray-900"
-                        style={{
-                          maxWidth: column.maxWidth || "300px",
-                        }}
+                        className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
                       >
-                        <div
-                          className="truncate"
-                          title={
-                            column.render ? undefined : row[column.accessor]
-                          }
-                        >
-                          {column.render
-                            ? column.render(row)
-                            : row[column.accessor]}
-                        </div>
+                        {column.render
+                          ? column.render(row)
+                          : row[column.accessor]}
                       </td>
                     ))}
                     {showViewAction && (
