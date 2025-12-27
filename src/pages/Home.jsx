@@ -5,19 +5,19 @@ const Home = () => {
   const { isAuthenticated } = useAuthStore();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-teal-600">
       {/* Navigation */}
       <nav className="bg-white/10 backdrop-blur-md border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-white">mPOS</h1>
+              <h1 className="text-2xl font-bold text-white">UNIFY</h1>
             </div>
             <div className="flex items-center gap-4">
               {isAuthenticated ? (
                 <Link
                   to="/dashboard"
-                  className="px-6 py-2 bg-white text-purple-600 rounded-lg font-medium hover:bg-gray-100 transition"
+                  className="px-6 py-2 bg-white text-blue-700 rounded-lg font-medium hover:bg-gray-100 transition"
                 >
                   Dashboard
                 </Link>
@@ -31,7 +31,7 @@ const Home = () => {
                   </Link>
                   <Link
                     to="/register"
-                    className="px-6 py-2 bg-white text-purple-600 rounded-lg font-medium hover:bg-gray-100 transition"
+                    className="px-6 py-2 bg-white text-blue-700 rounded-lg font-medium hover:bg-gray-100 transition"
                   >
                     Sign Up
                   </Link>
@@ -48,17 +48,17 @@ const Home = () => {
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
             Modern Point of Sale
             <br />
-            <span className="text-yellow-300">For Your Business</span>
+            <span className="text-teal-300">Business Management Software</span>
           </h1>
           <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto">
-            Streamline your sales, manage inventory, and grow your business with
-            our powerful mPOS solution. Simple, fast, and reliable.
+            Streamline your sales, inventory, and operations with UNIFY - the
+            all-in-one business management solution.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {isAuthenticated ? (
               <Link
                 to="/dashboard"
-                className="px-8 py-4 bg-white text-purple-600 rounded-xl font-semibold text-lg hover:bg-gray-100 transition shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+                className="px-8 py-4 bg-white text-blue-700 rounded-xl font-semibold text-lg hover:bg-gray-100 transition shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
               >
                 Go to Dashboard
               </Link>
@@ -66,13 +66,13 @@ const Home = () => {
               <>
                 <Link
                   to="/register"
-                  className="px-8 py-4 bg-white text-purple-600 rounded-xl font-semibold text-lg hover:bg-gray-100 transition shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+                  className="px-8 py-4 bg-white text-blue-700 rounded-xl font-semibold text-lg hover:bg-gray-100 transition shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
                 >
                   Get Started Free
                 </Link>
                 <Link
                   to="/login"
-                  className="px-8 py-4 bg-purple-600/20 backdrop-blur-sm text-white border-2 border-white rounded-xl font-semibold text-lg hover:bg-purple-600/30 transition"
+                  className="px-8 py-4 bg-blue-600/20 backdrop-blur-sm text-white border-2 border-white rounded-xl font-semibold text-lg hover:bg-blue-600/30 transition"
                 >
                   Sign In
                 </Link>

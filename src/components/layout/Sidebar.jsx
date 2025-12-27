@@ -416,11 +416,11 @@ export const Sidebar = ({ isOpen, onClose }) => {
         {/* Header with Close Button */}
         <div className="p-5 border-b border-gray-700 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              mPOS
+            <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              UNIFY
             </h1>
             <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">
-              {isSuperAdmin() ? "Admin Panel" : "Business"}
+              {isSuperAdmin() ? "Admin Panel" : "Business Management"}
             </p>
           </div>
           {/* Close button - only visible on mobile */}
@@ -453,7 +453,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
         {/* User Info & Logout */}
         <div className="p-3 border-t border-gray-700 bg-gray-900/50">
           <div className="flex items-center gap-3 px-3 py-2 rounded-lg mb-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold text-xs">
               {user?.email?.[0]?.toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
