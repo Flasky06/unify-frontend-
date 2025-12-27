@@ -119,7 +119,12 @@ const AddStock = () => {
   };
 
   const columns = [
-    { header: "Product Name", accessor: "name" },
+    {
+      header: "Product Name",
+      accessor: "name",
+      truncate: true,
+      maxWidth: "250px",
+    },
     { header: "Category", accessor: "category" },
     { header: "Brand", accessor: "brand" },
     { header: "Price (KSH)", accessor: "price" },
