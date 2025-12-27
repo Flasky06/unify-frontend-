@@ -5,19 +5,19 @@ const Home = () => {
   const { isAuthenticated } = useAuthStore();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-teal-600">
+    <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="bg-white/10 backdrop-blur-md border-b border-white/20">
+      <nav className="border-b border-gray-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-white">UNIFY</h1>
+              <h1 className="text-2xl font-bold text-gray-900">UNIFY</h1>
             </div>
             <div className="flex items-center gap-4">
               {isAuthenticated ? (
                 <Link
                   to="/dashboard"
-                  className="px-6 py-2 bg-white text-blue-700 rounded-lg font-medium hover:bg-gray-100 transition"
+                  className="px-6 py-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition"
                 >
                   Dashboard
                 </Link>
@@ -25,15 +25,15 @@ const Home = () => {
                 <>
                   <Link
                     to="/login"
-                    className="px-6 py-2 text-white font-medium hover:text-gray-200 transition"
+                    className="px-6 py-2 text-gray-700 hover:text-gray-900 font-medium transition"
                   >
-                    Login
+                    Sign In
                   </Link>
                   <Link
                     to="/register"
-                    className="px-6 py-2 bg-white text-blue-700 rounded-lg font-medium hover:bg-gray-100 transition"
+                    className="px-6 py-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition"
                   >
-                    Sign Up
+                    Get Started
                   </Link>
                 </>
               )}
@@ -43,22 +43,22 @@ const Home = () => {
       </nav>
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Modern Point of Sale
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="py-20 text-center">
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            Business Management
             <br />
-            <span className="text-teal-300">Business Management Software</span>
+            <span className="text-gray-600">Simplified</span>
           </h1>
-          <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto">
-            Streamline your sales, inventory, and operations with UNIFY - the
+          <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
+            UNIFY streamlines your sales, inventory, and operations with an
             all-in-one business management solution.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {isAuthenticated ? (
               <Link
                 to="/dashboard"
-                className="px-8 py-4 bg-white text-blue-700 rounded-xl font-semibold text-lg hover:bg-gray-100 transition shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+                className="px-8 py-4 bg-gray-900 text-white rounded-lg font-semibold text-lg hover:bg-gray-800 transition"
               >
                 Go to Dashboard
               </Link>
@@ -66,13 +66,13 @@ const Home = () => {
               <>
                 <Link
                   to="/register"
-                  className="px-8 py-4 bg-white text-blue-700 rounded-xl font-semibold text-lg hover:bg-gray-100 transition shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+                  className="px-8 py-4 bg-gray-900 text-white rounded-lg font-semibold text-lg hover:bg-gray-800 transition"
                 >
                   Get Started Free
                 </Link>
                 <Link
                   to="/login"
-                  className="px-8 py-4 bg-blue-600/20 backdrop-blur-sm text-white border-2 border-white rounded-xl font-semibold text-lg hover:bg-blue-600/30 transition"
+                  className="px-8 py-4 bg-white text-gray-900 border-2 border-gray-900 rounded-lg font-semibold text-lg hover:bg-gray-50 transition"
                 >
                   Sign In
                 </Link>
@@ -82,81 +82,87 @@ const Home = () => {
         </div>
 
         {/* Features Section */}
-        <div className="mt-32 grid md:grid-cols-3 gap-8">
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition">
-            <div className="w-12 h-12 bg-teal-400 rounded-lg flex items-center justify-center mb-4">
-              <svg
-                className="w-6 h-6 text-blue-700"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">
-              Lightning Fast
+        <div className="py-20 grid md:grid-cols-3 gap-12">
+          <div className="text-center">
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Sales Management
             </h3>
-            <p className="text-white/80">
-              Process transactions in seconds with our optimized checkout
-              system.
+            <p className="text-gray-600">
+              Track sales, manage transactions, and monitor performance across
+              all locations.
             </p>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition">
-            <div className="w-12 h-12 bg-yellow-400 rounded-lg flex items-center justify-center mb-4">
-              <svg
-                className="w-6 h-6 text-purple-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">
-              Real-time Analytics
+          <div className="text-center">
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Inventory Control
             </h3>
-            <p className="text-white/80">
-              Track sales, inventory, and performance with live dashboards.
+            <p className="text-gray-600">
+              Real-time stock tracking, automated alerts, and seamless transfers
+              between shops.
             </p>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition">
-            <div className="w-12 h-12 bg-yellow-400 rounded-lg flex items-center justify-center mb-4">
-              <svg
-                className="w-6 h-6 text-purple-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">
-              Secure & Reliable
+          <div className="text-center">
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Multi-Location
             </h3>
-            <p className="text-white/80">
-              Enterprise-grade security to protect your business data.
+            <p className="text-gray-600">
+              Manage multiple shops, assign managers, and control access with
+              role-based permissions.
             </p>
           </div>
         </div>
-      </main>
+
+        {/* Stats Section */}
+        <div className="py-20 border-t border-gray-200">
+          <div className="grid md:grid-cols-3 gap-12 text-center">
+            <div>
+              <div className="text-4xl font-bold text-gray-900 mb-2">Fast</div>
+              <p className="text-gray-600">Lightning-fast performance</p>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-gray-900 mb-2">
+                Secure
+              </div>
+              <p className="text-gray-600">Enterprise-grade security</p>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-gray-900 mb-2">
+                Reliable
+              </div>
+              <p className="text-gray-600">99.9% uptime guarantee</p>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="py-20 text-center border-t border-gray-200">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">
+            Ready to get started?
+          </h2>
+          <p className="text-xl text-gray-600 mb-8">
+            Join businesses already using UNIFY to streamline their operations.
+          </p>
+          {!isAuthenticated && (
+            <Link
+              to="/register"
+              className="inline-block px-8 py-4 bg-gray-900 text-white rounded-lg font-semibold text-lg hover:bg-gray-800 transition"
+            >
+              Start Free Trial
+            </Link>
+          )}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-200 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center text-gray-600">
+            <p>&copy; 2025 UNIFY. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
