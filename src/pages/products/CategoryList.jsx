@@ -11,7 +11,7 @@ export const CategoryList = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
-  const [formData, setFormData] = useState({ name: "", description: "" });
+  const [formData, setFormData] = useState({ name: "" });
   const [error, setError] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
@@ -42,11 +42,8 @@ export const CategoryList = () => {
     }
   };
 
-  const filteredCategories = categories.filter(
-    (category) =>
-      category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (category.description &&
-        category.description.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredCategories = categories.filter((category) =>
+    category.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSubmit = async (e) => {
@@ -97,7 +94,7 @@ export const CategoryList = () => {
 
   const openCreateModal = () => {
     setEditingCategory(null);
-    setFormData({ name: "", description: "" });
+    setFormData({ name: "" });
     setIsModalOpen(true);
     setError(null);
   };
@@ -106,7 +103,6 @@ export const CategoryList = () => {
     setEditingCategory(category);
     setFormData({
       name: category.name,
-      description: category.description || "",
     });
     setIsModalOpen(true);
     setError(null);
@@ -115,12 +111,11 @@ export const CategoryList = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setEditingCategory(null);
-    setFormData({ name: "", description: "" });
+    setFormData({ name: "" });
   };
 
   const columns = [
     { header: "Name", accessor: "name" },
-    { header: "Description", accessor: "description" },
     {
       header: "Actions",
       render: (category) => (
@@ -215,21 +210,6 @@ export const CategoryList = () => {
             placeholder="e.g., Electronics, Beverages"
             required
           />
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description
-            </label>
-            <textarea
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"
-              rows="3"
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              placeholder="Optional description..."
-            />
-          </div>
 
           <div className="flex justify-end gap-3 pt-4">
             <Button type="button" variant="outline" onClick={closeModal}>

@@ -11,7 +11,7 @@ export const BrandList = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBrand, setEditingBrand] = useState(null);
-  const [formData, setFormData] = useState({ name: "", description: "" });
+  const [formData, setFormData] = useState({ name: "" });
   const [error, setError] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
@@ -43,11 +43,8 @@ export const BrandList = () => {
     }
   };
 
-  const filteredBrands = brands.filter(
-    (brand) =>
-      brand.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (brand.description &&
-        brand.description.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredBrands = brands.filter((brand) =>
+    brand.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSubmit = async (e) => {
@@ -98,14 +95,14 @@ export const BrandList = () => {
 
   const openCreateModal = () => {
     setEditingBrand(null);
-    setFormData({ name: "", description: "" });
+    setFormData({ name: "" });
     setIsModalOpen(true);
     setError(null);
   };
 
   const openEditModal = (brand) => {
     setEditingBrand(brand);
-    setFormData({ name: brand.name, description: brand.description || "" });
+    setFormData({ name: brand.name });
     setIsModalOpen(true);
     setError(null);
   };
@@ -113,12 +110,11 @@ export const BrandList = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setEditingBrand(null);
-    setFormData({ name: "", description: "" });
+    setFormData({ name: "" });
   };
 
   const columns = [
     { header: "Name", accessor: "name" },
-    { header: "Description", accessor: "description" },
     {
       header: "Actions",
       render: (brand) => (
@@ -213,21 +209,6 @@ export const BrandList = () => {
             placeholder="e.g., Nike, Coca-Cola"
             required
           />
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description
-            </label>
-            <textarea
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"
-              rows="3"
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              placeholder="Optional description..."
-            />
-          </div>
 
           <div className="flex justify-end gap-3 pt-4">
             <Button type="button" variant="outline" onClick={closeModal}>

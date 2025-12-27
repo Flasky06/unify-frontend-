@@ -13,7 +13,7 @@ export const ServiceCategoryList = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
-  const [formData, setFormData] = useState({ name: "", description: "" });
+  const [formData, setFormData] = useState({ name: "" });
   const [error, setError] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
@@ -51,11 +51,8 @@ export const ServiceCategoryList = () => {
     }
   };
 
-  const filteredCategories = categories.filter(
-    (category) =>
-      category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (category.description &&
-        category.description.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredCategories = categories.filter((category) =>
+    category.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSubmit = async (e) => {
@@ -107,16 +104,14 @@ export const ServiceCategoryList = () => {
 
   const openCreateModal = () => {
     setEditingCategory(null);
-    setFormData({ name: "", description: "" });
+    setFormData({ name: "" });
     setError(null);
     setIsModalOpen(true);
   };
 
   const openEditModal = (category) => {
-    setEditingCategory(category);
     setFormData({
       name: category.name,
-      description: category.description || "",
     });
     setError(null);
     setIsModalOpen(true);
@@ -125,7 +120,7 @@ export const ServiceCategoryList = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setEditingCategory(null);
-    setFormData({ name: "", description: "" });
+    setFormData({ name: "" });
     setError(null);
   };
 
@@ -146,7 +141,6 @@ export const ServiceCategoryList = () => {
 
   const columns = [
     { header: "Name", accessor: "name" },
-    { header: "Description", accessor: "description" },
     {
       header: "Actions",
       render: (category) => (
@@ -233,21 +227,6 @@ export const ServiceCategoryList = () => {
               }
               required
               placeholder="e.g., Laundry Services"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description
-            </label>
-            <textarea
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              rows="3"
-              placeholder="Brief description of this service category"
             />
           </div>
 
