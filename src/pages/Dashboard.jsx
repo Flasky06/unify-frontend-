@@ -449,9 +449,21 @@ const Dashboard = () => {
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {cart.map((item) => (
-                    <tr key={item.productId} className="group">
+                    <tr
+                      key={
+                        item.type === "SERVICE"
+                          ? `svc-${item.serviceId}`
+                          : `prd-${item.productId}`
+                      }
+                      className="group"
+                    >
                       <td className="py-3 font-medium text-gray-900">
                         {item.name || item.productName}
+                        {item.type === "SERVICE" && (
+                          <span className="ml-2 px-2 py-0.5 text-xs bg-blue-50 text-blue-600 rounded-full">
+                            Service
+                          </span>
+                        )}
                       </td>
                       <td className="py-3 text-gray-600">
                         {item.price.toLocaleString()}
@@ -461,8 +473,11 @@ const Dashboard = () => {
                           <button
                             onClick={() =>
                               updateCartQuantity(
-                                item.productId,
-                                item.quantity - 1
+                                item.type === "SERVICE"
+                                  ? item.serviceId
+                                  : item.productId,
+                                item.quantity - 1,
+                                item.type
                               )
                             }
                             className="px-2 py-1 hover:bg-gray-100 text-gray-600 font-bold border-r border-gray-200"
@@ -472,12 +487,18 @@ const Dashboard = () => {
                           <input
                             type="number"
                             min="1"
-                            max={item.maxStock}
+                            max={item.type === "SERVICE" ? 9999 : item.maxStock}
                             value={item.quantity}
                             onChange={(e) => {
                               const val = parseInt(e.target.value);
                               if (!isNaN(val)) {
-                                updateCartQuantity(item.productId, val);
+                                updateCartQuantity(
+                                  item.type === "SERVICE"
+                                    ? item.serviceId
+                                    : item.productId,
+                                  val,
+                                  item.type
+                                );
                               }
                             }}
                             className="w-12 text-center border-none focus:ring-0 p-1 text-sm font-medium remove-arrow"
@@ -485,8 +506,11 @@ const Dashboard = () => {
                           <button
                             onClick={() =>
                               updateCartQuantity(
-                                item.productId,
-                                item.quantity + 1
+                                item.type === "SERVICE"
+                                  ? item.serviceId
+                                  : item.productId,
+                                item.quantity + 1,
+                                item.type
                               )
                             }
                             className="px-2 py-1 hover:bg-gray-100 text-gray-600 font-bold border-l border-gray-200"
@@ -500,7 +524,14 @@ const Dashboard = () => {
                       </td>
                       <td className="py-3 text-right">
                         <button
-                          onClick={() => removeFromCart(item.productId)}
+                          onClick={() =>
+                            removeFromCart(
+                              item.type === "SERVICE"
+                                ? item.serviceId
+                                : item.productId,
+                              item.type
+                            )
+                          }
                           className="text-gray-400 hover:text-red-500 transition"
                         >
                           <svg
