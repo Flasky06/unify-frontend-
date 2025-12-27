@@ -409,18 +409,40 @@ export const Sidebar = ({ isOpen, onClose }) => {
 
       <div
         className={`
-        fixed inset-y-0 left-0 z-50 w-60 bg-gradient-to-b from-gray-900 to-gray-800 text-white min-h-screen flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex-shrink-0
-        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        fixed inset-y-0 right-0 z-50 w-full bg-gradient-to-b from-gray-900 to-gray-800 text-white min-h-screen flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 lg:w-60 lg:left-0 lg:right-auto flex-shrink-0
+        ${isOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"}
       `}
       >
-        {/* Logo */}
-        <div className="p-5 border-b border-gray-700">
-          <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            mPOS
-          </h1>
-          <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">
-            {isSuperAdmin() ? "Admin Panel" : "Business"}
-          </p>
+        {/* Header with Close Button */}
+        <div className="p-5 border-b border-gray-700 flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              mPOS
+            </h1>
+            <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">
+              {isSuperAdmin() ? "Admin Panel" : "Business"}
+            </p>
+          </div>
+          {/* Close button - only visible on mobile */}
+          <button
+            onClick={onClose}
+            className="lg:hidden p-2 hover:bg-gray-800 rounded-lg transition-colors"
+            aria-label="Close menu"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         </div>
 
         {/* Navigation */}
