@@ -41,39 +41,6 @@ const Home = () => {
           </div>
         </div>
       </nav>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">UNIFY</h1>
-            </div>
-            <div className="flex items-center gap-4">
-              {isAuthenticated ? (
-                <Link
-                  to="/dashboard"
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
-                >
-                  Dashboard
-                </Link>
-              ) : (
-                <>
-                  <Link
-                    to="/login"
-                    className="px-6 py-2 text-gray-700 hover:text-gray-900 font-medium transition"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
-                  >
-                    Get Started
-                  </Link>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
 
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -192,12 +159,6 @@ const Home = () => {
       <footer className="bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center text-white">
-            <p>&copy; 2025 UNIFY. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center text-gray-600">
             <p>&copy; 2025 UNIFY. All rights reserved.</p>
           </div>
         </div>
