@@ -1,35 +1,28 @@
-import api from "../lib/api";
+import { api } from "../lib/api";
 
 export const stockTransferService = {
   // Initiate Transfer
   initiateTransfer: async (transferData) => {
-    const response = await api.post("/stocks/transfer/initiate", transferData);
-    return response.data;
+    return await api.post("/stocks/transfer/initiate", transferData);
   },
 
   // Acknowledge (Accept) Transfer
   acknowledgeTransfer: async (transferId) => {
-    const response = await api.post(
-      `/stocks/transfer/${transferId}/acknowledge`
-    );
-    return response.data;
+    return await api.post(`/stocks/transfer/${transferId}/acknowledge`);
   },
 
   // Cancel Transfer
   cancelTransfer: async (transferId) => {
-    const response = await api.post(`/stocks/transfer/${transferId}/cancel`);
-    return response.data;
+    return await api.post(`/stocks/transfer/${transferId}/cancel`);
   },
 
   // Get Incoming
   getIncomingTransfers: async (shopId) => {
-    const response = await api.get(`/stocks/shop/${shopId}/incoming-transfers`);
-    return response.data;
+    return await api.get(`/stocks/shop/${shopId}/incoming-transfers`);
   },
 
   // Get Outgoing
   getOutgoingTransfers: async (shopId) => {
-    const response = await api.get(`/stocks/shop/${shopId}/outgoing-transfers`);
-    return response.data;
+    return await api.get(`/stocks/shop/${shopId}/outgoing-transfers`);
   },
 };

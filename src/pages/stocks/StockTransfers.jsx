@@ -14,7 +14,8 @@ const StockTransfers = () => {
   const [activeTab, setActiveTab] = useState("incoming"); // 'incoming' or 'outgoing'
   const [transfers, setTransfers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [shops, setShops] = useState([]); // For creating transfer (target shops)
+  const [shops, setShops] = useState([]); // All shops
+  const [selectedShopId, setSelectedShopId] = useState(""); // For Business Owner shop selection
 
   // Create Transfer State
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
@@ -33,20 +34,50 @@ const StockTransfers = () => {
   });
 
   useEffect(() => {
-    fetchTransfers();
-  }, [activeTab, user]);
+    // Load shops for Business Owner
+    if (user?.role === "BUSINESS_OWNER") {
+      loadShops();
+    } else {
+      // For Shop Manager/Sales Rep, set their shop automatically
+      const shopId = user?.shopId || user?.shop?.id;
+      if (shopId) setSelectedShopId(shopId);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (selectedShopId) {
+      fetchTransfers();
+    }
+  }, [activeTab, selectedShopId]);
+
+  const loadShops = async () => {
+    try {
+      const data = await shopService.getAll();
+      setShops(data);
+      // Auto-select first shop for Business Owner
+      if (data.length > 0 && !selectedShopId) {
+        setSelectedShopId(data[0].id);
+      }
+    } catch (err) {
+      console.error(err);
+      setToast({
+        isOpen: true,
+        message: "Failed to load shops",
+        type: "error",
+      });
+    }
+  };
 
   const fetchTransfers = async () => {
-    if (!user.shopId && !user.shop?.id) return;
-    const shopId = user.shopId || user.shop?.id;
+    if (!selectedShopId) return;
 
     setLoading(true);
     try {
       let data = [];
       if (activeTab === "incoming") {
-        data = await stockTransferService.getIncomingTransfers(shopId);
+        data = await stockTransferService.getIncomingTransfers(selectedShopId);
       } else {
-        data = await stockTransferService.getOutgoingTransfers(shopId);
+        data = await stockTransferService.getOutgoingTransfers(selectedShopId);
       }
       setTransfers(data);
     } catch (err) {
@@ -63,13 +94,20 @@ const StockTransfers = () => {
 
   const handleInitFetch = async () => {
     try {
+      if (!selectedShopId) {
+        setToast({
+          isOpen: true,
+          message: "Please select a shop first",
+          type: "warning",
+        });
+        return;
+      }
       // Load shops and current shop's stock
-      const shopId = user.shopId || user.shop?.id;
       const [allShops, stocks] = await Promise.all([
         shopService.getAll(),
-        stockService.getStocksByShop(shopId),
+        stockService.getStocksByShop(selectedShopId),
       ]);
-      setShops(allShops.filter((s) => s.id !== shopId)); // Exclude current shop
+      setShops(allShops.filter((s) => s.id !== selectedShopId)); // Exclude current shop
 
       // Enrich stocks with needed details if necessary, but stock object usually has productName
       setAvailableStock(stocks);
@@ -90,8 +128,16 @@ const StockTransfers = () => {
 
   const handleCreateTransfer = async () => {
     try {
+      if (!selectedShopId) {
+        setToast({
+          isOpen: true,
+          message: "Please select a shop first",
+          type: "warning",
+        });
+        return;
+      }
       const payload = {
-        sourceShopId: user.shopId || user.shop?.id,
+        sourceShopId: selectedShopId,
         destinationShopId: parseInt(formData.targetShopId),
         productId: parseInt(formData.productId),
         quantity: parseInt(formData.quantity),
@@ -195,7 +241,23 @@ const StockTransfers = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-900">Stock Transfers</h1>
-        <Button onClick={openCreateModal}>New Transfer</Button>
+        <div className="flex gap-4 items-center">
+          {user?.role === "BUSINESS_OWNER" && (
+            <select
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+              value={selectedShopId}
+              onChange={(e) => setSelectedShopId(e.target.value)}
+            >
+              <option value="">Select Shop</option>
+              {shops.map((shop) => (
+                <option key={shop.id} value={shop.id}>
+                  {shop.name}
+                </option>
+              ))}
+            </select>
+          )}
+          <Button onClick={openCreateModal}>New Transfer</Button>
+        </div>
       </div>
 
       <div className="flex gap-4 border-b border-gray-200">
