@@ -8,6 +8,7 @@ import { shopService } from "../services/shopService";
 import { productService } from "../services/productService";
 import { stockService } from "../services/stockService";
 import { saleService } from "../services/saleService";
+import { serviceProductService } from "../services/serviceProductService";
 import { Toast } from "../components/ui/ConfirmDialog";
 
 const Dashboard = () => {
@@ -15,6 +16,8 @@ const Dashboard = () => {
   const [shops, setShops] = useState([]);
   const [selectedShopId, setSelectedShopId] = useState("");
   const [inventory, setInventory] = useState([]);
+  const [services, setServices] = useState([]); // Services list
+  const [activeTab, setActiveTab] = useState("products"); // 'products' or 'services'
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -77,6 +80,14 @@ const Dashboard = () => {
         setShops(shopsData);
         setProducts(productsData);
 
+        // Fetch services if businessId is available
+        if (user?.businessId) {
+          const servicesData = await serviceProductService.getAll(
+            user.businessId
+          );
+          setServices(servicesData || []);
+        }
+
         // Auto-select first shop if available
         if (shopsData.length > 0) {
           setSelectedShopId(shopsData[0].id);
@@ -123,14 +134,18 @@ const Dashboard = () => {
     }
   };
 
-  const addToCart = (stockItem) => {
+  const addToCart = (item, type = "PRODUCT") => {
     setCart((prev) => {
-      const existing = prev.find(
-        (item) => item.productId === stockItem.productId
+      const isService = type === "SERVICE";
+      const existing = prev.find((cartItem) =>
+        isService
+          ? cartItem.serviceId === item.id
+          : cartItem.productId === item.productId
       );
+
       if (existing) {
-        // Check stock limit
-        if (existing.quantity >= stockItem.quantity) {
+        // Check stock limit for products only
+        if (!isService && existing.quantity >= item.quantity) {
           setToast({
             isOpen: true,
             message: "Cannot add more than available stock!",
@@ -138,35 +153,65 @@ const Dashboard = () => {
           });
           return prev;
         }
-        return prev.map((item) =>
-          item.productId === stockItem.productId
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
+        return prev.map((cartItem) =>
+          (
+            isService
+              ? cartItem.serviceId === item.id
+              : cartItem.productId === item.productId
+          )
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
         );
       }
-      return [
-        ...prev,
-        {
-          productId: stockItem.productId,
-          productName: stockItem.productName,
-          price: stockItem.price,
-          quantity: 1,
-          maxStock: stockItem.quantity,
-        },
-      ];
+
+      // Add new item
+      if (isService) {
+        return [
+          ...prev,
+          {
+            serviceId: item.id,
+            name: item.name,
+            price: item.price,
+            unit: item.unit,
+            quantity: 1,
+            type: "SERVICE",
+          },
+        ];
+      } else {
+        return [
+          ...prev,
+          {
+            productId: item.productId,
+            name: item.productName,
+            sku: item.sku,
+            price: item.price,
+            quantity: 1,
+            maxStock: item.quantity,
+            type: "PRODUCT",
+          },
+        ];
+      }
     });
   };
 
-  const removeFromCart = (productId) => {
-    setCart((prev) => prev.filter((item) => item.productId !== productId));
+  const removeFromCart = (id, type) => {
+    setCart((prev) =>
+      prev.filter((item) => {
+        if (item.type === "SERVICE") return item.serviceId !== id;
+        return item.productId !== id;
+      })
+    );
   };
 
-  const updateCartQuantity = (productId, newQty) => {
+  const updateCartQuantity = (id, newQty, type) => {
     if (newQty < 1) return;
     setCart((prev) =>
       prev.map((item) => {
-        if (item.productId === productId) {
-          if (newQty > item.maxStock) {
+        const isTarget =
+          type === "SERVICE" ? item.serviceId === id : item.productId === id;
+
+        if (isTarget) {
+          if (type !== "SERVICE" && newQty > item.maxStock) {
             setToast({
               isOpen: true,
               message: `Only ${item.maxStock} units available`,
@@ -192,7 +237,8 @@ const Dashboard = () => {
       const saleData = {
         shopId: parseInt(selectedShopId),
         items: cart.map((item) => ({
-          productId: item.productId,
+          productId: item.type === "SERVICE" ? null : item.productId,
+          serviceId: item.type === "SERVICE" ? item.serviceId : null,
           quantity: item.quantity,
         })),
         paymentMethod: paymentMethod,
@@ -234,6 +280,43 @@ const Dashboard = () => {
       item.sku?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const filteredServices = services.filter(
+    (service) =>
+      service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (service.description &&
+        service.description.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  const serviceColumns = [
+    { header: "Service", accessor: "name" },
+    {
+      header: "Category",
+      accessor: "categoryName",
+      render: (service) => service.categoryName || "-",
+    },
+    {
+      header: "Price",
+      accessor: "price",
+      render: (service) => (
+        <span>
+          KSH {service.price.toLocaleString()}{" "}
+          <span className="text-xs text-gray-500">{service.unit}</span>
+        </span>
+      ),
+    },
+    {
+      header: "Action",
+      render: (service) => (
+        <button
+          onClick={() => addToCart(service, "SERVICE")}
+          className="px-3 py-1 bg-green-50 text-green-600 rounded hover:bg-green-100 text-sm font-medium transition"
+        >
+          Add Service
+        </button>
+      ),
+    },
+  ];
+
   if (!user) return null;
 
   return (
@@ -255,10 +338,38 @@ const Dashboard = () => {
               ))}
             </select>
           </div>
+
+          <div className="flex bg-gray-100 rounded-lg p-1">
+            <button
+              onClick={() => setActiveTab("products")}
+              className={`px-4 py-2 text-sm font-medium rounded-md transition ${
+                activeTab === "products"
+                  ? "bg-white text-gray-900 shadow-sm"
+                  : "text-gray-500 hover:text-gray-900"
+              }`}
+            >
+              Products
+            </button>
+            <button
+              onClick={() => setActiveTab("services")}
+              className={`px-4 py-2 text-sm font-medium rounded-md transition ${
+                activeTab === "services"
+                  ? "bg-white text-gray-900 shadow-sm"
+                  : "text-gray-500 hover:text-gray-900"
+              }`}
+            >
+              Services
+            </button>
+          </div>
+
           <div className="flex flex-col gap-3 w-full lg:flex-row lg:items-center lg:w-auto">
             <div className="w-full lg:w-72">
               <Input
-                placeholder="Search products..."
+                placeholder={
+                  activeTab === "products"
+                    ? "Search products..."
+                    : "Search services..."
+                }
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -297,10 +408,16 @@ const Dashboard = () => {
       <div className="bg-white rounded-lg shadow flex-1 overflow-hidden flex flex-col">
         <div className="flex-1 overflow-auto">
           <Table
-            columns={columns}
-            data={filteredInventory}
+            columns={activeTab === "products" ? columns : serviceColumns}
+            data={
+              activeTab === "products" ? filteredInventory : filteredServices
+            }
             loading={loading}
-            emptyMessage="No stock available. Add items to stock to begin."
+            emptyMessage={
+              activeTab === "products"
+                ? "No products found"
+                : "No services found"
+            }
           />
         </div>
       </div>
@@ -334,7 +451,7 @@ const Dashboard = () => {
                   {cart.map((item) => (
                     <tr key={item.productId} className="group">
                       <td className="py-3 font-medium text-gray-900">
-                        {item.productName}
+                        {item.name || item.productName}
                       </td>
                       <td className="py-3 text-gray-600">
                         {item.price.toLocaleString()}

@@ -21,7 +21,6 @@ import SalesHistory from "../pages/sales/SalesHistory";
 import SalesByItem from "../pages/sales/SalesByItem";
 import { ServiceCategoryList } from "../pages/services/ServiceCategoryList";
 import { ServiceList } from "../pages/services/ServiceList";
-import { ServiceCategoryList } from "../pages/services/ServiceCategoryList";
 
 export const router = createBrowserRouter([
   {
