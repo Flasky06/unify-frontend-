@@ -180,7 +180,7 @@ export const ProductList = () => {
   };
 
   const columns = [
-    { header: "Name", accessor: "name" },
+    { header: "Name", accessor: "name", truncate: true, maxWidth: "250px" },
     {
       header: "Selling Price",
       render: (product) => `KSH ${product.sellingPrice?.toFixed(2) || "0.00"}`,
