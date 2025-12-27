@@ -164,6 +164,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
       children: [
         { name: "Inventory", path: "/stocks" },
         { name: "Add Stock", path: "/stocks/add" },
+        { name: "Stock Movement", path: "/transfers" },
       ],
     },
     {
@@ -248,7 +249,10 @@ export const Sidebar = ({ isOpen, onClose }) => {
           return {
             ...item,
             children: item.children.map((child) => {
-              if (child.name === "Add Stock") {
+              if (
+                child.name === "Add Stock" ||
+                child.name === "Stock Movement"
+              ) {
                 return { ...child, disabled: true };
               }
               return child;
