@@ -427,4 +427,3 @@ export const UserList = () => {
   </div>
   );
 };
-```
