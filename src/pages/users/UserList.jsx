@@ -146,12 +146,16 @@ export const UserList = () => {
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-4 sm:gap-6">
         <div className="flex justify-end">
-          <Button onClick={() => setIsModalOpen(true)} className="w-full sm:w-auto whitespace-nowrap">
+          <Button
+            onClick={() => setIsModalOpen(true)}
+            className="w-full sm:w-auto whitespace-nowrap"
+          >
             <svg
               className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor">
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -163,81 +167,83 @@ export const UserList = () => {
           </Button>
         </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Email
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Role
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Phone
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Assigned Shop
-              </th>
-              <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td className="px-4 py-2 whitespace-nowrap text-sm">
-                  {user.email}
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    {user.role}
-                  </span>
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap text-sm">
-                  {user.phoneNo || "-"}
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap text-sm">
-                  {user.isActive || user.active ? "Active" : "Inactive"}
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap text-sm">
-                  {user.shopId ? (
-                    shops.find((s) => s.id === user.shopId)?.name ||
-                    `Shop #${user.shopId}`
-                  ) : (
-                    <span className="text-gray-400">-</span>
-                  )}
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
-                  <button
-                    onClick={() => handleToggleStatus(user)}
-                    className={`${
-                      user.isActive || user.active
-                        ? "text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1 rounded-full transition-colors"
-                        : "text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1 rounded-full transition-colors"
-                    }`}
-                  >
-                    {user.isActive || user.active ? "Deactivate" : "Activate"}
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {users.length === 0 && (
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
-                <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
-                  No users found.
-                </td>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Role
+                </th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Phone
+                </th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Assigned Shop
+                </th>
+                <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td className="px-4 py-2 whitespace-nowrap text-sm">
+                    {user.email}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                      {user.role}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap text-sm">
+                    {user.phoneNo || "-"}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap text-sm">
+                    {user.isActive || user.active ? "Active" : "Inactive"}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap text-sm">
+                    {user.shopId ? (
+                      shops.find((s) => s.id === user.shopId)?.name ||
+                      `Shop #${user.shopId}`
+                    ) : (
+                      <span className="text-gray-400">-</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
+                    <button
+                      onClick={() => handleToggleStatus(user)}
+                      className={`${
+                        user.isActive || user.active
+                          ? "text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1 rounded-full transition-colors"
+                          : "text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1 rounded-full transition-colors"
+                      }`}
+                    >
+                      {user.isActive || user.active ? "Deactivate" : "Activate"}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {users.length === 0 && (
+                <tr>
+                  <td
+                    colSpan="5"
+                    className="px-6 py-4 text-center text-gray-500"
+                  >
+                    No users found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </div>
 
       {/* Add User Modal */}
       {isModalOpen && (
@@ -418,5 +424,7 @@ export const UserList = () => {
         />
       )}
     </div>
+  </div>
   );
 };
+```
