@@ -412,7 +412,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
 
       <div
         className={`
-        fixed inset-y-0 right-0 z-50 w-full bg-gradient-to-b from-gray-900 to-gray-800 text-white min-h-screen flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 lg:w-60 lg:left-0 lg:right-auto flex-shrink-0
+        fixed inset-y-0 right-0 z-50 w-80 max-w-xs bg-gradient-to-b from-gray-900 to-gray-800 text-white min-h-screen flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 lg:w-60 lg:left-0 lg:right-auto flex-shrink-0
         ${isOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"}
       `}
       >
