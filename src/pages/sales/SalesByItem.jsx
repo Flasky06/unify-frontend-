@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import Input from "../../components/ui/Input";
 import Table from "../../components/ui/Table";
 import { saleService } from "../../services/saleService";
 import { shopService } from "../../services/shopService";
 
 const SalesByItem = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const salesType = searchParams.get("type") || "all"; // 'all', 'product', 'service'
+
   const [sales, setSales] = useState([]);
   const [shops, setShops] = useState([]);
   const [selectedShopId, setSelectedShopId] = useState("");
@@ -68,14 +72,21 @@ const SalesByItem = () => {
 
       if (sale.items) {
         sale.items.forEach((item) => {
-          if (!productStats[item.productId]) {
-            productStats[item.productId] = {
+          // Filter by sales type
+          if (salesType === "product" && item.type !== "PRODUCT") return;
+          if (salesType === "service" && item.type !== "SERVICE") return;
+
+          const itemKey = item.productId || item.serviceId || item.productName;
+          if (!productStats[itemKey]) {
+            productStats[itemKey] = {
               productId: item.productId,
+              serviceId: item.serviceId,
               productName: item.productName || "Unknown",
+              type: item.type,
               quantitySold: 0,
             };
           }
-          productStats[item.productId].quantitySold += item.quantity;
+          productStats[itemKey].quantitySold += item.quantity;
         });
       }
     });
@@ -103,10 +114,50 @@ const SalesByItem = () => {
 
   return (
     <div className="p-6">
+      {/* Tabs for Sales Type */}
+      <div className="mb-6 border-b border-gray-200">
+        <nav className="-mb-px flex space-x-8">
+          <button
+            onClick={() => setSearchParams({})}
+            className={`${
+              salesType === "all"
+                ? "border-blue-500 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
+          >
+            All Items
+          </button>
+          <button
+            onClick={() => setSearchParams({ type: "product" })}
+            className={`${
+              salesType === "product"
+                ? "border-blue-500 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
+          >
+            Products Only
+          </button>
+          <button
+            onClick={() => setSearchParams({ type: "service" })}
+            className={`${
+              salesType === "service"
+                ? "border-blue-500 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
+          >
+            Services Only
+          </button>
+        </nav>
+      </div>
+
       <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:justify-between lg:items-end">
         <div className="w-full lg:flex-1">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">
-            Sales by Item
+            {salesType === "product"
+              ? "Product Sales by Item"
+              : salesType === "service"
+              ? "Service Sales by Item"
+              : "Sales by Item"}
           </h1>
           <Input
             placeholder="Search by product name..."

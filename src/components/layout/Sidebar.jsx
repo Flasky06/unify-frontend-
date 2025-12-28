@@ -166,7 +166,9 @@ export const Sidebar = ({ isOpen, onClose }) => {
         </svg>
       ),
       children: [
-        { name: "Sales History", path: "/sales" },
+        { name: "All Sales", path: "/sales" },
+        { name: "Product Sales", path: "/sales?type=product" },
+        { name: "Service Sales", path: "/sales?type=service" },
         { name: "Sales By Item", path: "/sales/items" },
       ],
     },
