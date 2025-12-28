@@ -232,16 +232,16 @@ export const ExpenseList = () => {
       <div className="flex flex-col gap-4 sm:gap-6">
         <h1 className="text-2xl font-bold text-gray-800">Expense Management</h1>
 
-        <div className="flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-end">
-          <div className="flex flex-col gap-3 lg:flex-row lg:flex-1 lg:gap-4">
-            <div className="w-full lg:w-64">
+        <div className="flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-start lg:flex-wrap">
+          <div className="flex flex-col gap-3 lg:flex-row lg:flex-1 lg:gap-4 lg:flex-wrap">
+            <div className="w-full lg:w-64 lg:max-w-xs">
               <Input
                 placeholder="Search expenses..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="w-full lg:w-48">
+            <div className="w-full lg:w-48 lg:max-w-xs">
               <select
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={selectedCategory}
@@ -255,7 +255,7 @@ export const ExpenseList = () => {
                 ))}
               </select>
             </div>
-            <div className="w-full lg:w-48">
+            <div className="w-full lg:w-48 lg:max-w-xs">
               <select
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={selectedShop}
@@ -269,8 +269,8 @@ export const ExpenseList = () => {
                 ))}
               </select>
             </div>
-            <div className="flex gap-2 w-full lg:w-auto">
-              <div className="flex-1 lg:flex-none lg:w-auto">
+            <div className="flex gap-2 w-full lg:w-auto lg:max-w-md">
+              <div className="flex-1 lg:flex-none lg:w-40">
                 <label className="block text-xs font-medium text-gray-700 mb-1 px-1">
                   From
                 </label>
@@ -281,7 +281,7 @@ export const ExpenseList = () => {
                   placeholder="Start Date"
                 />
               </div>
-              <div className="flex-1 lg:flex-none lg:w-auto">
+              <div className="flex-1 lg:flex-none lg:w-40">
                 <label className="block text-xs font-medium text-gray-700 mb-1 px-1">
                   To
                 </label>
