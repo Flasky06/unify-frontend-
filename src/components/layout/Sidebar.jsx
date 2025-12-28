@@ -120,9 +120,9 @@ export const Sidebar = ({ isOpen, onClose }) => {
         </svg>
       ),
       children: [
-        { name: "Products", path: "/products" },
         { name: "Categories", path: "/products/categories" },
         { name: "Brands", path: "/products/brands" },
+        { name: "Products", path: "/products" },
       ],
     },
     {
