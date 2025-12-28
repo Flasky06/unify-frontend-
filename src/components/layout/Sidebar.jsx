@@ -65,7 +65,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
   // Business Owner Navigation
   const businessNav = [
     {
-      name: "POS",
+      name: "Sales",
       path: "/dashboard",
       icon: (
         <svg
