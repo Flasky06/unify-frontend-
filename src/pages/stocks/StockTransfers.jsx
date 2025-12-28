@@ -242,13 +242,15 @@ const StockTransfers = () => {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Stock Transfers</h1>
-        <div className="flex gap-4 items-center">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+          Stock Transfers
+        </h1>
+        <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 sm:items-center">
           {user?.role === "BUSINESS_OWNER" && (
             <select
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+              className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
               value={selectedShopId}
               onChange={(e) => setSelectedShopId(e.target.value)}
             >
@@ -260,7 +262,12 @@ const StockTransfers = () => {
               ))}
             </select>
           )}
-          <Button onClick={openCreateModal}>New Transfer</Button>
+          <Button
+            onClick={openCreateModal}
+            className="w-full sm:w-auto whitespace-nowrap"
+          >
+            New Transfer
+          </Button>
         </div>
       </div>
 
