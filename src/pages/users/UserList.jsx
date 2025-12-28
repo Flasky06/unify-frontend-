@@ -236,6 +236,8 @@ export const UserList = () => {
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
 
       {/* Add User Modal */}
       {isModalOpen && (
