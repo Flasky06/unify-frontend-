@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
@@ -40,6 +40,8 @@ export const ExpenseList = () => {
   const [selectedShop, setSelectedShop] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     fetchData();
@@ -63,26 +65,104 @@ export const ExpenseList = () => {
     }
   };
 
-  const filteredExpenses = expenses.filter((expense) => {
-    const matchesSearch =
-      expense.notes?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      expense.categoryName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      expense.shopName?.toLowerCase().includes(searchTerm.toLowerCase());
+  // Quick date filter functions
+  const setQuickFilter = (filter) => {
+    const today = new Date();
+    let start, end;
 
-    const matchesCategory = selectedCategory
-      ? expense.categoryId.toString() === selectedCategory
-      : true;
+    switch (filter) {
+      case "today":
+        start = end = today.toISOString().split("T")[0];
+        break;
+      case "week":
+        const weekStart = new Date(today);
+        weekStart.setDate(today.getDate() - today.getDay());
+        start = weekStart.toISOString().split("T")[0];
+        end = today.toISOString().split("T")[0];
+        break;
+      case "month":
+        start = new Date(today.getFullYear(), today.getMonth(), 1)
+          .toISOString()
+          .split("T")[0];
+        end = today.toISOString().split("T")[0];
+        break;
+      default:
+        start = end = "";
+    }
 
-    const matchesShop = selectedShop
-      ? expense.shopId?.toString() === selectedShop
-      : true;
+    setStartDate(start);
+    setEndDate(end);
+    setCurrentPage(1);
+  };
 
-    const matchesDateRange =
-      (!startDate || expense.expenseDate >= startDate) &&
-      (!endDate || expense.expenseDate <= endDate);
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory("");
+    setSelectedShop("");
+    setStartDate("");
+    setEndDate("");
+    setCurrentPage(1);
+  };
 
-    return matchesSearch && matchesCategory && matchesShop && matchesDateRange;
-  });
+  const filteredExpenses = useMemo(() => {
+    return expenses.filter((expense) => {
+      const matchesSearch =
+        expense.notes?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        expense.categoryName
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        expense.shopName?.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesCategory = selectedCategory
+        ? expense.categoryId.toString() === selectedCategory
+        : true;
+
+      const matchesShop = selectedShop
+        ? expense.shopId?.toString() === selectedShop
+        : true;
+
+      const matchesDateRange =
+        (!startDate || expense.expenseDate >= startDate) &&
+        (!endDate || expense.expenseDate <= endDate);
+
+      return (
+        matchesSearch && matchesCategory && matchesShop && matchesDateRange
+      );
+    });
+  }, [
+    expenses,
+    searchTerm,
+    selectedCategory,
+    selectedShop,
+    startDate,
+    endDate,
+  ]);
+
+  // Calculate summary statistics
+  const summary = useMemo(() => {
+    const total = filteredExpenses.reduce(
+      (sum, exp) => sum + (exp.amount || 0),
+      0
+    );
+    const count = filteredExpenses.length;
+    const byCategory = {};
+
+    filteredExpenses.forEach((exp) => {
+      if (!byCategory[exp.categoryName]) {
+        byCategory[exp.categoryName] = 0;
+      }
+      byCategory[exp.categoryName] += exp.amount || 0;
+    });
+
+    return { total, count, byCategory };
+  }, [filteredExpenses]);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
+  const paginatedExpenses = filteredExpenses.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -182,7 +262,13 @@ export const ExpenseList = () => {
     },
     {
       header: "Amount",
-      render: (expense) => `KSH ${expense.amount?.toFixed(2) || "0.00"}`,
+      render: (expense) => (
+        <span
+          className={expense.amount > 10000 ? "text-red-600 font-semibold" : ""}
+        >
+          KSH {expense.amount?.toFixed(2) || "0.00"}
+        </span>
+      ),
     },
     { header: "Category", accessor: "categoryName" },
     { header: "Shop", accessor: "shopName" },
@@ -227,25 +313,116 @@ export const ExpenseList = () => {
         ]),
   ];
 
+  const hasActiveFilters =
+    searchTerm || selectedCategory || selectedShop || startDate || endDate;
+
   return (
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-4 sm:gap-6">
         <h1 className="text-2xl font-bold text-gray-800">Expense Management</h1>
 
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+            <p className="text-sm text-blue-600 font-medium">Total Expenses</p>
+            <p className="text-2xl font-bold text-blue-900">
+              KSH {summary.total.toFixed(2)}
+            </p>
+            <p className="text-xs text-blue-600 mt-1">
+              {summary.count} transactions
+            </p>
+          </div>
+          <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
+            <p className="text-sm text-green-600 font-medium">Categories</p>
+            <p className="text-2xl font-bold text-green-900">
+              {Object.keys(summary.byCategory).length}
+            </p>
+            <p className="text-xs text-green-600 mt-1">active categories</p>
+          </div>
+          <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200">
+            <p className="text-sm text-purple-600 font-medium">Average</p>
+            <p className="text-2xl font-bold text-purple-900">
+              KSH{" "}
+              {summary.count > 0
+                ? (summary.total / summary.count).toFixed(2)
+                : "0.00"}
+            </p>
+            <p className="text-xs text-purple-600 mt-1">per transaction</p>
+          </div>
+        </div>
+
+        {/* Quick Filters */}
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setQuickFilter("today")}
+            className="text-xs"
+          >
+            Today
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setQuickFilter("week")}
+            className="text-xs"
+          >
+            This Week
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setQuickFilter("month")}
+            className="text-xs"
+          >
+            This Month
+          </Button>
+          {hasActiveFilters && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearFilters}
+              className="text-xs text-red-600 hover:text-red-800 hover:bg-red-50"
+            >
+              <svg
+                className="w-4 h-4 mr-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              Clear Filters
+            </Button>
+          )}
+        </div>
+
+        {/* Filters */}
         <div className="flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-start lg:flex-wrap">
           <div className="flex flex-col gap-3 lg:flex-row lg:flex-1 lg:gap-4 lg:flex-wrap">
             <div className="w-full lg:w-64 lg:max-w-xs">
               <Input
                 placeholder="Search expenses..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
               />
             </div>
             <div className="w-full lg:w-48 lg:max-w-xs">
               <select
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={(e) => {
+                  setSelectedCategory(e.target.value);
+                  setCurrentPage(1);
+                }}
               >
                 <option value="">All Categories</option>
                 {categories.map((c) => (
@@ -259,7 +436,10 @@ export const ExpenseList = () => {
               <select
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={selectedShop}
-                onChange={(e) => setSelectedShop(e.target.value)}
+                onChange={(e) => {
+                  setSelectedShop(e.target.value);
+                  setCurrentPage(1);
+                }}
               >
                 <option value="">All Shops</option>
                 {shops.map((s) => (
@@ -277,7 +457,10 @@ export const ExpenseList = () => {
                 <Input
                   type="date"
                   value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
+                  onChange={(e) => {
+                    setStartDate(e.target.value);
+                    setCurrentPage(1);
+                  }}
                   placeholder="Start Date"
                 />
               </div>
@@ -288,7 +471,10 @@ export const ExpenseList = () => {
                 <Input
                   type="date"
                   value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
+                  onChange={(e) => {
+                    setEndDate(e.target.value);
+                    setCurrentPage(1);
+                  }}
                   placeholder="End Date"
                 />
               </div>
@@ -317,21 +503,74 @@ export const ExpenseList = () => {
           )}
         </div>
 
+        {/* Table */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
           {loading ? (
             <div className="p-8 text-center text-gray-500">
               Loading expenses...
             </div>
           ) : (
-            <Table
-              columns={columns}
-              data={filteredExpenses}
-              emptyMessage="No expenses found matching your criteria."
-            />
+            <>
+              <Table
+                columns={columns}
+                data={paginatedExpenses}
+                emptyMessage="No expenses found matching your criteria."
+              />
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
+                  <div className="text-sm text-gray-700">
+                    Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+                    {Math.min(
+                      currentPage * itemsPerPage,
+                      filteredExpenses.length
+                    )}{" "}
+                    of {filteredExpenses.length} results
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </Button>
+                    <div className="flex gap-1">
+                      {[...Array(totalPages)].map((_, i) => (
+                        <Button
+                          key={i + 1}
+                          variant={
+                            currentPage === i + 1 ? "default" : "outline"
+                          }
+                          size="sm"
+                          onClick={() => setCurrentPage(i + 1)}
+                          className="min-w-[2.5rem]"
+                        >
+                          {i + 1}
+                        </Button>
+                      ))}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        setCurrentPage((p) => Math.min(totalPages, p + 1))
+                      }
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
 
+      {/* Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
