@@ -1,29 +1,31 @@
-import api from "./api";
-
-const EXPENSE_CATEGORY_BASE_URL = "/expense-categories";
+import { apiFetch } from "../lib/api";
 
 export const expenseCategoryService = {
   async getAll() {
-    const response = await api.get(EXPENSE_CATEGORY_BASE_URL);
-    return response.data;
+    return await apiFetch("/expense-categories");
   },
 
   async getById(id) {
-    const response = await api.get(`${EXPENSE_CATEGORY_BASE_URL}/${id}`);
-    return response.data;
+    return await apiFetch(`/expense-categories/${id}`);
   },
 
   async create(data) {
-    const response = await api.post(EXPENSE_CATEGORY_BASE_URL, data);
-    return response.data;
+    return await apiFetch("/expense-categories", {
+      method: "POST",
+      body: data,
+    });
   },
 
   async update(id, data) {
-    const response = await api.put(`${EXPENSE_CATEGORY_BASE_URL}/${id}`, data);
-    return response.data;
+    return await apiFetch(`/expense-categories/${id}`, {
+      method: "PUT",
+      body: data,
+    });
   },
 
   async delete(id) {
-    await api.delete(`${EXPENSE_CATEGORY_BASE_URL}/${id}`);
+    return await apiFetch(`/expense-categories/${id}`, {
+      method: "DELETE",
+    });
   },
 };

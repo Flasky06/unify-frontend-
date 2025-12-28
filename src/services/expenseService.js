@@ -1,48 +1,45 @@
-import api from "./api";
-
-const EXPENSE_BASE_URL = "/expenses";
+import { apiFetch } from "../lib/api";
 
 export const expenseService = {
   async getAll() {
-    const response = await api.get(EXPENSE_BASE_URL);
-    return response.data;
+    return await apiFetch("/expenses");
   },
 
   async getById(id) {
-    const response = await api.get(`${EXPENSE_BASE_URL}/${id}`);
-    return response.data;
+    return await apiFetch(`/expenses/${id}`);
   },
 
   async getByDateRange(startDate, endDate) {
-    const response = await api.get(`${EXPENSE_BASE_URL}/date-range`, {
-      params: { startDate, endDate },
-    });
-    return response.data;
+    return await apiFetch(
+      `/expenses/date-range?startDate=${startDate}&endDate=${endDate}`
+    );
   },
 
   async getByCategory(categoryId) {
-    const response = await api.get(
-      `${EXPENSE_BASE_URL}/category/${categoryId}`
-    );
-    return response.data;
+    return await apiFetch(`/expenses/category/${categoryId}`);
   },
 
   async getByShop(shopId) {
-    const response = await api.get(`${EXPENSE_BASE_URL}/shop/${shopId}`);
-    return response.data;
+    return await apiFetch(`/expenses/shop/${shopId}`);
   },
 
   async create(data) {
-    const response = await api.post(EXPENSE_BASE_URL, data);
-    return response.data;
+    return await apiFetch("/expenses", {
+      method: "POST",
+      body: data,
+    });
   },
 
   async update(id, data) {
-    const response = await api.put(`${EXPENSE_BASE_URL}/${id}`, data);
-    return response.data;
+    return await apiFetch(`/expenses/${id}`, {
+      method: "PUT",
+      body: data,
+    });
   },
 
   async delete(id) {
-    await api.delete(`${EXPENSE_BASE_URL}/${id}`);
+    return await apiFetch(`/expenses/${id}`, {
+      method: "DELETE",
+    });
   },
 };
