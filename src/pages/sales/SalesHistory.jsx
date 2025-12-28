@@ -12,7 +12,6 @@ const SalesHistory = () => {
   const [sales, setSales] = useState([]);
   const [shops, setShops] = useState([]);
   const [selectedShopId, setSelectedShopId] = useState("");
-  const [salesType, setSalesType] = useState("all"); // 'all', 'product', 'service'
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedSale, setSelectedSale] = useState(null);
@@ -205,25 +204,10 @@ const SalesHistory = () => {
           />
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-          <div className="w-full sm:w-40">
+        <div className="w-full lg:w-auto">
+          <div className="w-full sm:w-48">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Sales Type
-            </label>
-            <select
-              value={salesType}
-              onChange={(e) => setSalesType(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Sales</option>
-              <option value="product">Products Only</option>
-              <option value="service">Services Only</option>
-            </select>
-          </div>
-
-          <div className="w-full sm:w-40">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Shop
+              Filter by Shop
             </label>
             <select
               value={selectedShopId}
