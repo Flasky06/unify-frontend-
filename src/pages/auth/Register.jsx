@@ -11,7 +11,6 @@ const Register = () => {
 
   const formik = useFormik({
     initialValues: {
-      fullName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -106,33 +105,6 @@ const Register = () => {
             )}
 
             <form onSubmit={formik.handleSubmit} className="space-y-5">
-              <div>
-                <label
-                  htmlFor="fullName"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Full Name
-                </label>
-                <input
-                  id="fullName"
-                  name="fullName"
-                  type="text"
-                  autoComplete="name"
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition ${
-                    formik.touched.fullName && formik.errors.fullName
-                      ? "border-red-500"
-                      : "border-gray-300"
-                  }`}
-                  placeholder="John Doe"
-                  {...formik.getFieldProps("fullName")}
-                />
-                {formik.touched.fullName && formik.errors.fullName && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {formik.errors.fullName}
-                  </p>
-                )}
-              </div>
-
               <div>
                 <label
                   htmlFor="email"
