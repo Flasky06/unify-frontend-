@@ -269,19 +269,36 @@ export const ExpenseList = () => {
                 ))}
               </select>
             </div>
-            <div className="flex gap-2">
-              <Input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                placeholder="Start Date"
-              />
-              <Input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                placeholder="End Date"
-              />
+            <div className="flex flex-col gap-2 w-full lg:w-auto">
+              <label className="text-xs font-medium text-gray-700 px-1">
+                Date Range
+              </label>
+              <div className="flex gap-2">
+                <div className="relative">
+                  <Input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    placeholder="Start Date"
+                    className="pr-8"
+                  />
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none">
+                    From
+                  </span>
+                </div>
+                <div className="relative">
+                  <Input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    placeholder="End Date"
+                    className="pr-8"
+                  />
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none">
+                    To
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
           {user?.role !== "SALES_REP" && (
