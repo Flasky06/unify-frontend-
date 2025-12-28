@@ -139,7 +139,7 @@ export const ProductList = () => {
       sku: "",
       description: "",
       sellingPrice: "",
-      costPrice: "",
+
       brandId: "",
       categoryId: "",
       active: true,
@@ -155,7 +155,7 @@ export const ProductList = () => {
       sku: product.sku,
       description: product.description || "",
       sellingPrice: product.sellingPrice?.toString() || "",
-      costPrice: product.costPrice?.toString() || "",
+
       brandId: product.brandId?.toString() || "",
       categoryId: product.categoryId?.toString() || "",
       active: product.active ?? true,
@@ -172,7 +172,7 @@ export const ProductList = () => {
       sku: "",
       description: "",
       sellingPrice: "",
-      costPrice: "",
+
       brandId: "",
       categoryId: "",
       active: true,
@@ -234,13 +234,11 @@ export const ProductList = () => {
               </div>
             ),
           },
-```
         ]),
   ];
 
   return (
-    <div className="p-6">
-      <div className="flex flex-col h-full max-w-full overflow-hidden">
+    <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-4 sm:gap-6">
         <h1 className="text-2xl font-bold text-gray-800">Product Management</h1>
         <div className="flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-center">
@@ -367,18 +365,6 @@ export const ProductList = () => {
               value={formData.sellingPrice}
               onChange={(e) =>
                 setFormData({ ...formData, sellingPrice: e.target.value })
-              }
-              placeholder="0.00"
-              required
-            />
-
-            <Input
-              label="Cost Price (KSH)"
-              type="number"
-              step="0.01"
-              value={formData.costPrice}
-              onChange={(e) =>
-                setFormData({ ...formData, costPrice: e.target.value })
               }
               placeholder="0.00"
               required
