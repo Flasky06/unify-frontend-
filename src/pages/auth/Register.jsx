@@ -36,8 +36,10 @@ const Register = () => {
           role: "BUSINESS_OWNER",
         };
         await register(registerData);
-        setUserEmail(values.email);
-        setRegistrationSuccess(true);
+
+        // Email verification disabled - redirect to login
+        alert("Registration successful! Please login to continue.");
+        window.location.href = "/login";
       } catch (error) {
         console.error("Registration failed:", error);
       }
