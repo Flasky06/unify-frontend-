@@ -276,11 +276,7 @@ export const ExpenseList = () => {
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                   placeholder="Start Date"
-                  className="pr-8"
                 />
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none">
-                  From
-                </span>
               </div>
               <div className="relative flex-1 lg:flex-none lg:w-auto">
                 <Input
@@ -288,11 +284,7 @@ export const ExpenseList = () => {
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
                   placeholder="End Date"
-                  className="pr-8"
                 />
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none">
-                  To
-                </span>
               </div>
             </div>
           </div>
