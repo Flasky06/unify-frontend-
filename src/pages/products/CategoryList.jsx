@@ -147,20 +147,23 @@ export const CategoryList = () => {
   ];
 
   return (
-    <div className="p-6">
-      <div className="flex flex-col gap-6">
+    <div className="flex flex-col h-full max-w-full overflow-hidden">
+      <div className="flex flex-col gap-4 sm:gap-6">
         {/* Header Actions */}
-        <div className="flex justify-between items-center">
-          <div className="flex-1 max-w-md">
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+          <div className="w-full sm:flex-1 sm:max-w-md">
             <Input
               placeholder="Search categories..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Button onClick={openCreateModal}>
+          <Button
+            onClick={openCreateModal}
+            className="w-full sm:w-auto whitespace-nowrap"
+          >
             <svg
-              className="w-5 h-5 mr-2"
+              className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -176,7 +179,7 @@ export const CategoryList = () => {
           </Button>
         </div>
 
-        <div className="bg-white rounded-lg shadow">
+        <div className="bg-white rounded-lg shadow overflow-hidden">
           {loading ? (
             <div className="p-8 text-center text-gray-500">
               Loading categories...
