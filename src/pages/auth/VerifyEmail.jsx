@@ -46,10 +46,31 @@ const VerifyEmail = () => {
     }
   };
 
+  const [email, setEmail] = useState("");
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendMessage, setResendMessage] = useState("");
+
   const handleResendCode = async () => {
-    // You'll need to implement this based on your backend
-    // For now, just show a message
-    setMessage("Please check your email for the verification code.");
+    if (!email) {
+      setMessage("Please enter your email address to resend the code.");
+      setStatus("error");
+      return;
+    }
+
+    setResendLoading(true);
+    setResendMessage("");
+
+    try {
+      await api.post("/auth/resend-verification-code", { email });
+      setResendMessage("Verification code resent! Please check your email.");
+      setMessage("");
+    } catch (error) {
+      setResendMessage(
+        error.data?.message || "Failed to resend code. Please try again later."
+      );
+    } finally {
+      setResendLoading(false);
+    }
   };
 
   return (
@@ -137,15 +158,31 @@ const VerifyEmail = () => {
                 {isLoading ? "Verifying..." : "Verify Email"}
               </button>
 
-              <div className="text-sm text-gray-600">
-                Didn't receive the code?{" "}
-                <button
-                  type="button"
-                  onClick={handleResendCode}
-                  className="text-blue-600 hover:text-blue-500 font-medium"
-                >
-                  Resend
-                </button>
+              {/* Resend Section */}
+              <div className="pt-4 border-t border-gray-200">
+                <p className="text-sm text-gray-600 mb-2">
+                  Didn't receive the code?
+                </p>
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter your email"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleResendCode}
+                    disabled={resendLoading}
+                    className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition disabled:opacity-50"
+                  >
+                    {resendLoading ? "Sending..." : "Resend"}
+                  </button>
+                </div>
+                {resendMessage && (
+                  <p className="mt-2 text-sm text-green-600">{resendMessage}</p>
+                )}
               </div>
             </form>
           )}

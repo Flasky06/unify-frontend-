@@ -70,20 +70,20 @@ const Register = () => {
               Registration Successful!
             </h1>
             <p className="text-gray-600 mb-6">
-              We've sent a verification email to <strong>{userEmail}</strong>.
-              Please check your inbox and click the verification link to
-              activate your account.
+              We've sent a 6-digit verification code to{" "}
+              <strong>{userEmail}</strong>. Please check your inbox and enter
+              the code to activate your account.
             </p>
             <div className="space-y-3">
               <Link
-                to="/login"
+                to="/verify-email"
                 className="inline-block w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition"
               >
-                Go to Login
+                Enter Verification Code
               </Link>
               <p className="text-sm text-gray-500">
-                Didn't receive the email? Check your spam folder or contact
-                support.
+                Didn't receive the code? Check your spam folder or try again in
+                a few minutes.
               </p>
             </div>
           </div>
