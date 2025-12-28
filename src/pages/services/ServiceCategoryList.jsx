@@ -163,38 +163,36 @@ export const ServiceCategoryList = () => {
   ];
 
   return (
-    <div className="p-4">
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-        <h1 className="text-2xl font-bold">Service Categories</h1>
-        {user?.role !== "SALES_REP" && (
-          <Button onClick={openCreateModal}>
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            Add Service Category
-          </Button>
-        )}
-      </div>
+    <div className="flex flex-col h-full max-w-full overflow-hidden">
+      <div className="flex flex-col gap-4 sm:gap-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+          <div className="w-full sm:flex-1 sm:max-w-md">
+            <Input
+              placeholder="Search service categories..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          {user?.role !== "SALES_REP" && (
+            <Button onClick={openCreateModal} className="w-full sm:w-auto whitespace-nowrap">
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Add Service Category
+            </Button>
+          )}
+        </div>
 
-      <div className="mb-6 w-full">
-        <Input
-          placeholder="Search service categories..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
-      <Table
+        <div className="bg-white rounded-lg shadow overflow-hidden">
         columns={columns}
         data={filteredCategories}
         loading={loading}
