@@ -8,7 +8,7 @@ import { saleService } from "../../services/saleService";
 import { shopService } from "../../services/shopService";
 import { format } from "date-fns";
 
-const SalesHistory = () => {
+const ProductSales = () => {
   const [sales, setSales] = useState([]);
   const [shops, setShops] = useState([]);
   const [selectedShopId, setSelectedShopId] = useState("");
@@ -52,7 +52,6 @@ const SalesHistory = () => {
     setLoading(true);
     try {
       const data = await saleService.getSalesHistory();
-      // Sort by date desc
       const sorted = data.sort(
         (a, b) => new Date(b.saleDate) - new Date(a.saleDate)
       );
@@ -82,7 +81,6 @@ const SalesHistory = () => {
   const handleCancelSale = async (saleId) => {
     try {
       await saleService.cancelSale(saleId);
-      // Refresh list
       if (selectedShopId) fetchSalesByShop(selectedShopId);
       else fetchSales();
 
@@ -109,7 +107,20 @@ const SalesHistory = () => {
     setIsDetailsModalOpen(true);
   };
 
-  const filteredSales = sales.filter((sale) => {
+  const getSaleType = (sale) => {
+    if (!sale.items || sale.items.length === 0) return "unknown";
+
+    const hasProducts = sale.items.some((item) => item.type === "PRODUCT");
+    const hasServices = sale.items.some((item) => item.type === "SERVICE");
+
+    if (hasProducts && hasServices) return "mixed";
+    if (hasProducts) return "product";
+    if (hasServices) return "service";
+    return "unknown";
+  };
+
+  // Filter for product sales only
+  const searchFilteredSales = sales.filter((sale) => {
     const search = searchTerm.toLowerCase();
     return (
       sale.saleNumber?.toLowerCase().includes(search) ||
@@ -117,6 +128,11 @@ const SalesHistory = () => {
       sale.paymentMethod?.toLowerCase().includes(search) ||
       sale.status?.toLowerCase().includes(search)
     );
+  });
+
+  const filteredSales = searchFilteredSales.filter((sale) => {
+    const saleType = getSaleType(sale);
+    return saleType === "product";
   });
 
   const columns = [
@@ -177,7 +193,9 @@ const SalesHistory = () => {
     <div className="p-6">
       <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:justify-between lg:items-end">
         <div className="w-full lg:flex-1">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">All Sales</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            Product Sales
+          </h1>
           <Input
             placeholder="Search by sale no, shop, status..."
             value={searchTerm}
@@ -209,7 +227,7 @@ const SalesHistory = () => {
           columns={columns}
           data={filteredSales}
           loading={loading}
-          emptyMessage="No sales found."
+          emptyMessage="No product sales found."
         />
       </div>
 
@@ -338,4 +356,4 @@ const SalesHistory = () => {
   );
 };
 
-export default SalesHistory;
+export default ProductSales;

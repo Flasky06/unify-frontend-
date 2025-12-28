@@ -167,8 +167,8 @@ export const Sidebar = ({ isOpen, onClose }) => {
       ),
       children: [
         { name: "All Sales", path: "/sales" },
-        { name: "Product Sales", path: "/sales?type=product" },
-        { name: "Service Sales", path: "/sales?type=service" },
+        { name: "Product Sales", path: "/sales/products" },
+        { name: "Service Sales", path: "/sales/services" },
         { name: "Sales By Item", path: "/sales/items" },
       ],
     },
