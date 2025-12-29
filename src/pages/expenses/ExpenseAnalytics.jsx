@@ -89,6 +89,14 @@ export const ExpenseAnalytics = () => {
     setEndDate(end);
   };
 
+  const clearFilters = () => {
+    const today = new Date();
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    setStartDate(firstDay.toISOString().split("T")[0]);
+    setEndDate(today.toISOString().split("T")[0]);
+    setSelectedShop("");
+  };
+
   return (
     <div className="p-6">
       <div className="flex flex-col gap-6">
@@ -123,6 +131,14 @@ export const ExpenseAnalytics = () => {
             onClick={() => setQuickFilter("year")}
           >
             This Year
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={clearFilters}
+            className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+          >
+            Clear Filters
           </Button>
         </div>
 
