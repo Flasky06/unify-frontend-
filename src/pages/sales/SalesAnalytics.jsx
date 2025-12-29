@@ -174,7 +174,7 @@ export const SalesAnalytics = () => {
         ) : (
           <>
             {/* Sales Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
                 <p className="text-sm text-blue-600 font-medium">Total Sales</p>
                 <p className="text-2xl font-bold text-blue-900">
@@ -182,17 +182,6 @@ export const SalesAnalytics = () => {
                 </p>
                 <p className="text-xs text-blue-600 mt-1">
                   {salesAnalytics?.totalTransactions || 0} transactions
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
-                <p className="text-sm text-green-600 font-medium">
-                  Average Transaction
-                </p>
-                <p className="text-2xl font-bold text-green-900">
-                  KSH{" "}
-                  {salesAnalytics?.averageTransactionValue?.toFixed(2) ||
-                    "0.00"}
                 </p>
               </div>
 

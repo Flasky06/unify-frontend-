@@ -174,7 +174,7 @@ export const ExpenseAnalytics = () => {
         ) : (
           <>
             {/* Expense Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <div className="bg-gradient-to-br from-red-50 to-red-100 p-4 rounded-lg border border-red-200">
                 <p className="text-sm text-red-600 font-medium">
                   Total Expenses
@@ -184,21 +184,6 @@ export const ExpenseAnalytics = () => {
                 </p>
                 <p className="text-xs text-red-600 mt-1">
                   {expenseAnalytics?.totalTransactions || 0} transactions
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-lg border border-orange-200">
-                <p className="text-sm text-orange-600 font-medium">
-                  Average Expense
-                </p>
-                <p className="text-2xl font-bold text-orange-900">
-                  KSH{" "}
-                  {expenseAnalytics?.totalTransactions > 0
-                    ? (
-                        expenseAnalytics.totalExpenses /
-                        expenseAnalytics.totalTransactions
-                      ).toFixed(2)
-                    : "0.00"}
                 </p>
               </div>
             </div>
