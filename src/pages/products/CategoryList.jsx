@@ -155,7 +155,7 @@ export const CategoryList = () => {
   return (
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-4 sm:gap-6">
-        <h1 className="text-2xl font-bold text-gray-800">
+        <h1 className="text-2xl font-bold text-blue-600">
           Category Management
         </h1>
         {/* Header Actions */}

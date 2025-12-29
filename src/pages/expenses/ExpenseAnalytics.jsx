@@ -92,7 +92,7 @@ export const ExpenseAnalytics = () => {
   return (
     <div className="p-6">
       <div className="flex flex-col gap-6">
-        <h1 className="text-2xl font-bold text-gray-800">Expense Analytics</h1>
+        <h1 className="text-2xl font-bold text-blue-600">Expense Analytics</h1>
 
         {/* Quick Filters */}
         <div className="flex flex-wrap gap-2">

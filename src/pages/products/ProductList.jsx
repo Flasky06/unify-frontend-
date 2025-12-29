@@ -246,7 +246,7 @@ export const ProductList = () => {
   return (
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-4 sm:gap-6">
-        <h1 className="text-2xl font-bold text-gray-800">Product Management</h1>
+        <h1 className="text-2xl font-bold text-blue-600">Product Management</h1>
         <div className="flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-center">
           <div className="flex flex-col gap-3 lg:flex-row lg:flex-1 lg:gap-4">
             <div className="w-full lg:w-64">

@@ -181,7 +181,7 @@ const SalesHistory = () => {
     <div className="p-4">
       <div className="flex flex-col gap-3 mb-4 lg:flex-row lg:justify-between lg:items-end">
         <div className="w-full lg:flex-1">
-          <h1 className="text-2xl font-bold text-gray-800 mb-3">
+          <h1 className="text-2xl font-bold text-blue-600 mb-3">
             Sales History
           </h1>
           <Input

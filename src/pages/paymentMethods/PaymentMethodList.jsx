@@ -194,7 +194,7 @@ export const PaymentMethodList = () => {
   return (
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-4 sm:gap-6">
-        <h1 className="text-2xl font-bold text-gray-800">Payment Methods</h1>
+        <h1 className="text-2xl font-bold text-blue-600">Payment Methods</h1>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
           <div className="w-full sm:flex-1 sm:max-w-md">

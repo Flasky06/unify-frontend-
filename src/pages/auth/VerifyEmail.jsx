@@ -123,7 +123,7 @@ const VerifyEmail = () => {
           </div>
 
           {/* Title */}
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl font-bold text-blue-600 mb-2">
             {status === "verifying" && "Verifying Your Email"}
             {status === "success" && "Email Verified!"}
             {(status === "input" || status === "error") && "Verify Your Email"}
