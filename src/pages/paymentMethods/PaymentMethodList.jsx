@@ -55,10 +55,17 @@ export const PaymentMethodList = () => {
     e.preventDefault();
     setError(null);
     try {
+      // Sanitize data - convert empty strings to null for optional fields
+      const sanitizedData = {
+        name: formData.name.trim(),
+        type: formData.type?.trim() || null,
+        isActive: formData.isActive,
+      };
+
       if (editingMethod) {
-        await paymentMethodService.update(editingMethod.id, formData);
+        await paymentMethodService.update(editingMethod.id, sanitizedData);
       } else {
-        await paymentMethodService.create(formData);
+        await paymentMethodService.create(sanitizedData);
       }
       fetchPaymentMethods();
       closeModal();
@@ -70,6 +77,7 @@ export const PaymentMethodList = () => {
         type: "success",
       });
     } catch (err) {
+      console.error("Payment method operation error:", err);
       setError(err.message || "Operation failed");
       setToast({
         isOpen: true,
