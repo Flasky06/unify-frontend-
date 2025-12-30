@@ -214,19 +214,22 @@ export const SalesAnalytics = () => {
             {/* Sales by Payment Method */}
             {salesAnalytics?.salesByPaymentMethod &&
               Object.keys(salesAnalytics.salesByPaymentMethod).length > 0 && (
-                <div className="bg-white p-4 rounded-lg shadow">
-                  <h3 className="font-semibold text-gray-800 mb-3">
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                  <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                    <span className="w-1 h-5 bg-blue-600 rounded-full"></span>
                     Sales by Payment Method
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {Object.entries(salesAnalytics.salesByPaymentMethod).map(
                       ([method, amount]) => (
                         <div
                           key={method}
-                          className="flex justify-between items-center"
+                          className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors"
                         >
-                          <span className="text-gray-700">{method}</span>
-                          <span className="font-semibold text-gray-900">
+                          <span className="text-gray-700 font-medium">
+                            {method}
+                          </span>
+                          <span className="font-bold text-blue-900">
                             KSH {amount.toFixed(2)}
                           </span>
                         </div>
@@ -239,19 +242,22 @@ export const SalesAnalytics = () => {
             {/* Sales by Shop */}
             {salesAnalytics?.salesByShop &&
               Object.keys(salesAnalytics.salesByShop).length > 1 && (
-                <div className="bg-white p-4 rounded-lg shadow">
-                  <h3 className="font-semibold text-gray-800 mb-3">
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                  <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                    <span className="w-1 h-5 bg-blue-600 rounded-full"></span>
                     Sales by Shop
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {Object.entries(salesAnalytics.salesByShop).map(
                       ([shop, amount]) => (
                         <div
                           key={shop}
-                          className="flex justify-between items-center"
+                          className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors"
                         >
-                          <span className="text-gray-700">{shop}</span>
-                          <span className="font-semibold text-gray-900">
+                          <span className="text-gray-700 font-medium">
+                            {shop}
+                          </span>
+                          <span className="font-bold text-blue-900">
                             KSH {amount.toFixed(2)}
                           </span>
                         </div>

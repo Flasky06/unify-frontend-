@@ -237,7 +237,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
       ),
     },
     {
-      name: "User Management",
+      name: "Staff Members",
       icon: (
         <svg
           className="w-5 h-5"
@@ -282,9 +282,9 @@ export const Sidebar = ({ isOpen, onClose }) => {
     // SALES_REP: Very restricted
     if (user?.role === "SALES_REP") {
       return businessNav.map((item) => {
-        // Disable User Management, Shop Management, and Product Management (All)
+        // Disable Staff Members, Shop Management, and Product Management (All)
         if (
-          item.name === "User Management" ||
+          item.name === "Staff Members" ||
           item.name === "Shop Management" ||
           item.name === "Product Management"
         ) {
@@ -313,11 +313,8 @@ export const Sidebar = ({ isOpen, onClose }) => {
     // SHOP_MANAGER: Moderate restriction
     if (user?.role === "SHOP_MANAGER") {
       return businessNav.map((item) => {
-        // Disable User Management and Shop Management
-        if (
-          item.name === "User Management" ||
-          item.name === "Shop Management"
-        ) {
+        // Disable Staff Members and Shop Management
+        if (item.name === "Staff Members" || item.name === "Shop Management") {
           return { ...item, disabled: true };
         }
 
