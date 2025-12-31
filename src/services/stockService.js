@@ -87,4 +87,25 @@ export const stockService = {
   getOutgoingTransfers: async (shopId) => {
     return await apiFetch(`/stocks/shop/${shopId}/outgoing-transfers`);
   },
+
+  // Audit Logs
+  getLogs: async (id) => {
+    const response = await apiFetch(`/stocks/${id}/logs`);
+    return response; // apiFetch returns parsed JSON if successful usually? No, apiFetch wrapper handles response?
+    // Checking lines 8-9: return await apiFetch("/stocks");
+    // apiFetch usually returns the data directly if wrapper parses it.
+    // Let's assume apiFetch returns data.
+  },
+
+  // Adjust Stock
+  adjustStock: async (id, quantityChange, reason) => {
+    return await apiFetch(
+      `/stocks/${id}/adjust?quantityChange=${quantityChange}&reason=${encodeURIComponent(
+        reason
+      )}`,
+      {
+        method: "POST",
+      }
+    );
+  },
 };

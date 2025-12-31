@@ -12,6 +12,7 @@ import AdminDashboard from "../pages/super-admin/SuperAdminDashboard";
 import AdminUsers from "../pages/super-admin/AdminUsers";
 import Profile from "../pages/Profile";
 import { UserList } from "../pages/users/UserList";
+import RoleManagement from "../pages/users/RoleManagement";
 import { ProductList } from "../pages/products/ProductList";
 import { CategoryList } from "../pages/products/CategoryList";
 import { BrandList } from "../pages/products/BrandList";
@@ -28,6 +29,7 @@ import { ExpenseList } from "../pages/expenses/ExpenseList";
 import ExpenseAnalytics from "../pages/expenses/ExpenseAnalytics";
 import { PaymentMethodList } from "../pages/paymentMethods/PaymentMethodList";
 import SalesAnalytics from "../pages/sales/SalesAnalytics";
+import ReportsDashboard from "../pages/reports/ReportsDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -77,6 +79,10 @@ export const router = createBrowserRouter([
       {
         path: "users",
         element: <UserList />,
+      },
+      {
+        path: "users/roles",
+        element: <RoleManagement />,
       },
       {
         path: "products",
@@ -142,6 +148,10 @@ export const router = createBrowserRouter([
       {
         path: "expenses/analytics",
         element: <ExpenseAnalytics />,
+      },
+      {
+        path: "reports",
+        element: <ReportsDashboard />,
       },
       {
         path: "payment-methods",

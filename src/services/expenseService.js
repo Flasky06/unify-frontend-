@@ -42,4 +42,8 @@ export const expenseService = {
       method: "DELETE",
     });
   },
+
+  async getLogs(id) {
+    return await apiFetch(`/expenses/${id}/logs`);
+  },
 };

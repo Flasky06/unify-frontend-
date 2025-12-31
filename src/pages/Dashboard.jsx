@@ -237,6 +237,8 @@ const Dashboard = () => {
     );
   };
 
+  const [amountPaid, setAmountPaid] = useState(""); // State for credit sale
+
   const calculateTotal = () => {
     return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   };
@@ -245,6 +247,9 @@ const Dashboard = () => {
     if (!selectedShopId || cart.length === 0) return;
     setProcessing(true);
     try {
+      const total = calculateTotal();
+      const finalAmountPaid = amountPaid ? parseFloat(amountPaid) : total;
+
       const saleData = {
         shopId: parseInt(selectedShopId),
         items: cart.map((item) => ({
@@ -253,6 +258,7 @@ const Dashboard = () => {
           quantity: item.quantity,
         })),
         paymentMethodId: paymentMethod,
+        amountPaid: finalAmountPaid, // Pass amountPaid
       };
 
       await saleService.createSale(saleData);
@@ -262,6 +268,7 @@ const Dashboard = () => {
         type: "success",
       });
       setCart([]);
+      setAmountPaid(""); // Reset
       setCheckoutModalOpen(false);
       fetchStock(selectedShopId); // Refresh stock
     } catch (err) {
@@ -635,6 +642,22 @@ const Dashboard = () => {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Amount Paid for Credit Sales */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Amount Paid (Optional)
+            </label>
+            <Input
+              placeholder={`Full Amount: ${calculateTotal().toLocaleString()}`}
+              type="number"
+              value={amountPaid}
+              onChange={(e) => setAmountPaid(e.target.value)}
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Leave empty if paid in full. Enter less for Credit Sale.
+            </p>
           </div>
 
           {/* Placeholder for future customer details */}

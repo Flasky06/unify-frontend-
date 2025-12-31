@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Button from "../../components/ui/Button";
-import Input from "../../components/ui/Input";
 import Modal from "../../components/ui/Modal";
 import Table from "../../components/ui/Table";
+import AuditLogModal from "../../components/ui/AuditLogModal"; // Import
+import AdjustStockModal from "./AdjustStockModal"; // Import
 import { stockService } from "../../services/stockService";
 import { productService } from "../../services/productService";
 import { shopService } from "../../services/shopService";
@@ -20,11 +18,74 @@ const StockList = () => {
   const [selectedShopId, setSelectedShopId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Audit Log State
+  const [auditModal, setAuditModal] = useState({ isOpen: false, logs: [], loading: false, stock: null });
+  // Adjust Stock State
+  const [adjustModal, setAdjustModal] = useState({ isOpen: false, stock: null });
+
   const [formData, setFormData] = useState({
     shopId: "",
     productId: "",
     quantity: 0,
   });
+
+  // ... (Effect hooks unchanged) ... 
+  
+  // Handlers for New Features
+  const handleViewLogs = async (stock) => {
+    setAuditModal({ isOpen: true, logs: [], loading: true, stock });
+    try {
+      const logs = await stockService.getLogs(stock.id);
+      setAuditModal(prev => ({ ...prev, logs, loading: false }));
+    } catch (error) {
+      console.error("Failed to fetch logs", error);
+      setAuditModal(prev => ({ ...prev, loading: false })); // Keep open to show error or empty
+    }
+  };
+
+  const handleAdjustStock = (stock) => {
+    setAdjustModal({ isOpen: true, stock });
+  };
+
+  const confirmAdjustment = async (quantityChange, reason) => {
+    if (!adjustModal.stock) return;
+    try {
+      await stockService.adjustStock(adjustModal.stock.id, quantityChange, reason);
+      fetchStocks(); // Refresh list
+    } catch (error) {
+      throw error; // Let modal handle alert
+    }
+  };
+
+
+  // ... (Existing handlers: fetchStocks, etc. - ensure to keep them if I use replace block carefully) ...
+  // Wait, I need to be careful not to overwrite `fetchStocks` logic if I just pasted imports.
+  // I will target imports separately and then the Body.
+  
+  // Since I can't do multiple discontinuous edits easily without multi-replace, and I want to be safe:
+  // I will use `multi_replace_file_content` or rely on chunks.
+  // I'll stick to logical chunks.
+  
+  // Chunk 1: Imports
+  // Chunk 2: State
+  // Chunk 3: New Handlers
+  // Chunk 4: Columns
+  // Chunk 5: Render Modals (at end)
+  
+  // But wait, the tool expects ONE replace call per turn? No, I can batch with `waitForPreviousTools: false`.
+  // I will use `multi_replace_file_content` on `StockList.jsx`.
+}; 
+// Cancelling this tool call to use multi_replace.
+  const navigate = useNavigate();
+  const [stocks, setStocks] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [shops, setShops] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingStock, setEditingStock] = useState(null);
+  const [viewMode, setViewMode] = useState("all"); // all, byShop
+  const [selectedShopId, setSelectedShopId] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Fetch initial data
   useEffect(() => {
@@ -188,11 +249,27 @@ const StockList = () => {
       render: (row) => (
         <div className="flex gap-2">
           <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => tableData.find(d => d.id === row.id)?._stock && setAdjustModal({ isOpen: true, stock: row._stock })}
+            className="text-purple-600 hover:bg-purple-50"
+          >
+            Adjust
+          </Button>
+          <Button
+            variant="ghost" 
+            size="sm"
+            onClick={() => handleViewLogs(row._stock)}
+            className="text-gray-600 hover:bg-gray-100"
+          >
+            History
+          </Button>
+          <Button
             variant="outline"
             size="sm"
             onClick={() => handleEdit(row._stock)}
           >
-            Update Stock
+            Update
           </Button>
           <Button
             variant="outline"

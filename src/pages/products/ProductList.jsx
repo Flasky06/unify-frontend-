@@ -19,10 +19,10 @@ export const ProductList = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
-
     description: "",
+    sku: "",
+    costPrice: "",
     sellingPrice: "",
-
     brandId: "",
     categoryId: "",
     active: true,
@@ -142,10 +142,10 @@ export const ProductList = () => {
     setEditingProduct(null);
     setFormData({
       name: "",
-
       description: "",
+      sku: "",
+      costPrice: "",
       sellingPrice: "",
-
       brandId: "",
       categoryId: "",
       active: true,
@@ -158,10 +158,10 @@ export const ProductList = () => {
     setEditingProduct(product);
     setFormData({
       name: product.name,
-
       description: product.description || "",
+      sku: product.sku || "",
+      costPrice: product.costPrice?.toString() || "",
       sellingPrice: product.sellingPrice?.toString() || "",
-
       brandId: product.brandId?.toString() || "",
       categoryId: product.categoryId?.toString() || "",
       active: product.active ?? true,
@@ -175,10 +175,10 @@ export const ProductList = () => {
     setEditingProduct(null);
     setFormData({
       name: "",
-
       description: "",
+      sku: "",
+      costPrice: "",
       sellingPrice: "",
-
       brandId: "",
       categoryId: "",
       active: true,
@@ -186,7 +186,12 @@ export const ProductList = () => {
   };
 
   const columns = [
-    { header: "Name", accessor: "name", truncate: true, maxWidth: "250px" },
+    { header: "Name", accessor: "name", truncate: true, maxWidth: "200px" },
+    { header: "SKU", accessor: "sku" },
+    {
+      header: "Cost Price",
+      render: (product) => `KSH ${product.costPrice?.toFixed(2) || "0.00"}`,
+    },
     {
       header: "Selling Price",
       render: (product) => `KSH ${product.sellingPrice?.toFixed(2) || "0.00"}`,
@@ -355,7 +360,25 @@ export const ProductList = () => {
             />
           </div>
 
+          <Input
+            label="SKU / Product Code"
+            value={formData.sku}
+            onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
+            placeholder="e.g., PARA-500"
+            required
+          />
+
           <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="Cost Price (KSH)"
+              type="number"
+              step="0.01"
+              value={formData.costPrice}
+              onChange={(e) =>
+                setFormData({ ...formData, costPrice: e.target.value })
+              }
+              placeholder="0.00"
+            />
             <Input
               label="Selling Price (KSH)"
               type="number"

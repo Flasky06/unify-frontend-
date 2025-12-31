@@ -41,4 +41,8 @@ export const saleService = {
       method: "PUT",
     });
   },
+
+  getLogs: async (id) => {
+    return await apiFetch(`/sales/${id}/logs`);
+  },
 };

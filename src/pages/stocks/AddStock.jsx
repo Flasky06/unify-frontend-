@@ -168,7 +168,7 @@ const AddStock = () => {
     <div className="p-6">
       <div className="flex flex-col gap-6">
         {/* Header Actions */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-4">
           <div className="flex-1 max-w-md">
             <Input
               placeholder="Search products to add..."
@@ -176,6 +176,15 @@ const AddStock = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+          <Button
+            onClick={() => {
+              // Open product creation modal
+              window.open("/products", "_blank");
+            }}
+            variant="outline"
+          >
+            + Create New Product
+          </Button>
         </div>
 
         {error && (

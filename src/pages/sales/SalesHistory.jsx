@@ -3,6 +3,7 @@ import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
+import AuditLogModal from "../../components/ui/AuditLogModal";
 import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
 import { saleService } from "../../services/saleService";
 import { shopService } from "../../services/shopService";
@@ -18,6 +19,12 @@ const SalesHistory = () => {
   const [loading, setLoading] = useState(false);
   const [selectedSale, setSelectedSale] = useState(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [auditModal, setAuditModal] = useState({
+    isOpen: false,
+    logs: [],
+    loading: false,
+    sale: null,
+  });
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     saleId: null,
@@ -111,6 +118,17 @@ const SalesHistory = () => {
     setIsDetailsModalOpen(true);
   };
 
+  const handleViewLogs = async (sale) => {
+    setAuditModal({ isOpen: true, logs: [], loading: true, sale });
+    try {
+      const logs = await saleService.getLogs(sale.id);
+      setAuditModal((prev) => ({ ...prev, logs, loading: false }));
+    } catch (error) {
+      console.error("Failed to fetch logs", error);
+      setAuditModal((prev) => ({ ...prev, loading: false }));
+    }
+  };
+
   const filteredSales = sales.filter((sale) => {
     const search = searchTerm.toLowerCase();
     const searchMatch =
@@ -155,6 +173,22 @@ const SalesHistory = () => {
       render: (row) => `KSH ${row.total.toLocaleString()}`,
     },
     {
+      header: "Paid",
+      render: (row) => `KSH ${(row.amountPaid || 0).toLocaleString()}`,
+    },
+    {
+      header: "Balance",
+      render: (row) => (
+        <span
+          className={
+            row.balance > 0 ? "text-red-600 font-bold" : "text-green-600"
+          }
+        >
+          KSH {(row.balance || 0).toLocaleString()}
+        </span>
+      ),
+    },
+    {
       header: "Actions",
       render: (row) => (
         <div className="flex gap-3">
@@ -163,6 +197,12 @@ const SalesHistory = () => {
             className="text-blue-600 hover:text-blue-800 text-sm font-medium"
           >
             View
+          </button>
+          <button
+            onClick={() => handleViewLogs(row)}
+            className="text-gray-600 hover:text-gray-800 text-sm font-medium"
+          >
+            History
           </button>
           {row.status !== "CANCELLED" && (
             <button
@@ -324,6 +364,30 @@ const SalesHistory = () => {
                       KSH {selectedSale.total.toLocaleString()}
                     </td>
                   </tr>
+                  {/* Amount Paid */}
+                  <tr>
+                    <td
+                      colSpan="3"
+                      className="py-2 px-3 text-right text-gray-600 font-normal"
+                    >
+                      Amount Paid
+                    </td>
+                    <td className="py-2 px-3 text-right text-green-600">
+                      KSH {(selectedSale.amountPaid || 0).toLocaleString()}
+                    </td>
+                  </tr>
+                  {/* Balance */}
+                  <tr>
+                    <td
+                      colSpan="3"
+                      className="py-2 px-3 text-right text-gray-600 font-normal"
+                    >
+                      Balance
+                    </td>
+                    <td className="py-2 px-3 text-right text-red-600">
+                      KSH {(selectedSale.balance || 0).toLocaleString()}
+                    </td>
+                  </tr>
                 </tfoot>
               </table>
             </div>
@@ -357,6 +421,19 @@ const SalesHistory = () => {
         message="Are you sure you want to cancel this sale? This action cannot be undone."
         confirmText="Yes, Cancel Sale"
         variant="danger"
+      />
+
+      {/* Audit Log Modal */}
+      <AuditLogModal
+        isOpen={auditModal.isOpen}
+        onClose={() => setAuditModal({ ...auditModal, isOpen: false })}
+        title={
+          auditModal.sale
+            ? `Sale History - ${auditModal.sale.saleNumber}`
+            : "Sale History"
+        }
+        logs={auditModal.logs}
+        loading={auditModal.loading}
       />
 
       {/* Toast Notification */}
