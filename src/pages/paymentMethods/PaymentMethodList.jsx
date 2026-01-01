@@ -16,7 +16,7 @@ export const PaymentMethodList = () => {
   const [formData, setFormData] = useState({
     name: "",
     type: "",
-    isActive: true,
+    active: true,
   });
   const [error, setError] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState({
@@ -63,7 +63,7 @@ export const PaymentMethodList = () => {
       const sanitizedData = {
         name: formData.name.trim(),
         type: formData.type?.trim() || null,
-        isActive: formData.isActive,
+        active: formData.active,
       };
 
       if (editingMethod) {
@@ -113,7 +113,7 @@ export const PaymentMethodList = () => {
 
   const openCreateModal = () => {
     setEditingMethod(null);
-    setFormData({ name: "", type: "", isActive: true });
+    setFormData({ name: "", type: "", active: true });
     setIsModalOpen(true);
     setError(null);
   };
@@ -123,7 +123,7 @@ export const PaymentMethodList = () => {
     setFormData({
       name: method.name,
       type: method.type || "",
-      isActive: method.isActive,
+      active: method.active !== undefined ? method.active : true,
     });
     setIsModalOpen(true);
     setError(null);
@@ -132,7 +132,7 @@ export const PaymentMethodList = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setEditingMethod(null);
-    setFormData({ name: "", type: "", isActive: true });
+    setFormData({ name: "", type: "", active: true });
   };
 
   const columns = [
@@ -147,12 +147,12 @@ export const PaymentMethodList = () => {
       render: (method) => (
         <span
           className={`px-2 py-1 text-xs rounded-full ${
-            method.isActive
+            method.active
               ? "bg-green-100 text-green-800"
               : "bg-gray-100 text-gray-800"
           }`}
         >
-          {method.isActive ? "Active" : "Inactive"}
+          {method.active ? "Active" : "Inactive"}
         </span>
       ),
     },
@@ -272,14 +272,14 @@ export const PaymentMethodList = () => {
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
-              id="isActive"
-              checked={formData.isActive}
+              id="active"
+              checked={formData.active}
               onChange={(e) =>
-                setFormData({ ...formData, isActive: e.target.checked })
+                setFormData({ ...formData, active: e.target.checked })
               }
               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            <label htmlFor="isActive" className="text-sm text-gray-700">
+            <label htmlFor="active" className="text-sm text-gray-700">
               Active
             </label>
           </div>
