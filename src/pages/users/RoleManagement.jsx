@@ -1,7 +1,54 @@
 import React, { useState, useEffect } from "react";
 import { permissionService } from "../../services/permissionService";
-import { toast } from "react-hot-toast";
-import { Shield, Save, Check, X, AlertCircle } from "lucide-react";
+import { Toast } from "../../components/ui/ConfirmDialog";
+
+// Simple Icons
+const ShieldIcon = ({ className }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+  </svg>
+);
+
+const SaveIcon = ({ className }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+    <polyline points="17 21 17 13 7 13 7 21" />
+    <polyline points="7 3 7 8 15 8" />
+  </svg>
+);
+
+const CheckIcon = ({ className }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+);
 
 const RoleManagement = () => {
   const [roles, setRoles] = useState([]);
@@ -10,6 +57,17 @@ const RoleManagement = () => {
   const [rolePermissions, setRolePermissions] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  // Toast State
+  const [toastState, setToastState] = useState({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
+
+  const showToast = (message, type = "success") => {
+    setToastState({ isOpen: true, message, type });
+  };
 
   useEffect(() => {
     loadInitialData();
@@ -42,7 +100,7 @@ const RoleManagement = () => {
       }
     } catch (error) {
       console.error("Failed to load data:", error);
-      toast.error("Failed to load roles and permissions");
+      showToast("Failed to load roles and permissions", "error");
     } finally {
       setLoading(false);
     }
@@ -55,7 +113,7 @@ const RoleManagement = () => {
       setRolePermissions(new Set(permissions));
     } catch (error) {
       console.error("Failed to load role permissions:", error);
-      toast.error(`Failed to load permissions for ${role}`);
+      showToast(`Failed to load permissions for ${role}`, "error");
     } finally {
       setLoading(false);
     }
@@ -78,10 +136,10 @@ const RoleManagement = () => {
         selectedRole,
         Array.from(rolePermissions)
       );
-      toast.success(`Permissions updated for ${selectedRole}`);
+      showToast(`Permissions updated for ${selectedRole}`, "success");
     } catch (error) {
       console.error("Failed to update permissions:", error);
-      toast.error("Failed to update permissions");
+      showToast("Failed to update permissions", "error");
     } finally {
       setSaving(false);
     }
@@ -133,7 +191,7 @@ const RoleManagement = () => {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Shield className="w-8 h-8 text-blue-600" />
+            <ShieldIcon className="w-8 h-8 text-blue-600" />
             Role Permissions
           </h1>
           <p className="text-gray-500 mt-1">
@@ -145,7 +203,7 @@ const RoleManagement = () => {
           disabled={saving}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
         >
-          <Save className="w-4 h-4" />
+          <SaveIcon className="w-4 h-4" />
           {saving ? "Saving..." : "Save Changes"}
         </button>
       </div>
@@ -210,7 +268,7 @@ const RoleManagement = () => {
                           }`}
                         >
                           {rolePermissions.has(permission) && (
-                            <Check className="w-3.5 h-3.5 text-white" />
+                            <CheckIcon className="w-3.5 h-3.5 text-white" />
                           )}
                           <input
                             type="checkbox"
@@ -243,6 +301,13 @@ const RoleManagement = () => {
           </div>
         </div>
       </div>
+
+      <Toast
+        isOpen={toastState.isOpen}
+        onClose={() => setToastState((prev) => ({ ...prev, isOpen: false }))}
+        message={toastState.message}
+        type={toastState.type}
+      />
     </div>
   );
 };

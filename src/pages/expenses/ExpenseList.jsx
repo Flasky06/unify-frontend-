@@ -125,7 +125,6 @@ export const ExpenseList = () => {
   const filteredExpenses = useMemo(() => {
     return expenses.filter((expense) => {
       const matchesSearch =
-      const matchesSearch =
         expense.name?.toLowerCase().includes(searchTerm.toLowerCase()) || // name
         expense.categoryName
           ?.toLowerCase()
@@ -585,9 +584,7 @@ export const ExpenseList = () => {
           <Input
             label="Expense Name"
             value={formData.name}
-            onChange={(e) =>
-              setFormData({ ...formData, name: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="e.g., Electricity, Repair..."
             required
           />

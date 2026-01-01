@@ -1,6 +1,6 @@
-import { fetchWrapper } from "../utils/fetchWrapper";
+import { api } from "../lib/api";
 
-const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/permissions`;
+const BASE = "/permissions";
 
 export const permissionService = {
   getAllPermissionEnums,
@@ -10,17 +10,17 @@ export const permissionService = {
 };
 
 function getAllPermissionEnums() {
-  return fetchWrapper.get(`${baseUrl}/enums`);
+  return api.get(`${BASE}/enums`);
 }
 
 function getAllRoleEnums() {
-  return fetchWrapper.get(`${baseUrl}/roles`);
+  return api.get(`${BASE}/roles`);
 }
 
 function getRolePermissions(role) {
-  return fetchWrapper.get(`${baseUrl}/role/${role}`);
+  return api.get(`${BASE}/role/${role}`);
 }
 
 function updateRolePermissions(role, permissions) {
-  return fetchWrapper.put(`${baseUrl}/role/${role}`, permissions);
+  return api.put(`${BASE}/role/${role}`, permissions);
 }
