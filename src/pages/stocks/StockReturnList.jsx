@@ -184,29 +184,25 @@ const StockReturnList = () => {
         </div>
 
         <Table
-          headers={[
-            { key: "date", label: "Date" },
-            { key: "productName", label: "Product" },
-            { key: "type", label: "Type" },
-            { key: "quantity", label: "Quantity" },
-            { key: "reason", label: "Reason" },
-            { key: "userName", label: "Handled By" },
-          ]}
-          data={filteredReturns}
-          isLoading={loading}
-          emptyMessage="No returns found"
-          renderRow={(item) => (
-            <tr
-              key={item.id}
-              className="hover:bg-gray-50 border-b border-gray-100 last:border-0"
-            >
-              <td className="px-6 py-4 text-sm text-gray-900">
-                {new Date(item.date).toLocaleDateString()}
-              </td>
-              <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                {item.productName}
-              </td>
-              <td className="px-6 py-4 text-sm">
+          columns={[
+            {
+              header: "Date",
+              accessor: "date",
+              render: (item) => new Date(item.date).toLocaleDateString(),
+            },
+            {
+              header: "Product",
+              accessor: "productName",
+              render: (item) => (
+                <span className="font-medium text-gray-900">
+                  {item.productName}
+                </span>
+              ),
+            },
+            {
+              header: "Type",
+              accessor: "type",
+              render: (item) => (
                 <span
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     item.type === "CUSTOMER_RETURN"
@@ -216,21 +212,27 @@ const StockReturnList = () => {
                 >
                   {item.type.replace("_", " ")}
                 </span>
-              </td>
-              <td className="px-6 py-4 text-sm text-gray-900">
-                {item.quantity}
-              </td>
-              <td
-                className="px-6 py-4 text-sm text-gray-500 truncate max-w-xs"
-                title={item.reason}
-              >
-                {item.reason}
-              </td>
-              <td className="px-6 py-4 text-sm text-gray-500">
-                {item.userName}
-              </td>
-            </tr>
-          )}
+              ),
+            },
+            {
+              header: "Quantity",
+              accessor: "quantity",
+            },
+            {
+              header: "Reason",
+              accessor: "reason",
+              truncate: true,
+              maxWidth: "200px",
+            },
+            {
+              header: "Handled By",
+              accessor: "userName",
+            },
+          ]}
+          data={filteredReturns}
+          loading={loading}
+          emptyMessage="No returns found"
+          showViewAction={false}
         />
       </div>
 
