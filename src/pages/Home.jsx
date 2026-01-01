@@ -59,8 +59,9 @@ const Home = () => {
           </h1>
           <p className="text-2xl md:text-3xl text-gray-600 mb-12 leading-relaxed">
             The comprehensive business management solution for modern
-            businesses. Manage stock, products & service sales, and more—all in
-            one place.
+            businesses. Effortlessly manage stock across multiple locations,
+            track product & service sales, handle returns, and gain deep
+            insights with real-time analytics—all in one place.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {isAuthenticated ? (
