@@ -237,9 +237,11 @@ const StockList = () => {
           <Button
             variant="ghost"
             size="sm"
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() =>
-              tableData.find((d) => d.id === row.id)?._stock &&
-              setAdjustModal({ isOpen: true, stock: row._stock })
+              row._stock && setAdjustModal({ isOpen: true, stock: row._stock })
             }
             className="text-purple-600 hover:bg-purple-50 font-medium px-3"
           >
@@ -345,7 +347,12 @@ const StockList = () => {
 
         {/* Stock Table */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
-          <Table columns={columns} data={tableData} loading={loading} />
+          <Table
+            columns={columns}
+            data={tableData}
+            loading={loading}
+            showViewAction={false}
+          />
         </div>
       </div>
 
