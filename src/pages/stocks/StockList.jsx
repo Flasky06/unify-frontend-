@@ -241,7 +241,7 @@ const StockList = () => {
               tableData.find((d) => d.id === row.id)?._stock &&
               setAdjustModal({ isOpen: true, stock: row._stock })
             }
-            className="text-purple-600 hover:bg-purple-50"
+            className="text-purple-600 hover:bg-purple-50 font-medium px-3"
           >
             Adjust
           </Button>
@@ -249,21 +249,23 @@ const StockList = () => {
             variant="ghost"
             size="sm"
             onClick={() => handleViewLogs(row._stock)}
-            className="text-gray-600 hover:bg-gray-100"
+            className="text-gray-600 hover:bg-gray-100 font-medium px-3"
           >
             History
           </Button>
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
             onClick={() => handleEdit(row._stock)}
+            className="text-blue-600 hover:bg-blue-50 font-medium px-3"
           >
-            Update
+            Edit
           </Button>
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
             onClick={() => handleDelete(row._stock.id)}
+            className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
           >
             Delete
           </Button>
