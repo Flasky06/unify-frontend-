@@ -81,6 +81,10 @@ export const router = createBrowserRouter([
         element: <UserList />,
       },
       {
+        path: "employees",
+        element: <UserList />,
+      },
+      {
         path: "users/roles",
         element: <RoleManagement />,
       },
