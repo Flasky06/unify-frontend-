@@ -190,6 +190,7 @@ const StockReturnList = () => {
             {
               header: "Product",
               accessor: "productName",
+              triggerView: true,
               render: (item) => (
                 <span className="font-medium text-gray-900">
                   {item.productName}

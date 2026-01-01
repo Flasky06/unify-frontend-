@@ -156,7 +156,7 @@ const SalesHistory = () => {
   });
 
   const columns = [
-    { header: "Sale No", accessor: "saleNumber" },
+    { header: "Sale No", accessor: "saleNumber", triggerView: true },
     {
       header: "Date",
       accessor: "saleDate",
@@ -192,25 +192,40 @@ const SalesHistory = () => {
       header: "Actions",
       render: (row) => (
         <div className="flex gap-3">
-          <button
-            onClick={() => openDetails(row)}
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              openDetails(row);
+            }}
+            className="text-blue-600 hover:bg-blue-50 font-medium px-3"
           >
             View
-          </button>
-          <button
-            onClick={() => handleViewLogs(row)}
-            className="text-gray-600 hover:text-gray-800 text-sm font-medium"
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleViewLogs(row);
+            }}
+            className="text-gray-600 hover:bg-gray-100 font-medium px-3"
           >
             History
-          </button>
+          </Button>
           {row.status !== "CANCELLED" && (
-            <button
-              onClick={() => setConfirmDialog({ isOpen: true, saleId: row.id })}
-              className="text-red-600 hover:text-red-800 text-sm font-medium"
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                setConfirmDialog({ isOpen: true, saleId: row.id });
+              }}
+              className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
             >
               Cancel
-            </button>
+            </Button>
           )}
         </div>
       ),
@@ -282,6 +297,7 @@ const SalesHistory = () => {
           data={filteredSales}
           loading={loading}
           emptyMessage="No sales found."
+          showViewAction={false}
         />
       </div>
 

@@ -193,7 +193,13 @@ export const ServiceList = () => {
   };
 
   const columns = [
-    { header: "Name", accessor: "name", truncate: true, maxWidth: "200px" },
+    {
+      header: "Name",
+      accessor: "name",
+      truncate: true,
+      maxWidth: "200px",
+      triggerView: true,
+    },
     {
       header: "Category",
       accessor: "categoryName",
@@ -228,18 +234,28 @@ export const ServiceList = () => {
       header: "Actions",
       render: (service) => (
         <div className="flex gap-2">
-          <button
-            onClick={() => openEditModal(service)}
-            className="text-blue-600 hover:text-blue-900 px-3 py-1 rounded-full transition-colors"
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              openEditModal(service);
+            }}
+            className="text-blue-600 hover:bg-blue-50 font-medium px-3"
           >
             Edit
-          </button>
-          <button
-            onClick={() => openDeleteDialog(service.id)}
-            className="text-red-600 hover:text-red-900 px-3 py-1 rounded-full transition-colors"
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              openDeleteDialog(service.id);
+            }}
+            className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
           >
             Delete
-          </button>
+          </Button>
         </div>
       ),
     },
@@ -302,7 +318,7 @@ export const ServiceList = () => {
             data={filteredServices}
             loading={loading}
             emptyMessage="No services found"
-            showViewAction={true}
+            showViewAction={false}
           />
         </div>
       </div>

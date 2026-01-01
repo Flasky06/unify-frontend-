@@ -121,14 +121,15 @@ export const ProductCategoryList = () => {
   };
 
   const columns = [
-    { header: "Name", accessor: "name" },
+    { header: "Name", accessor: "name", triggerView: true },
     {
       header: "Actions",
       render: (category) => (
         <div className="flex gap-2">
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
+            className="text-blue-600 hover:bg-blue-50 font-medium px-3"
             onClick={(e) => {
               e.stopPropagation();
               openEditModal(category);
@@ -137,9 +138,9 @@ export const ProductCategoryList = () => {
             Edit
           </Button>
           <Button
-            variant="danger"
+            variant="ghost"
             size="sm"
-            className="text-red-600 border-red-200 hover:bg-red-50"
+            className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
             onClick={(e) => {
               e.stopPropagation();
               setConfirmDialog({ isOpen: true, categoryId: category.id });
@@ -196,6 +197,7 @@ export const ProductCategoryList = () => {
               columns={columns}
               data={filteredCategories}
               emptyMessage="No categories found. Create one to get started."
+              showViewAction={false}
             />
           )}
         </div>

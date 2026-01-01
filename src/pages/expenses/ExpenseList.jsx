@@ -307,6 +307,7 @@ export const ExpenseList = () => {
     {
       header: "Name",
       accessor: "name",
+      triggerView: true,
     },
     {
       header: "Date",
@@ -343,18 +344,7 @@ export const ExpenseList = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openEditModal(expense);
-                  }}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                  className="text-gray-600 hover:bg-gray-100 font-medium px-3"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleViewLogs(expense);
@@ -365,7 +355,18 @@ export const ExpenseList = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                  className="text-blue-600 hover:bg-blue-50 font-medium px-3"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openEditModal(expense);
+                  }}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
                   onClick={(e) => {
                     e.stopPropagation();
                     setConfirmDialog({ isOpen: true, expenseId: expense.id });
@@ -535,6 +536,7 @@ export const ExpenseList = () => {
                 columns={columns}
                 data={paginatedExpenses}
                 emptyMessage="No expenses found matching your criteria."
+                showViewAction={false}
               />
               {/* Pagination Controls Reuse */}
               {/* ... Simplified pagination render ... */}

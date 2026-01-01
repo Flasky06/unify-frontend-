@@ -182,7 +182,13 @@ export const ProductList = () => {
   };
 
   const columns = [
-    { header: "Name", accessor: "name", truncate: true, maxWidth: "200px" },
+    {
+      header: "Name",
+      accessor: "name",
+      truncate: true,
+      maxWidth: "200px",
+      triggerView: true,
+    },
     {
       header: "Cost Price",
       render: (product) => `KSH ${product.costPrice?.toFixed(2) || "0.00"}`,
@@ -218,7 +224,7 @@ export const ProductList = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+                  className="text-blue-600 hover:bg-blue-50 font-medium px-3"
                   onClick={(e) => {
                     e.stopPropagation();
                     openEditModal(product);
@@ -229,7 +235,7 @@ export const ProductList = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                  className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
                   onClick={(e) => {
                     e.stopPropagation();
                     setConfirmDialog({ isOpen: true, productId: product.id });
@@ -315,6 +321,7 @@ export const ProductList = () => {
               columns={columns}
               data={filteredProducts}
               emptyMessage="No products found matching your criteria."
+              showViewAction={false}
             />
           )}
         </div>

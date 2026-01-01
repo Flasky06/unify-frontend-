@@ -202,7 +202,7 @@ const StockTransfers = () => {
 
   const columns = [
     { header: "ID", accessor: "id" },
-    { header: "Product", accessor: "productName" },
+    { header: "Product", accessor: "productName", triggerView: true },
     { header: "Quantity", accessor: "quantity" },
     // For Business Owner/Manager, show both From and To shops
     // For Shop Manager, only show From shop (they know it's coming to their shop)
@@ -238,14 +238,20 @@ const StockTransfers = () => {
       render: (row) => (
         <div className="flex gap-2">
           {activeTab === "incoming" && row.status === "PENDING" && (
-            <Button size="sm" onClick={() => handleAcknowledge(row.id)}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleAcknowledge(row.id)}
+              className="text-green-600 hover:bg-green-50 font-medium px-3"
+            >
               Accept
             </Button>
           )}
           {activeTab === "outgoing" && row.status === "PENDING" && (
             <Button
+              variant="ghost"
               size="sm"
-              variant="danger"
+              className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
               onClick={() => handleCancel(row.id)}
             >
               Cancel
@@ -314,6 +320,7 @@ const StockTransfers = () => {
         data={transfers}
         loading={loading}
         emptyMessage={`No ${activeTab} transfers found`}
+        showViewAction={false}
       />
 
       <Modal

@@ -120,7 +120,7 @@ export const ExpenseCategoryList = () => {
   };
 
   const columns = [
-    { header: "Name", accessor: "name" },
+    { header: "Name", accessor: "name", triggerView: true },
     ...(user?.role === "SALES_REP"
       ? []
       : [
@@ -131,7 +131,7 @@ export const ExpenseCategoryList = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+                  className="text-blue-600 hover:bg-blue-50 font-medium px-3"
                   onClick={(e) => {
                     e.stopPropagation();
                     openEditModal(category);
@@ -142,7 +142,7 @@ export const ExpenseCategoryList = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                  className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
                   onClick={(e) => {
                     e.stopPropagation();
                     setConfirmDialog({ isOpen: true, categoryId: category.id });
@@ -202,6 +202,7 @@ export const ExpenseCategoryList = () => {
               columns={columns}
               data={filteredCategories}
               emptyMessage="No expense categories found. Create one to get started."
+              showViewAction={false}
             />
           )}
         </div>

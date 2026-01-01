@@ -191,6 +191,7 @@ const SalesByItem = () => {
           data={filteredData}
           loading={loading}
           emptyMessage="No item sales data found."
+          showViewAction={false}
         />
       </div>
     </div>

@@ -136,7 +136,7 @@ export const PaymentMethodList = () => {
   };
 
   const columns = [
-    { header: "Name", accessor: "name" },
+    { header: "Name", accessor: "name", triggerView: true },
     {
       header: "Type",
       accessor: "type",
@@ -166,7 +166,7 @@ export const PaymentMethodList = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+                  className="text-blue-600 hover:bg-blue-50 font-medium px-3"
                   onClick={(e) => {
                     e.stopPropagation();
                     openEditModal(method);
@@ -177,7 +177,7 @@ export const PaymentMethodList = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                  className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
                   onClick={(e) => {
                     e.stopPropagation();
                     setConfirmDialog({ isOpen: true, methodId: method.id });
@@ -237,6 +237,7 @@ export const PaymentMethodList = () => {
               columns={columns}
               data={filteredMethods}
               emptyMessage="No payment methods found. Create one to get started."
+              showViewAction={false}
             />
           )}
         </div>

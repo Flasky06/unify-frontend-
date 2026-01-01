@@ -146,23 +146,33 @@ export const ServiceCategoryList = () => {
   };
 
   const columns = [
-    { header: "Name", accessor: "name" },
+    { header: "Name", accessor: "name", triggerView: true },
     {
       header: "Actions",
       render: (category) => (
         <div className="flex gap-2">
-          <button
-            onClick={() => openEditModal(category)}
-            className="text-blue-600 hover:text-blue-900 px-3 py-1 rounded-full transition-colors"
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              openEditModal(category);
+            }}
+            className="text-blue-600 hover:bg-blue-50 font-medium px-3"
           >
             Edit
-          </button>
-          <button
-            onClick={() => openDeleteDialog(category.id)}
-            className="text-red-600 hover:text-red-900 px-3 py-1 rounded-full transition-colors"
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              openDeleteDialog(category.id);
+            }}
+            className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
           >
             Delete
-          </button>
+          </Button>
         </div>
       ),
     },
@@ -209,6 +219,7 @@ export const ServiceCategoryList = () => {
             data={filteredCategories}
             loading={loading}
             emptyMessage="No service categories found"
+            showViewAction={false}
           />
         </div>
       </div>

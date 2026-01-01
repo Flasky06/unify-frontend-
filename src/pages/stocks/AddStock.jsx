@@ -125,7 +125,7 @@ const AddStock = () => {
       header: "Product Name",
       accessor: "name",
       truncate: true,
-      maxWidth: "250px",
+      triggerView: true,
     },
     { header: "Category", accessor: "category" },
     { header: "Brand", accessor: "brand" },
@@ -135,9 +135,15 @@ const AddStock = () => {
       render: (row) => (
         <Button
           size="sm"
-          onClick={() => handleSelectProduct(row._product)}
+          variant="ghost"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleSelectProduct(row._product);
+          }}
           className={
-            selectedProduct?.id === row._product?.id ? "bg-blue-600" : ""
+            selectedProduct?.id === row._product?.id
+              ? "bg-blue-600 text-white hover:bg-blue-700"
+              : "text-blue-600 hover:bg-blue-50 font-medium px-3"
           }
         >
           Select
@@ -205,6 +211,7 @@ const AddStock = () => {
             data={tableData}
             loading={loading}
             emptyMessage="No products found matching your search."
+            showViewAction={false}
           />
         </div>
       </div>

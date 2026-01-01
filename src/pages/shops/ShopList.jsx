@@ -135,7 +135,7 @@ export const ShopList = () => {
   };
 
   const columns = [
-    { header: "Shop Name", accessor: "name" },
+    { header: "Shop Name", accessor: "name", triggerView: true },
     { header: "Location", accessor: "location" },
     // Hide Actions for SHOP_MANAGER and SALES_REP
     // Assuming SHOP_MANAGER shouldn't manage the shop LIST, only their own shop.
@@ -149,7 +149,7 @@ export const ShopList = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+                  className="text-blue-600 hover:bg-blue-50 font-medium px-3"
                   onClick={(e) => {
                     e.stopPropagation();
                     openEditModal(shop);
@@ -160,7 +160,7 @@ export const ShopList = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                  className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
                   onClick={(e) => {
                     e.stopPropagation();
                     setConfirmDialog({ isOpen: true, shopId: shop.id });
@@ -219,6 +219,7 @@ export const ShopList = () => {
               columns={columns}
               data={filteredShops}
               emptyMessage="No shops found. Create one to get started."
+              showViewAction={false}
             />
           )}
         </div>

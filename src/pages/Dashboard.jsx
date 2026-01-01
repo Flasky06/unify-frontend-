@@ -435,6 +435,7 @@ const Dashboard = () => {
                 ? "No products found"
                 : "No services found"
             }
+            showViewAction={false}
           />
         </div>
       </div>

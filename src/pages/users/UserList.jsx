@@ -133,6 +133,7 @@ export const UserList = () => {
     {
       header: "Email",
       accessor: "email",
+      triggerView: true,
     },
     {
       header: "Role",
@@ -176,7 +177,7 @@ export const UserList = () => {
                   userName: user.email, // or user.name if available
                 });
               }}
-              className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+              className="text-blue-600 hover:bg-blue-50 font-medium px-3"
             >
               Permissions
             </Button>
@@ -188,11 +189,11 @@ export const UserList = () => {
               e.stopPropagation();
               handleToggleStatus(user);
             }}
-            className={
+            className={`font-medium px-3 ${
               user.isActive || user.active
-                ? "text-red-600 hover:text-red-800 hover:bg-red-50"
-                : "text-green-600 hover:text-green-800 hover:bg-green-50"
-            }
+                ? "text-red-600 hover:bg-red-50 hover:text-red-700"
+                : "text-green-600 hover:bg-green-50 hover:text-green-800"
+            }`}
           >
             {user.isActive || user.active ? "Deactivate" : "Activate"}
           </Button>
@@ -238,6 +239,7 @@ export const UserList = () => {
               columns={columns}
               data={users}
               emptyMessage="No users found."
+              showViewAction={false}
             />
           )}
         </div>
