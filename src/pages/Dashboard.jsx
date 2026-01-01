@@ -59,9 +59,14 @@ const Dashboard = () => {
       render: (row) => (
         <button
           onClick={() => addToCart(row)}
-          className="px-3 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 text-sm font-medium transition"
+          disabled={row.quantity < 1}
+          className={`px-3 py-1 rounded text-sm font-medium transition ${
+            row.quantity < 1
+              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+              : "bg-blue-50 text-blue-600 hover:bg-blue-100"
+          }`}
         >
-          Add
+          {row.quantity < 1 ? "Out of Stock" : "Add"}
         </button>
       ),
     },
@@ -129,16 +134,18 @@ const Dashboard = () => {
     try {
       const stocks = await stockService.getStocksByShop(shopId);
 
-      // Enrich stock with product details
-      const enrichedStocks = stocks.map((stock) => {
-        const product = products.find((p) => p.id === stock.productId);
+      // Map ALL products to show availability, even if no stock record exists yet
+      const productAvailability = products.map((product) => {
+        const stockEntry = stocks.find((s) => s.productId === product.id);
         return {
-          ...stock,
-          productName: product?.name || "Unknown",
-          price: product?.sellingPrice || 0,
+          id: stockEntry?.id || `temp-${product.id}`,
+          productId: product.id,
+          productName: product.name,
+          price: product.sellingPrice || 0,
+          quantity: stockEntry?.quantity || 0,
         };
       });
-      setStock(enrichedStocks);
+      setStock(productAvailability);
     } catch (err) {
       console.error("Failed to fetch stock", err);
     } finally {
