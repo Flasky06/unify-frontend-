@@ -61,7 +61,7 @@ const Home = () => {
             The comprehensive business management solution for modern
             businesses. Effortlessly manage stock across multiple locations,
             track product & service sales, and gain deep insights with real-time
-            analytics—all in one place.
+            analytics all in one place.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {isAuthenticated ? (
