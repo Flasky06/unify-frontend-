@@ -48,7 +48,7 @@ const Home = () => {
       </nav>
 
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-32">
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 mb-8 leading-tight tracking-tight">
             Manage Your Business,
@@ -57,9 +57,9 @@ const Home = () => {
               Simplify Operations
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 mb-12 leading-relaxed">
+          <p className="text-2xl md:text-3xl text-gray-600 mb-12 leading-relaxed">
             The comprehensive business management solution for modern
-            businesses. Manage stock,products & service sales, and more—all in
+            businesses. Manage stock, products & service sales, and more—all in
             one place.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -142,8 +142,8 @@ const Home = () => {
               Advanced Inventory
             </h3>
             <p className="text-gray-600">
-              Track stock levels, manage brands & categories, and handle stock
-              transfers between multiple shop locations effortlessly.
+              Track 10,000+ SKUs across multiple locations. Manage brands,
+              categories, and stock transfers effortlessly.
             </p>
           </div>
 
@@ -168,8 +168,8 @@ const Home = () => {
               Recall Analytics
             </h3>
             <p className="text-gray-600">
-              Deep dive into sales, expenses, and net profit. Use date filters
-              to analyze performance over any custom timeframe.
+              Visualize 12 months of data instantly. Deep dive into sales,
+              expenses, and net profit with custom date filters.
             </p>
           </div>
 
@@ -194,8 +194,8 @@ const Home = () => {
               Multi-Shop Support
             </h3>
             <p className="text-gray-600">
-              Scale your business. Manage multiple branches, staff, and
-              inventories from a single centralized dashboard.
+              Scale from 1 to 100+ branches. Manage multiple locations, staff,
+              and inventories from a single centralized dashboard.
             </p>
           </div>
 
@@ -220,8 +220,8 @@ const Home = () => {
               Expense Tracking
             </h3>
             <p className="text-gray-600">
-              Keep a close watch on spending. Categorize expenses and monitor
-              burn rate to maximize your profitability.
+              Categorize 100% of your operational costs. Keep a close watch on
+              spending and monitor burn rate to maximize profitability.
             </p>
           </div>
 
@@ -246,19 +246,152 @@ const Home = () => {
               Customer & Stock Returns
             </h3>
             <p className="text-gray-600">
-              Handle customer returns and damaged stock efficiently, keeping
-              your inventory counts accurate at all times.
+              Process returns in under 30 seconds. Handle customer returns and
+              damaged stock efficiently, keeping your inventory counts accurate.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 mb-20">
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+          Frequently Asked Questions
+        </h2>
+        <div className="space-y-8">
+          <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition">
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Can I use UNIFY for multiple separate businesses?
+            </h3>
+            <p className="text-gray-600">
+              Yes! UNIFY is designed to handle multiple shops and business
+              entities under a single account, giving you a centralized view of
+              your entire empire.
+            </p>
+          </div>
+          <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition">
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Who has access to my data?
+            </h3>
+            <p className="text-gray-600">
+              You have complete control. Our granular permissions system allows
+              you to define exactly what each staff member can see and do. Your
+              data is encrypted and secure.
+            </p>
+          </div>
+          <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition">
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Can I export my financial reports?
+            </h3>
+            <p className="text-gray-600">
+              Absolutely. You can export detailed sales, expense, and profit
+              reports to help with accounting and performance analysis.
             </p>
           </div>
         </div>
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-lg">
-            &copy; 2026 UNIFY. Building the future of Business management
-          </p>
+      <footer className="bg-gray-900 text-gray-300 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div className="col-span-1 md:col-span-1">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">U</span>
+                </div>
+                <h2 className="text-2xl font-bold text-white tracking-tight">
+                  UNIFY
+                </h2>
+              </div>
+              <p className="text-gray-400 mb-6">
+                Building the operating system for modern retail businesses.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-white font-bold text-lg mb-6">Product</h3>
+              <ul className="space-y-4">
+                <li>
+                  <Link to="#" className="hover:text-blue-400 transition">
+                    Features
+                  </Link>
+                </li>
+                <li>
+                  <Link to="#" className="hover:text-blue-400 transition">
+                    Pricing
+                  </Link>
+                </li>
+                <li>
+                  <Link to="#" className="hover:text-blue-400 transition">
+                    API
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-white font-bold text-lg mb-6">Company</h3>
+              <ul className="space-y-4">
+                <li>
+                  <Link to="#" className="hover:text-blue-400 transition">
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link to="#" className="hover:text-blue-400 transition">
+                    Careers
+                  </Link>
+                </li>
+                <li>
+                  <Link to="#" className="hover:text-blue-400 transition">
+                    Blog
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-white font-bold text-lg mb-6">Contact</h3>
+              <ul className="space-y-4">
+                <li className="flex items-start gap-3">
+                  <span className="text-blue-500">Email:</span>
+                  <a
+                    href="mailto:bonnienjuguna106@gmail.com"
+                    className="hover:text-white transition"
+                  >
+                    bonnienjuguna106@gmail.com
+                  </a>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-blue-500">Cell:</span>
+                  <span className="hover:text-white transition">
+                    0717299106
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-500">
+              &copy; {new Date().getFullYear()} UNIFY. All rights reserved.
+            </p>
+            <div className="flex gap-6 mt-4 md:mt-0">
+              <Link
+                to="#"
+                className="text-gray-500 hover:text-white transition"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                to="#"
+                className="text-gray-500 hover:text-white transition"
+              >
+                Terms of Service
+              </Link>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
