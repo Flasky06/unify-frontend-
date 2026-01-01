@@ -96,33 +96,7 @@ const Home = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Feature 1 */}
-          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group text-center">
-            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition duration-300 mx-auto">
-              <svg
-                className="w-6 h-6 text-blue-600 group-hover:text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3">
-              Staff Permissions
-            </h3>
-            <p className="text-gray-600">
-              Go beyond roles. Set specific, fine-grained permission overrides
-              for every staff member to secure your business data.
-            </p>
-          </div>
-
-          {/* Feature 2 */}
+          {/* Feature 1: Advanced Inventory */}
           <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group text-center">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition duration-300 mx-auto">
               <svg
@@ -148,7 +122,7 @@ const Home = () => {
             </p>
           </div>
 
-          {/* Feature 3 */}
+          {/* Feature 2: Performance Analytics */}
           <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group text-center">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition duration-300 mx-auto">
               <svg
@@ -175,7 +149,7 @@ const Home = () => {
             </p>
           </div>
 
-          {/* Feature 4 */}
+          {/* Feature 3: Multi-Shop Support */}
           <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group text-center">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition duration-300 mx-auto">
               <svg
@@ -201,7 +175,7 @@ const Home = () => {
             </p>
           </div>
 
-          {/* Feature 5 */}
+          {/* Feature 4: Expense Tracking */}
           <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group text-center">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition duration-300 mx-auto">
               <svg
@@ -227,7 +201,33 @@ const Home = () => {
             </p>
           </div>
 
-          {/* Feature 6 */}
+          {/* Feature 5: Staff Permissions */}
+          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group text-center">
+            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition duration-300 mx-auto">
+              <svg
+                className="w-6 h-6 text-blue-600 group-hover:text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Staff Permissions
+            </h3>
+            <p className="text-gray-600">
+              Go beyond roles. Set specific, fine-grained permission overrides
+              for every staff member to secure your business data.
+            </p>
+          </div>
+
+          {/* Feature 6: Returns Management */}
           <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group text-center">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition duration-300 mx-auto">
               <svg
