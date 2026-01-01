@@ -96,7 +96,7 @@ const Home = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Feature 1 */}
-          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group">
+          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group text-center">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition duration-300 mx-auto">
               <svg
                 className="w-6 h-6 text-blue-600 group-hover:text-white"
@@ -122,7 +122,7 @@ const Home = () => {
           </div>
 
           {/* Feature 2 */}
-          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group">
+          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group text-center">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition duration-300 mx-auto">
               <svg
                 className="w-6 h-6 text-blue-600 group-hover:text-white"
@@ -148,7 +148,7 @@ const Home = () => {
           </div>
 
           {/* Feature 3 */}
-          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group">
+          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group text-center">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition duration-300 mx-auto">
               <svg
                 className="w-6 h-6 text-blue-600 group-hover:text-white"
@@ -174,7 +174,7 @@ const Home = () => {
           </div>
 
           {/* Feature 4 */}
-          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group">
+          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group text-center">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition duration-300 mx-auto">
               <svg
                 className="w-6 h-6 text-blue-600 group-hover:text-white"
@@ -200,7 +200,7 @@ const Home = () => {
           </div>
 
           {/* Feature 5 */}
-          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group">
+          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group text-center">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition duration-300 mx-auto">
               <svg
                 className="w-6 h-6 text-blue-600 group-hover:text-white"
@@ -226,7 +226,7 @@ const Home = () => {
           </div>
 
           {/* Feature 6 */}
-          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group">
+          <div className="p-8 rounded-2xl bg-gray-50 hover:bg-blue-50 transition duration-300 group text-center">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition duration-300 mx-auto">
               <svg
                 className="w-6 h-6 text-blue-600 group-hover:text-white"
