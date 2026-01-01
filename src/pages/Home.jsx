@@ -325,8 +325,8 @@ const Home = () => {
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-300 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-            <div className="col-span-1 md:col-span-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+            <div className="col-span-1">
               <div className="flex items-center gap-2 mb-6">
                 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-xl">U</span>
@@ -335,56 +335,14 @@ const Home = () => {
                   UNIFY
                 </h2>
               </div>
-              <p className="text-gray-400 mb-6">
+              <p className="text-gray-400 mb-6 max-w-sm">
                 Building the operating system for modern retail businesses.
               </p>
             </div>
 
-            <div>
-              <h3 className="text-white font-bold text-lg mb-6">Product</h3>
-              <ul className="space-y-4">
-                <li>
-                  <Link to="#" className="hover:text-blue-400 transition">
-                    Features
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="hover:text-blue-400 transition">
-                    Pricing
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="hover:text-blue-400 transition">
-                    API
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-white font-bold text-lg mb-6">Company</h3>
-              <ul className="space-y-4">
-                <li>
-                  <Link to="#" className="hover:text-blue-400 transition">
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="hover:text-blue-400 transition">
-                    Careers
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="hover:text-blue-400 transition">
-                    Blog
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
+            <div className="md:text-right">
               <h3 className="text-white font-bold text-lg mb-6">Contact</h3>
-              <ul className="space-y-4">
+              <ul className="space-y-4 inline-block text-left">
                 <li className="flex items-start gap-3">
                   <span className="text-blue-500">Email:</span>
                   <a
