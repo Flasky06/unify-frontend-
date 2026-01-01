@@ -160,11 +160,7 @@ const SalesByItem = () => {
       <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:justify-between lg:items-end">
         <div className="w-full lg:flex-1">
           <h1 className="text-2xl font-bold text-blue-600 mb-4">
-            {salesType === "product"
-              ? "Product Sales by Item"
-              : salesType === "service"
-              ? "Service Sales by Item"
-              : "Sales by Item"}
+            Sales by Item
           </h1>
           <Input
             placeholder="Search by product name..."

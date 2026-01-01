@@ -490,24 +490,26 @@ export const ExpenseList = () => {
               </select>
             </div>
             {/* Dates */}
-            <div className="flex gap-2 w-full lg:w-auto lg:max-w-md">
+            <div className="w-full sm:w-auto">
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                Start Date
+              </label>
               <Input
                 type="date"
                 value={startDate}
-                onChange={(e) => {
-                  setStartDate(e.target.value);
-                  setCurrentPage(1);
-                }}
-                placeholder="Start"
+                onChange={(e) => setStartDate(e.target.value)}
+                className="w-full sm:w-auto"
               />
+            </div>
+            <div className="w-full sm:w-auto">
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                End Date
+              </label>
               <Input
                 type="date"
                 value={endDate}
-                onChange={(e) => {
-                  setEndDate(e.target.value);
-                  setCurrentPage(1);
-                }}
-                placeholder="End"
+                onChange={(e) => setEndDate(e.target.value)}
+                className="w-full sm:w-auto"
               />
             </div>
           </div>

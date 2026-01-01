@@ -191,12 +191,8 @@ const RoleManagement = () => {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <ShieldIcon className="w-8 h-8 text-blue-600" />
-            Role Permissions
+            <span className="text-blue-600">Role Management</span>
           </h1>
-          <p className="text-gray-500 mt-1">
-            Customize what each staff member can do
-          </p>
         </div>
         <button
           onClick={handleSave}
@@ -245,7 +241,7 @@ const RoleManagement = () => {
         </div>
 
         {/* Permissions Grid */}
-        <div className="flex-1 bg-white rounded-lg shadow-sm border p-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 h-[calc(100vh-140px)] flex flex-col">
           <div className="flex items-center justify-between mb-6 border-b pb-4">
             <h2 className="text-lg font-semibold text-gray-800">
               Permissions for{" "}

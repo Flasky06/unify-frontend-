@@ -284,7 +284,6 @@ const StockList = () => {
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-4 sm:gap-6">
         <h1 className="text-2xl font-bold text-blue-600">Stock Management</h1>
-        {/* Add Stock Button and Filters */}
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-end">
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-1 sm:gap-4">
             <div className="w-full sm:w-48">

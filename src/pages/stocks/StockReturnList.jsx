@@ -119,9 +119,6 @@ const StockReturnList = () => {
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Stock Returns</h1>
-          <p className="text-gray-500">
-            Manage customer returns and damaged stock
-          </p>
         </div>
         <div className="flex gap-2">
           <select
