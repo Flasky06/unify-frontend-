@@ -65,20 +65,12 @@ const Home = () => {
                 Go to Dashboard
               </Link>
             ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="hidden sm:block px-6 py-2.5 text-gray-600 hover:text-blue-600 font-medium transition"
-                >
-                  Log In
-                </Link>
-                <Link
-                  to="/register"
-                  className="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                >
-                  Start Free Trial
-                </Link>
-              </>
+              <Link
+                to="/register"
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+              >
+                Start Free Trial
+              </Link>
             )}
           </div>
         </nav>
