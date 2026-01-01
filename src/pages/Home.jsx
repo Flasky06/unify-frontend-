@@ -143,7 +143,7 @@ const Home = () => {
               Advanced Inventory
             </h3>
             <p className="text-gray-600">
-              Track 10,000+ products across multiple locations. Manage brands,
+              Track unlimited products across multiple locations. Manage brands,
               categories, and stock transfers effortlessly.
             </p>
           </div>
@@ -196,7 +196,7 @@ const Home = () => {
               Multi-Shop Support
             </h3>
             <p className="text-gray-600">
-              Scale from 1 to 100+ branches. Manage multiple locations, staff,
+              Scale your business. Manage multiple branches, locations, staff,
               and inventories from a single centralized dashboard.
             </p>
           </div>
@@ -222,7 +222,7 @@ const Home = () => {
               Expense Tracking
             </h3>
             <p className="text-gray-600">
-              Categorize 100% of your operational costs. Keep a close watch on
+              Categorize all your operational costs. Keep a close watch on
               spending and monitor burn rate to maximize profitability.
             </p>
           </div>
@@ -248,8 +248,8 @@ const Home = () => {
               Customer & Stock Returns
             </h3>
             <p className="text-gray-600">
-              Process returns in under 30 seconds. Handle customer returns and
-              damaged stock efficiently, keeping your inventory counts accurate.
+              Process returns instantly. Handle customer returns and damaged
+              stock efficiently, keeping your inventory counts accurate.
             </p>
           </div>
         </div>
