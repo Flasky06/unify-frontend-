@@ -3,6 +3,8 @@ import useAuthStore from "../../store/authStore";
 import { stockReturnService } from "../../services/stockReturnService";
 import { shopService } from "../../services/shopService";
 import { productService } from "../../services/productService";
+import Modal from "../../components/ui/Modal";
+import Button from "../../components/ui/Button";
 import Toast from "../../components/ui/Toast";
 
 const StockReturnList = () => {
@@ -132,9 +134,9 @@ const StockReturnList = () => {
               </option>
             ))}
           </select>
-          <button
+          <Button
             onClick={() => setIsModalOpen(true)}
-            className="btn btn-primary flex items-center gap-2"
+            className="flex items-center gap-2"
           >
             <svg
               className="w-4 h-4"
@@ -150,7 +152,7 @@ const StockReturnList = () => {
               />
             </svg>
             Process Return
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -247,115 +249,103 @@ const StockReturnList = () => {
         </div>
       </div>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
-            <div className="p-6 border-b border-gray-100">
-              <h2 className="text-xl font-bold text-gray-900">
-                Process Stock Return
-              </h2>
-            </div>
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Product
-                </label>
-                <select
-                  required
-                  value={formData.productId}
-                  onChange={(e) =>
-                    setFormData({ ...formData, productId: e.target.value })
-                  }
-                  className="w-full rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
-                >
-                  <option value="">Select Product</option>
-                  {products.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Return Type
-                </label>
-                <select
-                  required
-                  value={formData.type}
-                  onChange={(e) =>
-                    setFormData({ ...formData, type: e.target.value })
-                  }
-                  className="w-full rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
-                >
-                  <option value="CUSTOMER_RETURN">
-                    Customer Return (Restock)
-                  </option>
-                  <option value="SUPPLIER_RETURN">
-                    Return to Supplier (Deduct)
-                  </option>
-                  <option value="DAMAGED">Damaged (Deduct)</option>
-                  <option value="EXPIRED">Expired (Deduct)</option>
-                </select>
-                <p className="text-xs text-gray-500 mt-1">
-                  {formData.type === "CUSTOMER_RETURN"
-                    ? "Use this when a customer returns an item. Stock will INCREASE."
-                    : "Use this for bad stock. Stock will DECREASE."}
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Quantity
-                </label>
-                <input
-                  type="number"
-                  required
-                  min="1"
-                  value={formData.quantity}
-                  onChange={(e) =>
-                    setFormData({ ...formData, quantity: e.target.value })
-                  }
-                  className="w-full rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Reason
-                </label>
-                <textarea
-                  required
-                  rows="3"
-                  value={formData.reason}
-                  onChange={(e) =>
-                    setFormData({ ...formData, reason: e.target.value })
-                  }
-                  className="w-full rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
-                  placeholder="Why is it being returned?"
-                />
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 px-4 py-2 text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors"
-                >
-                  Confirm Return
-                </button>
-              </div>
-            </form>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Process Stock Return"
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Product
+            </label>
+            <select
+              required
+              value={formData.productId}
+              onChange={(e) =>
+                setFormData({ ...formData, productId: e.target.value })
+              }
+              className="w-full rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option value="">Select Product</option>
+              {products.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
           </div>
-        </div>
-      )}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Return Type
+            </label>
+            <select
+              required
+              value={formData.type}
+              onChange={(e) =>
+                setFormData({ ...formData, type: e.target.value })
+              }
+              className="w-full rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option value="CUSTOMER_RETURN">Customer Return (Restock)</option>
+              <option value="SUPPLIER_RETURN">
+                Return to Supplier (Deduct)
+              </option>
+              <option value="DAMAGED">Damaged (Deduct)</option>
+              <option value="EXPIRED">Expired (Deduct)</option>
+            </select>
+            <p className="text-xs text-gray-500 mt-1">
+              {formData.type === "CUSTOMER_RETURN"
+                ? "Use this when a customer returns an item. Stock will INCREASE."
+                : "Use this for bad stock. Stock will DECREASE."}
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Quantity
+            </label>
+            <input
+              type="number"
+              required
+              min="1"
+              value={formData.quantity}
+              onChange={(e) =>
+                setFormData({ ...formData, quantity: e.target.value })
+              }
+              className="w-full rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Reason
+            </label>
+            <textarea
+              required
+              rows="3"
+              value={formData.reason}
+              onChange={(e) =>
+                setFormData({ ...formData, reason: e.target.value })
+              }
+              className="w-full rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Why is it being returned?"
+            />
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit">Confirm Return</Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };

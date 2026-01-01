@@ -1,6 +1,6 @@
 import { apiFetch } from "../lib/api";
 
-export const categoryService = {
+export const productCategoryService = {
   // Get all categories
   getAll: async () => {
     return await apiFetch("/product-categories");

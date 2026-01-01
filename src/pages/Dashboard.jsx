@@ -295,11 +295,8 @@ const Dashboard = () => {
     item.productName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const filteredServices = services.filter(
-    (service) =>
-      service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (service.description &&
-        service.description.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredServices = services.filter((service) =>
+    service.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const serviceColumns = [

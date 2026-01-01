@@ -14,7 +14,7 @@ import Profile from "../pages/Profile";
 import { UserList } from "../pages/users/UserList";
 import RoleManagement from "../pages/users/RoleManagement";
 import { ProductList } from "../pages/products/ProductList";
-import { CategoryList } from "../pages/products/CategoryList";
+import { ProductCategoryList } from "../pages/products/ProductCategoryList";
 import { BrandList } from "../pages/products/BrandList";
 import { ShopList } from "../pages/shops/ShopList";
 import StockList from "../pages/stocks/StockList";
@@ -98,7 +98,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "categories",
-            element: <CategoryList />,
+            element: <ProductCategoryList />,
           },
           {
             path: "brands",

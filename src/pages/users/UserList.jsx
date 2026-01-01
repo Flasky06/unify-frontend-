@@ -8,6 +8,8 @@ import { shopService } from "../../services/shopService";
 import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
 import useAuthStore from "../../store/authStore";
 
+import UserPermissionsModal from "./UserPermissionsModal";
+
 export const UserList = () => {
   const [users, setUsers] = useState([]);
   const [shops, setShops] = useState([]);
@@ -16,6 +18,12 @@ export const UserList = () => {
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [permissionsModal, setPermissionsModal] = useState({
+    isOpen: false,
+    userId: null,
+    userName: "",
+  });
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -155,21 +163,40 @@ export const UserList = () => {
     {
       header: "Actions",
       render: (user) => (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleToggleStatus(user);
-          }}
-          className={
-            user.isActive || user.active
-              ? "text-red-600 hover:text-red-800 hover:bg-red-50"
-              : "text-green-600 hover:text-green-800 hover:bg-green-50"
-          }
-        >
-          {user.isActive || user.active ? "Deactivate" : "Activate"}
-        </Button>
+        <div className="flex gap-2">
+          {isBusinessOwner && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                setPermissionsModal({
+                  isOpen: true,
+                  userId: user.id,
+                  userName: user.email, // or user.name if available
+                });
+              }}
+              className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+            >
+              Permissions
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleToggleStatus(user);
+            }}
+            className={
+              user.isActive || user.active
+                ? "text-red-600 hover:text-red-800 hover:bg-red-50"
+                : "text-green-600 hover:text-green-800 hover:bg-green-50"
+            }
+          >
+            {user.isActive || user.active ? "Deactivate" : "Activate"}
+          </Button>
+        </div>
       ),
     },
   ];
@@ -345,6 +372,15 @@ export const UserList = () => {
           </div>
         </form>
       </Modal>
+
+      <UserPermissionsModal
+        isOpen={permissionsModal.isOpen}
+        onClose={() =>
+          setPermissionsModal({ ...permissionsModal, isOpen: false })
+        }
+        userId={permissionsModal.userId}
+        userName={permissionsModal.userName}
+      />
 
       <Toast
         isOpen={toast.isOpen}

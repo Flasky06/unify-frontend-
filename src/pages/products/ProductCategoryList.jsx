@@ -3,10 +3,10 @@ import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
-import { categoryService } from "../../services/categoryService";
+import { productCategoryService } from "../../services/productCategoryService";
 import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
 
-export const CategoryList = () => {
+export const ProductCategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,7 +34,7 @@ export const CategoryList = () => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const data = await categoryService.getAll();
+      const data = await productCategoryService.getAll();
       setCategories(data || []);
     } catch (err) {
       console.error("Failed to fetch categories", err);
@@ -55,9 +55,9 @@ export const CategoryList = () => {
     setSubmitting(true);
     try {
       if (editingCategory) {
-        await categoryService.update(editingCategory.id, formData);
+        await productCategoryService.update(editingCategory.id, formData);
       } else {
-        await categoryService.create(formData);
+        await productCategoryService.create(formData);
       }
       fetchCategories();
       closeModal();
@@ -82,7 +82,7 @@ export const CategoryList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await categoryService.delete(id);
+      await productCategoryService.delete(id);
       fetchCategories();
       setToast({
         isOpen: true,

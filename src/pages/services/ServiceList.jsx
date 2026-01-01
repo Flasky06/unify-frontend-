@@ -17,7 +17,7 @@ export const ServiceList = () => {
   const [editingService, setEditingService] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
-    description: "",
+
     price: "",
     unit: "",
     minimumQuantity: 1,
@@ -69,11 +69,8 @@ export const ServiceList = () => {
     }
   };
 
-  const filteredServices = services.filter(
-    (service) =>
-      service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (service.description &&
-        service.description.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredServices = services.filter((service) =>
+    service.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSubmit = async (e) => {
@@ -139,7 +136,7 @@ export const ServiceList = () => {
     setEditingService(null);
     setFormData({
       name: "",
-      description: "",
+
       price: "",
       unit: "per service",
       minimumQuantity: 1,
@@ -154,7 +151,7 @@ export const ServiceList = () => {
     setEditingService(service);
     setFormData({
       name: service.name,
-      description: service.description || "",
+
       price: service.price,
       unit: service.unit,
       minimumQuantity: service.minimumQuantity,
@@ -170,7 +167,7 @@ export const ServiceList = () => {
     setEditingService(null);
     setFormData({
       name: "",
-      description: "",
+
       price: "",
       unit: "",
       minimumQuantity: 1,
@@ -386,20 +383,6 @@ export const ServiceList = () => {
                 placeholder="e.g., per pair"
               />
             </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description
-            </label>
-            <textarea
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              rows="3"
-            />
           </div>
 
           <div className="flex items-center">

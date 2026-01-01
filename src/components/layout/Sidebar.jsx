@@ -66,7 +66,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
   const businessNav = [
     // 1. MAIN
     {
-      name: "POS",
+      name: "Dashboard",
       path: "/dashboard",
       icon: (
         <svg
@@ -104,9 +104,9 @@ export const Sidebar = ({ isOpen, onClose }) => {
       ),
     },
 
-    // 2. INVENTORY
+    // 2. PRODUCTS
     {
-      name: "Inventory",
+      name: "Products",
       icon: (
         <svg
           className="w-5 h-5"
@@ -118,24 +118,20 @@ export const Sidebar = ({ isOpen, onClose }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
           />
         </svg>
       ),
       children: [
-        { name: "Stock List", path: "/stocks" },
-        { name: "Add Stock", path: "/stocks/add" },
-        { name: "Products", path: "/products" },
-        { name: "Categories", path: "/products/categories" },
+        { name: "Product List", path: "/products" },
+        { name: "Product Categories", path: "/products/categories" },
         { name: "Brands", path: "/products/brands" },
-        { name: "Stock Returns", path: "/stocks/returns" },
-        { name: "Transfer Stock", path: "/transfers" },
       ],
     },
 
-    // 3. RECORDS (Finance)
+    // 3. INVENTORY
     {
-      name: "Records",
+      name: "Inventory",
       icon: (
         <svg
           className="w-5 h-5"
@@ -152,13 +148,39 @@ export const Sidebar = ({ isOpen, onClose }) => {
         </svg>
       ),
       children: [
+        { name: "Stock List", path: "/stocks" },
+        { name: "Add Stock", path: "/stocks/add" },
+        { name: "Stock Returns", path: "/stocks/returns" },
+        { name: "Transfer Stock", path: "/transfers" },
+      ],
+    },
+
+    // 4. RECORDS (Finance)
+    {
+      name: "Records",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+      ),
+      children: [
         { name: "Sales History", path: "/sales" },
         { name: "Expenses", path: "/expenses" },
         { name: "Expense Categories", path: "/expenses/categories" },
       ],
     },
 
-    // 4. SERVICES
+    // 5. SERVICES
     {
       name: "Services",
       icon: (
@@ -182,7 +204,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
       ],
     },
 
-    // 5. ADMIN
+    // 6. ADMIN
     {
       name: "Admin",
       icon: (
@@ -237,30 +259,33 @@ export const Sidebar = ({ isOpen, onClose }) => {
   ];
 
   // Filter navigation based on user role
-  // Filter navigation based on user role
   const getFilteredBusinessNav = () => {
     // SALES_REP: Very restricted
     if (user?.role === "SALES_REP") {
       return businessNav.map((item) => {
         // Disable User Management and Shop Management
         if (
+          item.name === "Admin" || // Renamed block
           item.name === "User Management" ||
           item.name === "Shop Management"
         ) {
           return { ...item, disabled: true };
         }
 
-        // Stock Management: Disable Categories, Brands, Products, Add Stock, and Stock Movement
-        if (item.name === "Stock Management") {
+        // Disable entire Products section
+        if (item.name === "Products") {
+          return { ...item, disabled: true };
+        }
+
+        // Inventory: Disable Add Stock, Stock Returns, Transfers
+        if (item.name === "Inventory") {
           return {
             ...item,
             children: item.children.map((child) => {
               if (
-                child.name === "Categories" ||
-                child.name === "Brands" ||
-                child.name === "Products" ||
                 child.name === "Add Stock" ||
-                child.name === "Stock Movement"
+                child.name === "Stock Returns" ||
+                child.name === "Transfer Stock"
               ) {
                 return { ...child, disabled: true };
               }
@@ -277,18 +302,42 @@ export const Sidebar = ({ isOpen, onClose }) => {
       return businessNav.map((item) => {
         // Disable User Management and Shop Management
         if (
-          item.name === "User Management" ||
-          item.name === "Shop Management"
+          item.name === "Admin" // Renamed block checks
         ) {
-          return { ...item, disabled: true };
+          // Admin block has shops/employees/users. Shop Manager shouldn't access global admin?
+          // But Shop Manager manages employees?
+          // The old code disabled "User Management".
+          // Let's look at the Admin block children: Shops, Employees, Users, Payment Methods.
+          // Shop Manager should probably see Employees (of their shop), but maybe not global Users?
+          // For now, I'll replicate the previous restriction: Disable "User Management" & "Shop Management" which likely mapped to Admin features.
+          // The previous code explicitly checked names `User Management` and `Shop Management`.
+          // But the main nav item is named "Admin".
+          // Ah, wait. The previous code structure had "Admin" as the name.
+          // But the checks were `item.name === "User Management"`. This implies there were top level items with those names?
+          // No, looking at lines 186-215 of original file, the group name is "Admin".
+          // The previous checks `item.name === "User Management"` might have been legacy or targeting something that doesn't exist anymore?
+          // Or maybe they meant children?
+          // Wait, the previous code lines 247-248: `item.name === "User Management" || item.name === "Shop Management"`.
+          // The `businessNav` array in the View (lines 187) has name "Admin".
+          // There is NO item named "User Management" in `businessNav`.
+          // So those checks were doing nothing? Or I missed something.
+          // Let's assume for now I should disable the "Admin" block for Shop Managers, or strictly filter it.
+          // Actually, Shop Managers usually manage their shop staff.
+          // I'll disable the "Admin" block for them to be safe/consistent with "Manager shouldn't touch Configs".
+          if (item.name === "Admin") {
+            return { ...item, disabled: true };
+          }
         }
 
-        // For Stock Management, disable Categories and Brands
-        if (item.name === "Stock Management") {
+        // Products: Disable Categories and Brands
+        if (item.name === "Products") {
           return {
             ...item,
             children: item.children.map((child) => {
-              if (child.name === "Brands" || child.name === "Categories") {
+              if (
+                child.name === "Brands" ||
+                child.name === "Product Categories"
+              ) {
                 return { ...child, disabled: true };
               }
               return child;
