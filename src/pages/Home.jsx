@@ -259,7 +259,7 @@ const Home = () => {
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
           Frequently Asked Questions
         </h2>
-        <div className="space-y-8">
+        <div className="grid md:grid-cols-2 gap-8">
           <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition">
             <h3 className="text-xl font-bold text-gray-900 mb-3">
               Can I use UNIFY for multiple separate businesses?
@@ -287,6 +287,36 @@ const Home = () => {
             <p className="text-gray-600">
               Absolutely. You can export detailed sales, expense, and profit
               reports to help with accounting and performance analysis.
+            </p>
+          </div>
+          <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition">
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Does UNIFY work offline?
+            </h3>
+            <p className="text-gray-600">
+              Yes, keep selling even without internet. Your sales data syncs
+              automatically the moment you're back online, so business never
+              stops.
+            </p>
+          </div>
+          <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition">
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              Is it hard to switch to UNIFY?
+            </h3>
+            <p className="text-gray-600">
+              Not at all. We offer seamless data migration tools and dedicated
+              support to ensure a smooth, zero-downtime transition from your old
+              system.
+            </p>
+          </div>
+          <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition">
+            <h3 className="text-xl font-bold text-gray-900 mb-3">
+              What kind of support do you offer?
+            </h3>
+            <p className="text-gray-600">
+              We provide 24/7 priority support via chat and email for all plans.
+              Our expert team is always ready to help you resolve any issues
+              quickly.
             </p>
           </div>
         </div>
