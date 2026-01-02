@@ -50,7 +50,6 @@ export const ExpenseList = () => {
   });
   const [submitting, setSubmitting] = useState(false);
 
-
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedShop, setSelectedShop] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -114,7 +113,6 @@ export const ExpenseList = () => {
   };
 
   const clearFilters = () => {
-
     setSelectedCategory("");
     setSelectedShop("");
     setStartDate("");
@@ -136,17 +134,9 @@ export const ExpenseList = () => {
         (!startDate || expense.date >= startDate) && // expenseDate -> date (DTO)
         (!endDate || expense.date <= endDate);
 
-      return (
-        matchesCategory && matchesShop && matchesDateRange
-      );
+      return matchesCategory && matchesShop && matchesDateRange;
     });
-  }, [
-    expenses,
-    selectedCategory,
-    selectedShop,
-    startDate,
-    endDate,
-  ]);
+  }, [expenses, selectedCategory, selectedShop, startDate, endDate]);
 
   // Calculate summary statistics
   const summary = useMemo(() => {
@@ -432,125 +422,124 @@ export const ExpenseList = () => {
 
         {/* Filters Input Area */}
         <div className="flex flex-col gap-2 lg:flex-row lg:justify-between lg:items-end lg:flex-wrap">
-            {/* Category Select */}
-            <div className="w-full lg:w-48 lg:max-w-xs">
-              <select
-                className="w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                value={selectedCategory}
-                onChange={(e) => {
-                  setSelectedCategory(e.target.value);
-                  setCurrentPage(1);
-                }}
-              >
-                <option value="">All Categories</option>
-                {categories.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
+          {/* Category Select */}
+          <div className="w-full lg:w-48 lg:max-w-xs">
+            <select
+              className="w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              value={selectedCategory}
+              onChange={(e) => {
+                setSelectedCategory(e.target.value);
+                setCurrentPage(1);
+              }}
+            >
+              <option value="">All Categories</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          {/* Shop Select */}
+          <div className="w-full lg:w-48 lg:max-w-xs">
+            <select
+              className="w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              value={selectedShop}
+              onChange={(e) => {
+                setSelectedShop(e.target.value);
+                setCurrentPage(1);
+              }}
+            >
+              <option value="">All Shops</option>
+              {shops.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          {/* Dates */}
+          {/* Dates */}
+          <div className="flex flex-row gap-2 items-end">
+            <div className="w-full sm:w-auto">
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                Start Date
+              </label>
+              <Input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="w-full sm:w-auto py-1.5 text-sm"
+              />
             </div>
-            {/* Shop Select */}
-            <div className="w-full lg:w-48 lg:max-w-xs">
-              <select
-                className="w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                value={selectedShop}
-                onChange={(e) => {
-                  setSelectedShop(e.target.value);
-                  setCurrentPage(1);
-                }}
-              >
-                <option value="">All Shops</option>
-                {shops.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {/* Dates */}
-            {/* Dates */}
-            <div className="flex flex-row gap-2 items-end">
-              <div className="w-full sm:w-auto">
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Start Date
-                </label>
-                <Input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full sm:w-auto py-1.5 text-sm"
-                />
-              </div>
-              <div className="w-full sm:w-auto">
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  End Date
-                </label>
-                <Input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full sm:w-auto py-1.5 text-sm"
-                />
-              </div>
+            <div className="w-full sm:w-auto">
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                End Date
+              </label>
+              <Input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="w-full sm:w-auto py-1.5 text-sm"
+              />
             </div>
           </div>
-          {user?.role !== "SALES_REP" && (
-            <Button
-              onClick={openCreateModal}
-              className="w-full lg:w-auto whitespace-nowrap py-1.5"
-            >
-              Add Expense
-            </Button>
-          )}
         </div>
+        {user?.role !== "SALES_REP" && (
+          <Button
+            onClick={openCreateModal}
+            className="w-full lg:w-auto whitespace-nowrap py-1.5"
+          >
+            Add Expense
+          </Button>
+        )}
+      </div>
 
-        {/* Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          {loading ? (
-            <div className="p-8 text-center text-gray-500">
-              Loading expenses...
-            </div>
-          ) : (
-            <>
-              <Table
-                columns={columns}
-                data={paginatedExpenses}
-                emptyMessage="No expenses found matching your criteria."
-                showViewAction={false}
-              />
-              {/* Pagination Controls Reuse */}
-              {/* ... Simplified pagination render ... */}
-              {totalPages > 1 && (
-                <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
-                  <div className="text-sm text-gray-700">
-                    Page {currentPage} of {totalPages}
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                      disabled={currentPage === 1}
-                    >
-                      Prev
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() =>
-                        setCurrentPage((p) => Math.min(totalPages, p + 1))
-                      }
-                      disabled={currentPage === totalPages}
-                    >
-                      Next
-                    </Button>
-                  </div>
+      {/* Table */}
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        {loading ? (
+          <div className="p-8 text-center text-gray-500">
+            Loading expenses...
+          </div>
+        ) : (
+          <>
+            <Table
+              columns={columns}
+              data={paginatedExpenses}
+              emptyMessage="No expenses found matching your criteria."
+              showViewAction={false}
+            />
+            {/* Pagination Controls Reuse */}
+            {/* ... Simplified pagination render ... */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
+                <div className="text-sm text-gray-700">
+                  Page {currentPage} of {totalPages}
                 </div>
-              )}
-            </>
-          )}
-        </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                  >
+                    Prev
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      setCurrentPage((p) => Math.min(totalPages, p + 1))
+                    }
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </Button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       {/* Modal */}
