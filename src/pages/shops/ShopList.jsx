@@ -27,6 +27,7 @@ export const ShopList = () => {
     type: "success",
   });
   const [submitting, setSubmitting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -152,6 +153,14 @@ export const ShopList = () => {
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-4 border-b border-gray-200 flex flex-col sm:flex-row gap-4">
+          <div className="w-full sm:max-w-xs">
+            <Input
+              placeholder="Search shops..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="py-1.5"
+            />
+          </div>
           {user?.role !== "SHOP_MANAGER" && user?.role !== "SALES_REP" && (
             <Button
               onClick={openCreateModal}
@@ -218,10 +227,13 @@ export const ShopList = () => {
               ),
             },
           ]}
-          data={shops}
+          data={shops.filter((shop) =>
+            shop.name.toLowerCase().includes(searchTerm.toLowerCase())
+          )}
           loading={loading}
           emptyMessage="No shops found"
           showViewAction={false}
+          searchable={false}
         />
       </div>
 

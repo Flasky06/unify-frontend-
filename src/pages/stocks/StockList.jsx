@@ -20,6 +20,7 @@ const StockList = () => {
   const [editingStock, setEditingStock] = useState(null);
   const [viewMode, setViewMode] = useState("all"); // all, byShop
   const [selectedShopId, setSelectedShopId] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Audit Log State
   const [auditModal, setAuditModal] = useState({
@@ -300,7 +301,17 @@ const StockList = () => {
               </select>
             </div>
 
-            <div className="flex-1"></div>
+            <div className="flex-1 w-full sm:max-w-xs">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Search
+              </label>
+              <Input
+                placeholder="Search stocks..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="py-1.5"
+              />
+            </div>
           </div>
 
           <Button
@@ -328,9 +339,16 @@ const StockList = () => {
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <Table
             columns={columns}
-            data={tableData}
+            data={tableData.filter(
+              (stock) =>
+                stock.productName
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase()) ||
+                stock.shopName.toLowerCase().includes(searchTerm.toLowerCase())
+            )}
             loading={loading}
             showViewAction={false}
+            searchable={false}
           />
         </div>
       </div>

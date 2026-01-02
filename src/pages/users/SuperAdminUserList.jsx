@@ -12,6 +12,7 @@ export const SuperAdminUserList = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Modal State
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -267,7 +268,14 @@ export const SuperAdminUserList = () => {
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-2 sm:gap-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
-          <div className="w-full sm:max-w-xs"></div>
+          <div className="w-full sm:flex-1 sm:max-w-md">
+            <Input
+              placeholder="Search users..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full"
+            />
+          </div>
           <Button
             onClick={() => setIsCreateModalOpen(true)}
             className="w-full sm:w-auto whitespace-nowrap py-1.5"
@@ -299,9 +307,18 @@ export const SuperAdminUserList = () => {
           ) : (
             <Table
               columns={columns}
-              data={users}
+              data={users.filter(
+                (user) =>
+                  user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  (user.phoneNo && user.phoneNo.includes(searchTerm)) ||
+                  (user.business?.businessName &&
+                    user.business.businessName
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()))
+              )}
               emptyMessage="No business owners found."
               showViewAction={false}
+              searchable={false}
             />
           )}
         </div>

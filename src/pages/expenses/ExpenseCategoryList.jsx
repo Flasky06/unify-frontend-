@@ -15,6 +15,7 @@ export const ExpenseCategoryList = () => {
   const [editingCategory, setEditingCategory] = useState(null);
   const [formData, setFormData] = useState({ name: "" });
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     categoryId: null,
@@ -154,7 +155,14 @@ export const ExpenseCategoryList = () => {
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-2 sm:gap-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
-          <div className="w-full sm:flex-1 sm:max-w-md"></div>
+          <div className="w-full sm:flex-1 sm:max-w-md">
+            <Input
+              placeholder="Search expense categories..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full"
+            />
+          </div>
           {user?.role !== "SALES_REP" && (
             <Button
               onClick={openCreateModal}
@@ -186,9 +194,12 @@ export const ExpenseCategoryList = () => {
           ) : (
             <Table
               columns={columns}
-              data={categories}
+              data={categories.filter((category) =>
+                category.name.toLowerCase().includes(searchTerm.toLowerCase())
+              )}
               emptyMessage="No expense categories found. Create one to get started."
               showViewAction={false}
+              searchable={false}
             />
           )}
         </div>

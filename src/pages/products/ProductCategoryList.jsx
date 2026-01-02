@@ -13,6 +13,7 @@ export const ProductCategoryList = () => {
   const [editingCategory, setEditingCategory] = useState(null);
   const [formData, setFormData] = useState({ name: "" });
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     categoryId: null,
@@ -152,7 +153,14 @@ export const ProductCategoryList = () => {
       <div className="flex flex-col gap-4 sm:gap-6">
         {/* Header Actions */}
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
-          <div className="w-full sm:flex-1 sm:max-w-md"></div>
+          <div className="w-full sm:flex-1 sm:max-w-md">
+            <Input
+              placeholder="Search categories..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full"
+            />
+          </div>
           <Button
             onClick={openCreateModal}
             className="w-full sm:w-auto whitespace-nowrap"
@@ -182,9 +190,12 @@ export const ProductCategoryList = () => {
           ) : (
             <Table
               columns={columns}
-              data={categories}
+              data={categories.filter((category) =>
+                category.name.toLowerCase().includes(searchTerm.toLowerCase())
+              )}
               emptyMessage="No categories found. Create one to get started."
               showViewAction={false}
+              searchable={false}
             />
           )}
         </div>

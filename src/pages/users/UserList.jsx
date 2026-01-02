@@ -14,7 +14,9 @@ export const UserList = () => {
   const [users, setUsers] = useState([]);
   const [shops, setShops] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -207,7 +209,12 @@ export const UserList = () => {
       <div className="flex flex-col gap-2 sm:gap-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
           <div className="w-full sm:max-w-xs">
-            <div className="w-full sm:max-w-xs"></div>
+            <Input
+              placeholder="Search users..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="py-1.5"
+            />
           </div>
           <Button
             onClick={() => setIsModalOpen(true)}
@@ -240,9 +247,14 @@ export const UserList = () => {
           ) : (
             <Table
               columns={columns}
-              data={users}
+              data={users.filter(
+                (u) =>
+                  u.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  (u.phoneNo && u.phoneNo.includes(searchTerm))
+              )}
               emptyMessage="No users found."
               showViewAction={false}
+              searchable={false}
             />
           )}
         </div>

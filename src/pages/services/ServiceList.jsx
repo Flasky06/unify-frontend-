@@ -37,6 +37,7 @@ export const ServiceList = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -262,7 +263,14 @@ export const ServiceList = () => {
       <div className="flex flex-col gap-2 sm:gap-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
           <div className="w-full flex flex-col gap-2 sm:flex-1 sm:flex-row sm:gap-3">
-            <div className="w-full sm:flex-1 sm:max-w-md"></div>
+            <div className="w-full sm:flex-1 sm:max-w-md">
+              <Input
+                placeholder="Search services..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="py-1.5"
+              />
+            </div>
             <div className="w-full sm:w-auto md:w-48">
               <select
                 value={selectedCategory}
@@ -304,10 +312,13 @@ export const ServiceList = () => {
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <Table
             columns={columns}
-            data={services}
+            data={services.filter((service) =>
+              service.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )}
             loading={loading}
             emptyMessage="No services found"
             showViewAction={false}
+            searchable={false}
           />
         </div>
       </div>

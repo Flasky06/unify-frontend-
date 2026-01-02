@@ -14,7 +14,9 @@ export const ServiceCategoryList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const [formData, setFormData] = useState({ name: "" });
+
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     categoryId: null,
@@ -177,7 +179,14 @@ export const ServiceCategoryList = () => {
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-4 sm:gap-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
-          <div className="w-full sm:flex-1 sm:max-w-md"></div>
+          <div className="w-full sm:flex-1 sm:max-w-md">
+            <Input
+              placeholder="Search categories..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full"
+            />
+          </div>
           {user?.role !== "SALES_REP" && (
             <Button
               onClick={openCreateModal}
@@ -203,11 +212,13 @@ export const ServiceCategoryList = () => {
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <Table
-            columns={columns}
-            data={categories}
+            data={categories.filter((c) =>
+              c.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )}
             loading={loading}
             emptyMessage="No service categories found"
             showViewAction={false}
+            searchable={false}
           />
         </div>
       </div>

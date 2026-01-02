@@ -40,6 +40,7 @@ export const ProductList = () => {
 
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Fetch products, brands, and categories on mount
   useEffect(() => {
@@ -65,13 +66,16 @@ export const ProductList = () => {
   };
 
   const filteredProducts = products.filter((product) => {
+    const matchesSearch = product.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
     const matchesBrand = selectedBrand
       ? product.brandId.toString() === selectedBrand
       : true;
     const matchesCategory = selectedCategory
       ? product.categoryId.toString() === selectedCategory
       : true;
-    return matchesBrand && matchesCategory;
+    return matchesSearch && matchesBrand && matchesCategory;
   });
 
   const handleSubmit = async (e) => {
@@ -250,7 +254,14 @@ export const ProductList = () => {
       <div className="flex flex-col gap-2 sm:gap-4">
         <div className="flex flex-col gap-2 lg:flex-row lg:justify-between lg:items-center">
           <div className="flex flex-col gap-2 lg:flex-row lg:flex-1 lg:gap-3">
-            <div className="w-full lg:w-64"></div>
+            <div className="w-full lg:w-64">
+              <Input
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="py-1.5 text-sm"
+              />
+            </div>
             <div className="w-full lg:w-48">
               <select
                 className="w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
@@ -314,6 +325,7 @@ export const ProductList = () => {
               data={filteredProducts}
               emptyMessage="No products found matching your criteria."
               showViewAction={false}
+              searchable={false}
             />
           )}
         </div>

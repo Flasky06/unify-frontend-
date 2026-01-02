@@ -52,6 +52,7 @@ export const ExpenseList = () => {
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedShop, setSelectedShop] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -134,7 +135,13 @@ export const ExpenseList = () => {
         (!startDate || expense.date >= startDate) && // expenseDate -> date (DTO)
         (!endDate || expense.date <= endDate);
 
-      return matchesCategory && matchesShop && matchesDateRange;
+      const matchesSearch = expense.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+      return (
+        matchesCategory && matchesShop && matchesDateRange && matchesSearch
+      );
     });
   }, [expenses, selectedCategory, selectedShop, startDate, endDate]);
 
@@ -422,6 +429,14 @@ export const ExpenseList = () => {
 
         {/* Filters Input Area */}
         <div className="flex flex-col gap-2 lg:flex-row lg:justify-between lg:items-end lg:flex-wrap">
+          <div className="w-full lg:w-48 lg:max-w-xs">
+            <Input
+              placeholder="Search expenses..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="py-1.5 text-sm"
+            />
+          </div>
           {/* Category Select */}
           <div className="w-full lg:w-48 lg:max-w-xs">
             <select
@@ -508,6 +523,7 @@ export const ExpenseList = () => {
               data={paginatedExpenses}
               emptyMessage="No expenses found matching your criteria."
               showViewAction={false}
+              searchable={false}
             />
             {/* Pagination Controls Reuse */}
             {/* ... Simplified pagination render ... */}
