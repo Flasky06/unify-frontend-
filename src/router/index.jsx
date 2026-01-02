@@ -13,6 +13,7 @@ import AdminUsers from "../pages/super-admin/AdminUsers";
 import Profile from "../pages/Profile";
 import { UserList } from "../pages/users/UserList";
 import { SuperAdminUserList } from "../pages/users/SuperAdminUserList";
+import { BusinessDetails } from "../pages/super-admin/BusinessDetails";
 import RoleManagement from "../pages/users/RoleManagement";
 import { ProductList } from "../pages/products/ProductList";
 import { ProductCategoryList } from "../pages/products/ProductCategoryList";
@@ -188,6 +189,10 @@ export const router = createBrowserRouter([
       {
         path: "business-owners",
         element: <SuperAdminUserList />,
+      },
+      {
+        path: "business/:id",
+        element: <BusinessDetails />,
       },
     ],
   },

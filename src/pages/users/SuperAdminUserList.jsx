@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
@@ -41,6 +42,7 @@ export const SuperAdminUserList = () => {
   });
 
   const { isSuperAdmin } = useAuthStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isSuperAdmin()) {
@@ -157,7 +159,25 @@ export const SuperAdminUserList = () => {
     },
     {
       header: "Business Name",
-      render: (user) => user.business?.businessName || "-",
+      render: (user) => {
+        const businessName = user.business?.businessName || "-";
+        const businessId = user.business?.id;
+
+        if (businessId) {
+          return (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/super-admin/business/${businessId}`);
+              }}
+              className="text-blue-600 hover:text-blue-800 hover:underline font-medium text-left"
+            >
+              {businessName}
+            </button>
+          );
+        }
+        return businessName;
+      },
     },
     {
       header: "Business Type",
@@ -193,20 +213,6 @@ export const SuperAdminUserList = () => {
       header: "Actions",
       render: (user) => (
         <div className="flex gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              setViewDetailsModal({
-                isOpen: true,
-                user,
-              });
-            }}
-            className="text-blue-600 hover:bg-blue-50 font-medium px-3"
-          >
-            View
-          </Button>
           <Button
             variant="ghost"
             size="sm"

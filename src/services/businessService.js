@@ -27,4 +27,20 @@ export const businessService = {
       body: businessData,
     });
   },
+
+  /**
+   * Get business statistics (SUPER_ADMIN only)
+   */
+  getBusinessStats: async (businessId) => {
+    return await apiFetch(`/business/${businessId}/stats`);
+  },
+
+  /**
+   * Toggle business status (SUPER_ADMIN only)
+   */
+  toggleBusinessStatus: async (businessId) => {
+    return await apiFetch(`/business/${businessId}/toggle-status`, {
+      method: "PUT",
+    });
+  },
 };
