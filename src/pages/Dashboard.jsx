@@ -79,6 +79,7 @@ const Dashboard = () => {
   useEffect(() => {
     const init = async () => {
       try {
+        console.log("Fetching initial data...");
         const [shopsData, productsData, paymentMethodsData] = await Promise.all(
           [
             shopService.getAll(),
@@ -86,6 +87,7 @@ const Dashboard = () => {
             paymentMethodService.getAll(),
           ]
         );
+        console.log("Payment methods fetched:", paymentMethodsData);
         setShops(shopsData);
         setProducts(productsData);
 
@@ -93,9 +95,12 @@ const Dashboard = () => {
         const activeMethods = (paymentMethodsData || []).filter(
           (pm) => pm.isActive
         );
+        console.log("Active payment methods:", activeMethods);
         setPaymentMethods(activeMethods);
         if (activeMethods.length > 0) {
           setPaymentMethod(activeMethods[0].id);
+        } else {
+          console.warn("No active payment methods found!");
         }
 
         // Fetch services if businessId is available
@@ -627,26 +632,37 @@ const Dashboard = () => {
             <label className="block text-sm font-medium text-gray-700 mb-3">
               Payment Method
             </label>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {paymentMethods.map((method) => (
-                <button
-                  key={method.id}
-                  onClick={() => setPaymentMethod(method.id)}
-                  className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition ${
-                    paymentMethod === method.id
-                      ? "border-blue-600 bg-blue-50 text-blue-700"
-                      : "border-gray-200 hover:border-gray-300 text-gray-600"
-                  }`}
-                >
-                  <span className="font-medium text-sm text-center">
-                    {method.name}
-                  </span>
-                  {method.type && (
-                    <span className="text-xs text-gray-500">{method.type}</span>
-                  )}
-                </button>
-              ))}
-            </div>
+            {paymentMethods.length === 0 ? (
+              <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
+                <p className="text-sm text-yellow-800">
+                  No payment methods available. Please add payment methods in
+                  Settings.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {paymentMethods.map((method) => (
+                  <button
+                    key={method.id}
+                    onClick={() => setPaymentMethod(method.id)}
+                    className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition ${
+                      paymentMethod === method.id
+                        ? "border-blue-600 bg-blue-50 text-blue-700"
+                        : "border-gray-200 hover:border-gray-300 text-gray-600"
+                    }`}
+                  >
+                    <span className="font-medium text-sm text-center">
+                      {method.name}
+                    </span>
+                    {method.type && (
+                      <span className="text-xs text-gray-500">
+                        {method.type}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Amount Paid for Credit Sales */}
