@@ -305,65 +305,83 @@ const SalesHistory = () => {
       <Modal
         isOpen={isDetailsModalOpen}
         onClose={() => setIsDetailsModalOpen(false)}
-        title={
-          selectedSale
-            ? `Sale Details - ${selectedSale.saleNumber}`
-            : "Sale Details"
-        }
+        title="Sale Receipt"
       >
         {selectedSale && (
           <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="text-gray-500">Date</p>
-                <p className="font-medium">
-                  {format(new Date(selectedSale.saleDate), "PPpp")}
-                </p>
+            {/* Receipt Header */}
+            <div className="text-center pb-4 border-b border-gray-100">
+              <h2 className="text-2xl font-bold text-gray-900 mb-1">
+                {selectedSale.shopName}
+              </h2>
+              <p className="text-sm text-gray-500 font-mono mb-1">
+                Receipt #{selectedSale.saleNumber}
+              </p>
+              <p className="text-sm text-gray-500">
+                {format(new Date(selectedSale.saleDate), "MMM d, yyyy, h:mm a")}
+              </p>
+            </div>
+
+            {/* Metadata Badges */}
+            <div className="flex justify-between items-center px-4 py-3 bg-gray-50 rounded-lg">
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">
+                  Payment
+                </span>
+                <span className="font-medium text-gray-900">
+                  {selectedSale.paymentMethod
+                    ? selectedSale.paymentMethod.replace("_", " ")
+                    : "-"}
+                </span>
               </div>
-              <div>
-                <p className="text-gray-500">Shop</p>
-                <p className="font-medium">{selectedSale.shopName}</p>
-              </div>
-              <div>
-                <p className="text-gray-500">Payment Method</p>
-                <p className="font-medium">
-                  {selectedSale.paymentMethod?.replace("_", " ")}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-500">Status</p>
-                <p
-                  className={`font-medium ${
+              <div className="flex flex-col items-end">
+                <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">
+                  Status
+                </span>
+                <span
+                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     selectedSale.status === "CANCELLED"
-                      ? "text-red-600"
-                      : "text-green-600"
+                      ? "bg-red-100 text-red-800"
+                      : "bg-green-100 text-green-800"
                   }`}
                 >
                   {selectedSale.status}
-                </p>
+                </span>
               </div>
             </div>
 
+            {/* Items Table */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Items</h3>
-              <table className="w-full text-sm text-left">
-                <thead className="text-gray-500 bg-gray-50 border-b">
-                  <tr>
-                    <th className="py-2 px-3">Product</th>
-                    <th className="py-2 px-3 text-right">Price</th>
-                    <th className="py-2 px-3 text-center">Qty</th>
-                    <th className="py-2 px-3 text-right">Total</th>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b-2 border-gray-100">
+                    <th className="py-2 text-left font-semibold text-gray-600 w-1/2">
+                      Product
+                    </th>
+                    <th className="py-2 text-center font-semibold text-gray-600">
+                      Qty
+                    </th>
+                    <th className="py-2 text-right font-semibold text-gray-600">
+                      Amount
+                    </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y">
+                <tbody className="divide-y divide-dashed divide-gray-100">
                   {selectedSale.items?.map((item, idx) => (
                     <tr key={idx}>
-                      <td className="py-2 px-3">{item.productName}</td>
-                      <td className="py-2 px-3 text-right">
-                        {(item.unitPrice || 0).toLocaleString()}
+                      <td className="py-3 pr-2">
+                        <div className="font-medium text-gray-900">
+                          {item.productName}
+                        </div>
+                        <div className="text-gray-500 text-xs mt-0.5">
+                          @ KSH {(item.unitPrice || 0).toLocaleString()}
+                        </div>
                       </td>
-                      <td className="py-2 px-3 text-center">{item.quantity}</td>
-                      <td className="py-2 px-3 text-right">
+                      <td className="py-3 text-center align-top pt-3.5">
+                        {item.quantity}
+                      </td>
+                      <td className="py-3 text-right align-top pt-3.5 font-medium text-gray-900">
+                        KSH{" "}
                         {(
                           (item.unitPrice || 0) * item.quantity
                         ).toLocaleString()}
@@ -371,58 +389,94 @@ const SalesHistory = () => {
                     </tr>
                   ))}
                 </tbody>
-                <tfoot className="border-t font-semibold bg-gray-50">
-                  <tr>
-                    <td colSpan="3" className="py-3 px-3 text-right">
-                      Grand Total
-                    </td>
-                    <td className="py-3 px-3 text-right">
-                      KSH {selectedSale.total.toLocaleString()}
-                    </td>
-                  </tr>
-                  {/* Amount Paid */}
-                  <tr>
-                    <td
-                      colSpan="3"
-                      className="py-2 px-3 text-right text-gray-600 font-normal"
-                    >
-                      Amount Paid
-                    </td>
-                    <td className="py-2 px-3 text-right text-green-600">
-                      KSH {(selectedSale.amountPaid || 0).toLocaleString()}
-                    </td>
-                  </tr>
-                  {/* Balance */}
-                  <tr>
-                    <td
-                      colSpan="3"
-                      className="py-2 px-3 text-right text-gray-600 font-normal"
-                    >
-                      Balance
-                    </td>
-                    <td className="py-2 px-3 text-right text-red-600">
-                      KSH {(selectedSale.balance || 0).toLocaleString()}
-                    </td>
-                  </tr>
-                </tfoot>
               </table>
             </div>
 
-            <div className="flex justify-end pt-4 gap-3">
-              {selectedSale.status !== "CANCELLED" && (
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    setConfirmDialog({ isOpen: true, saleId: selectedSale.id })
-                  }
-                  className="text-red-600 border-red-200 hover:bg-red-50"
+            {/* Totals Section */}
+            {/* Totals Section */}
+            <div className="border-t-2 border-gray-900 pt-4 space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-lg font-bold text-gray-900">
+                  Grand Total
+                </span>
+                <span className="text-2xl font-bold text-gray-900">
+                  KSH {selectedSale.total.toLocaleString()}
+                </span>
+              </div>
+
+              {/* Amount Paid - defaults to Total if 0/null (assumes full payment) */}
+              <div className="pt-3 border-t border-gray-100 space-y-2">
+                <div className="flex justify-between items-center text-sm text-gray-600">
+                  <span>Amount Paid</span>
+                  <span>
+                    KSH{" "}
+                    {(selectedSale.amountPaid > 0
+                      ? selectedSale.amountPaid
+                      : selectedSale.total
+                    ).toLocaleString()}
+                  </span>
+                </div>
+                {/* Only show balance if expressly set and > 0, AND amountPaid was tracked (otherwise assume 0) */}
+                {selectedSale.amountPaid > 0 && selectedSale.balance > 0 && (
+                  <div className="flex justify-between items-center text-sm font-bold text-red-600">
+                    <span>Balance Due</span>
+                    <span>
+                      KSH {(selectedSale.balance || 0).toLocaleString()}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Thank You Footer */}
+            <div className="text-center pt-6 pb-2">
+              <p className="text-gray-400 text-sm font-medium italic">
+                Thank you for your business!
+              </p>
+            </div>
+
+            {/* Actions */}
+            <div className="flex justify-between pt-6 border-t border-gray-100">
+              <Button
+                variant="outline"
+                onClick={() => window.print()}
+                className="gap-2"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  Cancel Sale
-                </Button>
-              )}
-              <Button onClick={() => setIsDetailsModalOpen(false)}>
-                Close
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                  />
+                </svg>
+                Print Receipt
               </Button>
+
+              <div className="flex gap-2">
+                {selectedSale.status !== "CANCELLED" && (
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      setConfirmDialog({
+                        isOpen: true,
+                        saleId: selectedSale.id,
+                      })
+                    }
+                    className="text-red-600 border-red-200 hover:bg-red-50"
+                  >
+                    Cancel Sale
+                  </Button>
+                )}
+                <Button onClick={() => setIsDetailsModalOpen(false)}>
+                  Close
+                </Button>
+              </div>
             </div>
           </div>
         )}
