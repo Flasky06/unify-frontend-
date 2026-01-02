@@ -145,7 +145,7 @@ const Table = ({
                     {columns.map((column, colIndex) => (
                       <td
                         key={colIndex}
-                        className={`px-6 py-4 text-sm text-gray-900 ${
+                        className={`px-6 py-2.5 text-sm text-gray-900 ${
                           column.truncate ? "" : "whitespace-nowrap"
                         }`}
                         style={{
@@ -197,7 +197,7 @@ const Table = ({
                       </td>
                     ))}
                     {showViewAction && (
-                      <td className="px-6 py-4 text-sm">
+                      <td className="px-6 py-2.5 text-sm">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
