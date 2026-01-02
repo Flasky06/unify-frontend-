@@ -10,3 +10,31 @@ body {
 * {
   box-sizing: border-box;
 }
+
+@media print {
+  /* Hide everything by default */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Show the printable receipt and its children */
+  #printable-receipt,
+  #printable-receipt * {
+    visibility: visible;
+  }
+
+  /* Position the receipt at the top left */
+  #printable-receipt {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Hide modal overlay/backdrop if any other element is causing background issues */
+  .fixed.inset-0 {
+    display: none;
+  }
+}

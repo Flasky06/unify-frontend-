@@ -309,7 +309,7 @@ const SalesHistory = () => {
         title="Sale Receipt"
       >
         {selectedSale && (
-          <div className="space-y-6">
+          <div className="space-y-6" id="printable-receipt">
             {/* Receipt Header */}
             <div className="text-center pb-4 border-b border-gray-100">
               <h2 className="text-2xl font-bold text-gray-900 mb-1">
@@ -324,7 +324,7 @@ const SalesHistory = () => {
             </div>
 
             {/* Metadata Badges */}
-            <div className="flex justify-between items-center px-4 py-3 bg-gray-50 rounded-lg">
+            <div className="flex justify-between items-center px-4 py-3 bg-gray-50 rounded-lg print:bg-gray-50">
               <div className="flex flex-col">
                 <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">
                   Payment
@@ -344,7 +344,7 @@ const SalesHistory = () => {
                     selectedSale.status === "CANCELLED"
                       ? "bg-red-100 text-red-800"
                       : "bg-green-100 text-green-800"
-                  }`}
+                  } print:border print:border-gray-300`}
                 >
                   {selectedSale.status}
                 </span>
@@ -394,7 +394,6 @@ const SalesHistory = () => {
             </div>
 
             {/* Totals Section */}
-            {/* Totals Section */}
             <div className="border-t-2 border-gray-900 pt-4 space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-lg font-bold text-gray-900">
@@ -405,7 +404,7 @@ const SalesHistory = () => {
                 </span>
               </div>
 
-              {/* Amount Paid - defaults to Total if 0/null (assumes full payment) */}
+              {/* Amount Paid */}
               <div className="pt-3 border-t border-gray-100 space-y-2">
                 <div className="flex justify-between items-center text-sm text-gray-600">
                   <span>Amount Paid</span>
@@ -417,7 +416,6 @@ const SalesHistory = () => {
                     ).toLocaleString()}
                   </span>
                 </div>
-                {/* Only show balance if expressly set and > 0, AND amountPaid was tracked (otherwise assume 0) */}
                 {selectedSale.amountPaid > 0 && selectedSale.balance > 0 && (
                   <div className="flex justify-between items-center text-sm font-bold text-red-600">
                     <span>Balance Due</span>
@@ -436,8 +434,8 @@ const SalesHistory = () => {
               </p>
             </div>
 
-            {/* Actions */}
-            <div className="flex justify-between pt-6 border-t border-gray-100">
+            {/* Actions - HIDDEN ON PRINT */}
+            <div className="flex justify-between pt-6 border-t border-gray-100 print:hidden">
               <Button
                 variant="outline"
                 onClick={() => window.print()}
