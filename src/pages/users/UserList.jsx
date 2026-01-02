@@ -378,7 +378,7 @@ export const UserList = () => {
                 <option value="">Select a shop...</option>
                 {shops.map((shop) => (
                   <option key={shop.id} value={shop.id}>
-                    {shop.name} - {shop.location}
+                    {shop.name}
                   </option>
                 ))}
               </select>

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import useAuthStore from "../../store/authStore";
+import Input from "../../components/ui/Input";
+import Select from "../../components/ui/Select";
 import { stockReturnService } from "../../services/stockReturnService";
 import { shopService } from "../../services/shopService";
 import { productService } from "../../services/productService";
@@ -240,17 +242,14 @@ const StockReturnList = () => {
         title="Process Stock Return"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Product
-            </label>
-            <select
+            <Select
+              label="Product"
               required
               value={formData.productId}
               onChange={(e) =>
                 setFormData({ ...formData, productId: e.target.value })
               }
-              className="w-full rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full"
             >
               <option value="">Select Product</option>
               {products.map((p) => (
@@ -258,20 +257,18 @@ const StockReturnList = () => {
                   {p.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Return Type
-            </label>
-            <select
+            <Select
+              label="Return Type"
               required
               value={formData.type}
               onChange={(e) =>
                 setFormData({ ...formData, type: e.target.value })
               }
-              className="w-full rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full"
             >
               <option value="CUSTOMER_RETURN">Customer Return (Restock)</option>
               <option value="SUPPLIER_RETURN">
@@ -279,7 +276,7 @@ const StockReturnList = () => {
               </option>
               <option value="DAMAGED">Damaged (Deduct)</option>
               <option value="EXPIRED">Expired (Deduct)</option>
-            </select>
+            </Select>
             <p className="text-xs text-gray-500 mt-1">
               {formData.type === "CUSTOMER_RETURN"
                 ? "Use this when a customer returns an item. Stock will INCREASE."
@@ -288,10 +285,8 @@ const StockReturnList = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Quantity
-            </label>
-            <input
+            <Input
+              label="Quantity"
               type="number"
               required
               min="1"
@@ -299,7 +294,7 @@ const StockReturnList = () => {
               onChange={(e) =>
                 setFormData({ ...formData, quantity: e.target.value })
               }
-              className="w-full rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full"
             />
           </div>
 
@@ -314,7 +309,7 @@ const StockReturnList = () => {
               onChange={(e) =>
                 setFormData({ ...formData, reason: e.target.value })
               }
-              className="w-full rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all placeholder:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
               placeholder="Why is it being returned?"
             />
           </div>

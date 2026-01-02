@@ -15,7 +15,6 @@ export const ShopList = () => {
   const [editingShop, setEditingShop] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
-    location: "",
   });
   const [error, setError] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState({
@@ -50,8 +49,7 @@ export const ShopList = () => {
 
   const filteredShops = shops.filter(
     (shop) =>
-      shop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      shop.location.toLowerCase().includes(searchTerm.toLowerCase())
+      shop.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSubmit = async (e) => {
@@ -183,8 +181,59 @@ export const ShopList = () => {
               placeholder="Search shops..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="py-1.5"
+              className="w-full pl-10 rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
             />
+          </div>
+        </div>
+
+        <Table
+          columns={[
+            {
+              header: "Name",
+              accessor: "name",
+              triggerView: true,
+              render: (shop) => (
+                <span className="font-medium text-gray-900">{shop.name}</span>
+              ),
+            },
+            {
+              header: "Actions",
+              render: (shop) => (
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openEditModal(shop);
+                    }}
+                    className="text-blue-600 hover:bg-blue-50"
+                  >
+                    Edit
+                  </Button>
+                  {user?.role !== "SHOP_MANAGER" && user?.role !== "SALES_REP" && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setConfirmDialog({ isOpen: true, shopId: shop.id });
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </div>
+              ),
+            },
+          ]}
+          data={filteredShops}
+          loading={loading}
+          emptyMessage="No shops found"
+          showViewAction={false}
+        />
+      </div>
           </div>
           {user?.role !== "SHOP_MANAGER" && user?.role !== "SALES_REP" && (
             <Button
@@ -209,21 +258,7 @@ export const ShopList = () => {
           )}
         </div>
 
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          {loading ? (
-            <div className="p-8 text-center text-gray-500">
-              Loading shops...
-            </div>
-          ) : (
-            <Table
-              columns={columns}
-              data={filteredShops}
-              emptyMessage="No shops found. Create one to get started."
-              showViewAction={false}
-              searchable={false}
-            />
-          )}
-        </div>
+        {/* The original Table component was here, but it's now integrated into the search div */}
       </div>
 
       <Modal
@@ -242,17 +277,7 @@ export const ShopList = () => {
             label="Shop Name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="e.g., Main Branch, Downtown Store"
-            required
-          />
-
-          <Input
-            label="Location"
-            value={formData.location}
-            onChange={(e) =>
-              setFormData({ ...formData, location: e.target.value })
-            }
-            placeholder="e.g., Nairobi CBD, Westlands"
+            placeholder="e.g., Main Branch"
             required
           />
 

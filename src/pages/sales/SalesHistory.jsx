@@ -391,28 +391,6 @@ const SalesHistory = () => {
                   KSH {selectedSale.total.toLocaleString()}
                 </span>
               </div>
-
-              {/* Amount Paid */}
-              <div className="pt-3 border-t border-gray-100 space-y-2">
-                <div className="flex justify-between items-center text-sm text-gray-600">
-                  <span>Amount Paid</span>
-                  <span>
-                    KSH{" "}
-                    {(selectedSale.amountPaid > 0
-                      ? selectedSale.amountPaid
-                      : selectedSale.total
-                    ).toLocaleString()}
-                  </span>
-                </div>
-                {selectedSale.amountPaid > 0 && selectedSale.balance > 0 && (
-                  <div className="flex justify-between items-center text-sm font-bold text-red-600">
-                    <span>Balance Due</span>
-                    <span>
-                      KSH {(selectedSale.balance || 0).toLocaleString()}
-                    </span>
-                  </div>
-                )}
-              </div>
             </div>
 
             {/* Thank You Footer */}

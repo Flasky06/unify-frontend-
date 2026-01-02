@@ -249,8 +249,6 @@ const Dashboard = () => {
     );
   };
 
-  const [amountPaid, setAmountPaid] = useState(""); // State for credit sale
-
   const calculateTotal = () => {
     return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   };
@@ -260,7 +258,6 @@ const Dashboard = () => {
     setProcessing(true);
     try {
       const total = calculateTotal();
-      const finalAmountPaid = amountPaid ? parseFloat(amountPaid) : total;
 
       const saleData = {
         shopId: parseInt(selectedShopId),
@@ -270,7 +267,6 @@ const Dashboard = () => {
           quantity: item.quantity,
         })),
         paymentMethodId: paymentMethod,
-        amountPaid: finalAmountPaid, // Pass amountPaid
       };
 
       await saleService.createSale(saleData);
@@ -280,7 +276,6 @@ const Dashboard = () => {
         type: "success",
       });
       setCart([]);
-      setAmountPaid(""); // Reset
       setCheckoutModalOpen(false);
       fetchStock(selectedShopId); // Refresh stock
     } catch (err) {
