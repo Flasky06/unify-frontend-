@@ -92,8 +92,13 @@ const useAuthStore = create(
 
       hasPermission: (permission) => {
         const { user } = get();
-        // Super/Business Owner always has access
-        if (["SUPER_ADMIN", "BUSINESS_OWNER"].includes(user?.role)) return true;
+        // Super/Business Owner/Business Manager always has access
+        if (
+          ["SUPER_ADMIN", "BUSINESS_OWNER", "BUSINESS_MANAGER"].includes(
+            user?.role
+          )
+        )
+          return true;
 
         // Implicit grants for other roles (to avoid database migration for sidebar visibility)
         if (
