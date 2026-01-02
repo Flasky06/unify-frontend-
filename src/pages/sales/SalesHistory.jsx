@@ -156,7 +156,19 @@ const SalesHistory = () => {
   });
 
   const columns = [
-    { header: "Sale No", accessor: "saleNumber", triggerView: true },
+    {
+      header: "Sale No",
+      accessor: "saleNumber",
+      triggerView: true,
+      render: (row) => (
+        <button
+          onClick={() => openDetails(row)}
+          className="text-blue-600 hover:text-blue-800 font-medium hover:underline"
+        >
+          {row.saleNumber}
+        </button>
+      ),
+    },
     {
       header: "Date",
       accessor: "saleDate",
@@ -192,17 +204,6 @@ const SalesHistory = () => {
       header: "Actions",
       render: (row) => (
         <div className="flex gap-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              openDetails(row);
-            }}
-            className="text-blue-600 hover:bg-blue-50 font-medium px-3"
-          >
-            View
-          </Button>
           <Button
             variant="ghost"
             size="sm"
