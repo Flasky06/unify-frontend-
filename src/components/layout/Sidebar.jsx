@@ -495,10 +495,10 @@ export const Sidebar = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Mobile Overlay */}
+      {/* Mobile Overlay - Only show on mobile when sidebar is open */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden md:hidden transition-opacity"
+          className="fixed inset-0 bg-black/50 z-40 transition-opacity lg:hidden"
           onClick={onClose}
         />
       )}
