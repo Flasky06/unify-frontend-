@@ -81,15 +81,15 @@ const ReportsDashboard = () => {
             <table className="w-full text-sm text-left">
               <thead className="text-gray-500 bg-gray-50 uppercase">
                 <tr>
-                  <th className="px-4 py-3">Date</th>
-                  <th className="px-4 py-3 text-right">Total Sales</th>
+                  <th className="px-4 py-2">Date</th>
+                  <th className="px-4 py-2 text-right">Total Sales</th>
                 </tr>
               </thead>
               <tbody>
                 {data.last7DaysSales.map((item, idx) => (
                   <tr key={idx} className="border-b hover:bg-gray-50">
-                    <td className="px-4 py-3">{item.date}</td>
-                    <td className="px-4 py-3 text-right font-medium">
+                    <td className="px-4 py-2">{item.date}</td>
+                    <td className="px-4 py-2 text-right font-medium">
                       KSH {item.totalAmount?.toLocaleString()}
                     </td>
                   </tr>

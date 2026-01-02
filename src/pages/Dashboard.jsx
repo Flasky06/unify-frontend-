@@ -460,13 +460,13 @@ const Dashboard = () => {
               <table className="w-full text-left">
                 <thead className="text-gray-500 border-b border-gray-200">
                   <tr>
-                    <th className="py-2 text-sm font-medium">Item</th>
-                    <th className="py-2 text-sm font-medium">Price</th>
-                    <th className="py-2 text-sm font-medium">Qty</th>
-                    <th className="py-2 text-sm font-medium text-right">
+                    <th className="py-1 text-sm font-medium">Item</th>
+                    <th className="py-1 text-sm font-medium">Price</th>
+                    <th className="py-1 text-sm font-medium">Qty</th>
+                    <th className="py-1 text-sm font-medium text-right">
                       Total
                     </th>
-                    <th className="py-2 text-sm font-medium"></th>
+                    <th className="py-1 text-sm font-medium"></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -479,7 +479,7 @@ const Dashboard = () => {
                       }
                       className="group"
                     >
-                      <td className="py-3 font-medium text-gray-900">
+                      <td className="py-1.5 font-medium text-gray-900">
                         {item.name || item.productName}
                         {item.type === "SERVICE" && (
                           <span className="ml-2 px-2 py-0.5 text-xs bg-blue-50 text-blue-600 rounded-full">
@@ -487,10 +487,10 @@ const Dashboard = () => {
                           </span>
                         )}
                       </td>
-                      <td className="py-3 text-gray-600">
+                      <td className="py-1.5 text-gray-600">
                         {item.price.toLocaleString()}
                       </td>
-                      <td className="py-3">
+                      <td className="py-1.5">
                         <div className="flex items-center w-max bg-white border border-gray-200 rounded-lg">
                           <button
                             onClick={() =>
@@ -541,10 +541,10 @@ const Dashboard = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="py-3 text-right font-medium text-gray-900">
+                      <td className="py-1.5 text-right font-medium text-gray-900">
                         {(item.price * item.quantity).toLocaleString()}
                       </td>
-                      <td className="py-3 text-right">
+                      <td className="py-1.5 text-right">
                         <button
                           onClick={() =>
                             removeFromCart(

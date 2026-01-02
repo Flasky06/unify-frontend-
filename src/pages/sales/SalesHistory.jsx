@@ -356,13 +356,13 @@ const SalesHistory = () => {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b-2 border-gray-100">
-                    <th className="py-2 text-left font-semibold text-gray-600 w-1/2">
+                    <th className="py-1.5 text-left font-semibold text-gray-600 w-1/2">
                       Product
                     </th>
-                    <th className="py-2 text-center font-semibold text-gray-600">
+                    <th className="py-1.5 text-center font-semibold text-gray-600">
                       Qty
                     </th>
-                    <th className="py-2 text-right font-semibold text-gray-600">
+                    <th className="py-1.5 text-right font-semibold text-gray-600">
                       Amount
                     </th>
                   </tr>
@@ -370,7 +370,7 @@ const SalesHistory = () => {
                 <tbody className="divide-y divide-dashed divide-gray-100">
                   {selectedSale.items?.map((item, idx) => (
                     <tr key={idx}>
-                      <td className="py-3 pr-2">
+                      <td className="py-1.5 pr-2">
                         <div className="font-medium text-gray-900">
                           {item.productName}
                         </div>
@@ -378,10 +378,10 @@ const SalesHistory = () => {
                           @ KSH {(item.unitPrice || 0).toLocaleString()}
                         </div>
                       </td>
-                      <td className="py-3 text-center align-top pt-3.5">
+                      <td className="py-1.5 text-center align-top pt-2">
                         {item.quantity}
                       </td>
-                      <td className="py-3 text-right align-top pt-3.5 font-medium text-gray-900">
+                      <td className="py-1.5 text-right align-top pt-2 font-medium text-gray-900">
                         KSH{" "}
                         {(
                           (item.unitPrice || 0) * item.quantity
