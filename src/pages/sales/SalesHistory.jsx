@@ -312,7 +312,10 @@ const SalesHistory = () => {
           <div className="space-y-6" id="printable-receipt">
             {/* Receipt Header */}
             <div className="text-center pb-4 border-b border-gray-100">
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">
+              <h1 className="text-2xl font-bold text-gray-900 mb-1">
+                {selectedSale.businessName || "Business Name"}
+              </h1>
+              <h2 className="text-lg font-semibold text-gray-700 mb-1">
                 {selectedSale.shopName}
               </h2>
               <p className="text-sm text-gray-500 font-mono mb-1">
