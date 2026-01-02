@@ -263,21 +263,22 @@ export const ServiceList = () => {
 
   return (
     <div className="flex flex-col h-full max-w-full overflow-hidden">
-      <div className="flex flex-col gap-4 sm:gap-6">
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
-          <div className="w-full flex flex-col gap-3 sm:flex-1 sm:flex-row sm:gap-4">
+      <div className="flex flex-col gap-2 sm:gap-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
+          <div className="w-full flex flex-col gap-2 sm:flex-1 sm:flex-row sm:gap-3">
             <div className="w-full sm:flex-1 sm:max-w-md">
               <Input
                 placeholder="Search services..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                className="py-1.5"
               />
             </div>
             <div className="w-full sm:w-auto md:w-48">
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">All Categories</option>
                 {categories.map((category) => (
@@ -291,7 +292,7 @@ export const ServiceList = () => {
           {user?.role !== "SALES_REP" && (
             <Button
               onClick={openCreateModal}
-              className="w-full sm:w-auto whitespace-nowrap"
+              className="w-full sm:w-auto whitespace-nowrap py-1.5"
             >
               <svg
                 className="w-4 h-4 sm:w-5 sm:h-5 mr-2"

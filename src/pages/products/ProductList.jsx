@@ -251,19 +251,20 @@ export const ProductList = () => {
 
   return (
     <div className="flex flex-col h-full max-w-full overflow-hidden">
-      <div className="flex flex-col gap-4 sm:gap-6">
-        <div className="flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-center">
-          <div className="flex flex-col gap-3 lg:flex-row lg:flex-1 lg:gap-4">
+      <div className="flex flex-col gap-2 sm:gap-4">
+        <div className="flex flex-col gap-2 lg:flex-row lg:justify-between lg:items-center">
+          <div className="flex flex-col gap-2 lg:flex-row lg:flex-1 lg:gap-3">
             <div className="w-full lg:w-64">
               <Input
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                className="py-1.5"
               />
             </div>
             <div className="w-full lg:w-48">
               <select
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
@@ -277,7 +278,7 @@ export const ProductList = () => {
             </div>
             <div className="w-full lg:w-48">
               <select
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 value={selectedBrand}
                 onChange={(e) => setSelectedBrand(e.target.value)}
               >
@@ -291,7 +292,10 @@ export const ProductList = () => {
             </div>
           </div>
           {user?.role !== "SALES_REP" && (
-            <Button onClick={openCreateModal} className="w-full lg:w-auto">
+            <Button
+              onClick={openCreateModal}
+              className="w-full lg:w-auto py-1.5"
+            >
               <svg
                 className="w-5 h-5 mr-2"
                 fill="none"

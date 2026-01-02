@@ -283,12 +283,11 @@ const StockList = () => {
 
   return (
     <div className="flex flex-col h-full max-w-full overflow-hidden">
-      <div className="flex flex-col gap-4 sm:gap-6">
-        <h1 className="text-2xl font-bold text-blue-600">Stock Management</h1>
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-end">
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-1 sm:gap-4">
+      <div className="flex flex-col gap-2 sm:gap-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-end">
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-1 sm:gap-3">
             <div className="w-full sm:w-48">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Filter by Shop
               </label>
               <select
@@ -298,7 +297,7 @@ const StockList = () => {
                   setSelectedShopId(value);
                   setViewMode(value ? "byShop" : "all");
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">All Shops</option>
                 {shops.map((shop) => (
@@ -310,20 +309,21 @@ const StockList = () => {
             </div>
 
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Search
               </label>
               <Input
                 placeholder="Search by product or shop name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                className="py-1.5"
               />
             </div>
           </div>
 
           <Button
             onClick={() => navigate("/stocks/add")}
-            className="w-full sm:w-auto whitespace-nowrap"
+            className="w-full sm:w-auto whitespace-nowrap py-1.5"
           >
             <svg
               className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
