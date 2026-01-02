@@ -11,7 +11,7 @@ export const DashboardLayout = () => {
   useIdleTimeout(5 * 60 * 1000);
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex h-screen overflow-hidden bg-gray-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header onMenuClick={() => setSidebarOpen(true)} />
