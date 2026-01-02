@@ -105,12 +105,16 @@ const Home = () => {
                   >
                     Get Started
                   </Link>
-                  <Link
-                    to="/demo"
+                  <button
+                    onClick={() =>
+                      alert(
+                        "Demo coming soon! Please sign up to explore the platform."
+                      )
+                    }
                     className="px-8 py-4 bg-white text-blue-600 border-2 border-blue-100 rounded-xl font-bold text-lg hover:border-blue-200 hover:bg-blue-50 transition duration-300"
                   >
                     Watch Demo
-                  </Link>
+                  </button>
                 </>
               )}
             </div>
