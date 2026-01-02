@@ -387,10 +387,10 @@ export const ExpenseList = () => {
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-4 sm:gap-6">
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 gap-4">
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+        <div className="grid grid-cols-1 gap-2">
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-3 rounded-lg border border-blue-200">
             <p className="text-sm text-blue-600 font-medium">Total Expenses</p>
-            <p className="text-2xl font-bold text-blue-900">
+            <p className="text-xl font-bold text-blue-900">
               KSH {summary.total.toFixed(2)}
             </p>
             <p className="text-xs text-blue-600 mt-1">
@@ -407,7 +407,7 @@ export const ExpenseList = () => {
             variant="outline"
             size="sm"
             onClick={() => setQuickFilter("today")}
-            className="text-xs"
+            className="text-xs py-1"
           >
             Today
           </Button>
@@ -415,7 +415,7 @@ export const ExpenseList = () => {
             variant="outline"
             size="sm"
             onClick={() => setQuickFilter("week")}
-            className="text-xs"
+            className="text-xs py-1"
           >
             This Week
           </Button>
@@ -423,7 +423,7 @@ export const ExpenseList = () => {
             variant="outline"
             size="sm"
             onClick={() => setQuickFilter("month")}
-            className="text-xs"
+            className="text-xs py-1"
           >
             This Month
           </Button>
@@ -432,7 +432,7 @@ export const ExpenseList = () => {
               variant="ghost"
               size="sm"
               onClick={clearFilters}
-              className="text-xs text-red-600 hover:text-red-800 hover:bg-red-50"
+              className="text-xs py-1 text-red-600 hover:text-red-800 hover:bg-red-50"
             >
               Clear Filters
             </Button>
@@ -440,8 +440,8 @@ export const ExpenseList = () => {
         </div>
 
         {/* Filters Input Area */}
-        <div className="flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-start lg:flex-wrap">
-          <div className="flex flex-col gap-3 lg:flex-row lg:flex-1 lg:gap-4 lg:flex-wrap">
+        <div className="flex flex-col gap-2 lg:flex-row lg:justify-between lg:items-end lg:flex-wrap">
+          <div className="flex flex-col gap-2 lg:flex-row lg:flex-1 lg:gap-3 lg:flex-wrap">
             <div className="w-full lg:w-64 lg:max-w-xs">
               <Input
                 placeholder="Search expenses..."
@@ -450,12 +450,13 @@ export const ExpenseList = () => {
                   setSearchTerm(e.target.value);
                   setCurrentPage(1);
                 }}
+                className="py-1.5"
               />
             </div>
             {/* Category Select */}
             <div className="w-full lg:w-48 lg:max-w-xs">
               <select
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 value={selectedCategory}
                 onChange={(e) => {
                   setSelectedCategory(e.target.value);
@@ -473,7 +474,7 @@ export const ExpenseList = () => {
             {/* Shop Select */}
             <div className="w-full lg:w-48 lg:max-w-xs">
               <select
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 value={selectedShop}
                 onChange={(e) => {
                   setSelectedShop(e.target.value);
@@ -489,33 +490,36 @@ export const ExpenseList = () => {
               </select>
             </div>
             {/* Dates */}
-            <div className="w-full sm:w-auto">
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Start Date
-              </label>
-              <Input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="w-full sm:w-auto"
-              />
-            </div>
-            <div className="w-full sm:w-auto">
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                End Date
-              </label>
-              <Input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="w-full sm:w-auto"
-              />
+            {/* Dates */}
+            <div className="flex flex-row gap-2 items-end">
+              <div className="w-full sm:w-auto">
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  Start Date
+                </label>
+                <Input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-full sm:w-auto py-1.5 text-sm"
+                />
+              </div>
+              <div className="w-full sm:w-auto">
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  End Date
+                </label>
+                <Input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="w-full sm:w-auto py-1.5 text-sm"
+                />
+              </div>
             </div>
           </div>
           {user?.role !== "SALES_REP" && (
             <Button
               onClick={openCreateModal}
-              className="w-full lg:w-auto whitespace-nowrap"
+              className="w-full lg:w-auto whitespace-nowrap py-1.5"
             >
               Add Expense
             </Button>

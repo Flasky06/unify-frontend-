@@ -158,19 +158,20 @@ export const ExpenseCategoryList = () => {
 
   return (
     <div className="flex flex-col h-full max-w-full overflow-hidden">
-      <div className="flex flex-col gap-4 sm:gap-6">
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+      <div className="flex flex-col gap-2 sm:gap-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
           <div className="w-full sm:flex-1 sm:max-w-md">
             <Input
               placeholder="Search expense categories..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              className="py-1.5"
             />
           </div>
           {user?.role !== "SALES_REP" && (
             <Button
               onClick={openCreateModal}
-              className="w-full sm:w-auto whitespace-nowrap"
+              className="w-full sm:w-auto whitespace-nowrap py-1.5"
             >
               <svg
                 className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
