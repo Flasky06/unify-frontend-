@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Spinner } from "./Spinner";
 import Modal from "./Modal";
 
@@ -8,18 +8,80 @@ const Table = ({
   onRowClick,
   loading = false,
   emptyMessage = "No data available",
-  showViewAction = true, // New prop to enable/disable view button
+  showViewAction = true,
+  searchable = true,
+  searchPlaceholder = "Search...",
+  pageSize = 10,
+  pageSizeOptions = [10, 25, 50, 100],
 }) => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(pageSize);
 
   const handleViewRow = (row) => {
     setSelectedRow(row);
     setViewModalOpen(true);
   };
 
+  // Filter data based on search query
+  const filteredData = useMemo(() => {
+    if (!searchable || !searchQuery.trim()) return data;
+
+    return data.filter((row) => {
+      return columns.some((column) => {
+        const value = column.accessor
+          ? row[column.accessor]
+          : column.render
+          ? column.render(row)
+          : "";
+
+        if (value === null || value === undefined) return false;
+
+        return String(value).toLowerCase().includes(searchQuery.toLowerCase());
+      });
+    });
+  }, [data, searchQuery, columns, searchable]);
+
+  // Paginate filtered data
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredData.slice(startIndex, endIndex);
+  }, [filteredData, currentPage, itemsPerPage]);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  // Reset to page 1 when search query changes
+  useMemo(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1);
+  };
+
   return (
     <>
+      {/* Search Input */}
+      {searchable && (
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder={searchPlaceholder}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+          />
+        </div>
+      )}
+
       <div className="overflow-hidden rounded-lg border border-gray-200 w-full">
         <div
           className="overflow-x-auto overflow-y-auto max-h-[calc(100vh-280px)]"
@@ -60,17 +122,17 @@ const Table = ({
                     </div>
                   </td>
                 </tr>
-              ) : data.length === 0 ? (
+              ) : paginatedData.length === 0 ? (
                 <tr>
                   <td
                     colSpan={columns.length + (showViewAction ? 1 : 0)}
                     className="px-6 py-8 text-center text-gray-500"
                   >
-                    {emptyMessage}
+                    {searchQuery ? "No results found" : emptyMessage}
                   </td>
                 </tr>
               ) : (
-                data.map((row, rowIndex) => (
+                paginatedData.map((row, rowIndex) => (
                   <tr
                     key={rowIndex}
                     onClick={() => onRowClick?.(row)}
@@ -154,6 +216,83 @@ const Table = ({
           </table>
         </div>
       </div>
+
+      {/* Pagination Controls */}
+      {!loading && filteredData.length > 0 && (
+        <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-sm text-gray-700">
+            <span>Show</span>
+            <select
+              value={itemsPerPage}
+              onChange={handleItemsPerPageChange}
+              className="px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            >
+              {pageSizeOptions.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+            <span>
+              of {filteredData.length}{" "}
+              {filteredData.length === 1 ? "entry" : "entries"}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+
+            <div className="flex gap-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter((page) => {
+                  // Show first page, last page, current page, and pages around current
+                  return (
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1)
+                  );
+                })
+                .map((page, index, array) => {
+                  // Add ellipsis if there's a gap
+                  const showEllipsisBefore =
+                    index > 0 && page - array[index - 1] > 1;
+
+                  return (
+                    <div key={page} className="flex items-center gap-1">
+                      {showEllipsisBefore && (
+                        <span className="px-2 text-gray-500">...</span>
+                      )}
+                      <button
+                        onClick={() => handlePageChange(page)}
+                        className={`px-3 py-1 border rounded ${
+                          currentPage === page
+                            ? "bg-blue-600 text-white border-blue-600"
+                            : "border-gray-300 hover:bg-gray-50"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    </div>
+                  );
+                })}
+            </div>
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* View Details Modal */}
       {showViewAction && (

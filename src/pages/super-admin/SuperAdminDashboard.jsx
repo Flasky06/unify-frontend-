@@ -53,16 +53,6 @@ const SuperAdminDashboard = () => {
   return (
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-4 sm:gap-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Platform Overview
-          </h1>
-          <p className="text-gray-600 mt-1">
-            General statistics across the entire platform
-          </p>
-        </div>
-
         {/* Statistics Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Users Section */}
