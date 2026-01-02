@@ -17,16 +17,16 @@ const AuditLogModal = ({ isOpen, onClose, title, logs, loading }) => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     Date/Time
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     User
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     Action
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                     Details
                   </th>
                 </tr>
@@ -34,13 +34,13 @@ const AuditLogModal = ({ isOpen, onClose, title, logs, loading }) => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {logs.map((log, index) => (
                   <tr key={index}>
-                    <td className="px-3 py-2 text-sm text-gray-500 whitespace-nowrap">
+                    <td className="px-3 py-2 text-base font-medium text-gray-500 whitespace-nowrap">
                       {format(new Date(log.timestamp), "MMM d, yyyy HH:mm")}
                     </td>
-                    <td className="px-3 py-2 text-sm text-gray-900">
+                    <td className="px-3 py-2 text-base font-medium text-gray-900">
                       {log.performedBy}
                     </td>
-                    <td className="px-3 py-2 text-sm">
+                    <td className="px-3 py-2 text-base font-medium">
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                         ${
@@ -54,7 +54,7 @@ const AuditLogModal = ({ isOpen, onClose, title, logs, loading }) => {
                         {log.action}
                       </span>
                     </td>
-                    <td className="px-3 py-2 text-sm text-gray-500">
+                    <td className="px-3 py-2 text-base font-medium text-gray-500">
                       {log.details ||
                         log.reason ||
                         (log.quantityChange
