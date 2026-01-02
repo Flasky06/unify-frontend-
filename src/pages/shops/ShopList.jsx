@@ -181,7 +181,7 @@ export const ShopList = () => {
               </svg>
               Add Shop
             </Button>
-
+          )}
         </div>
 
         <Table
