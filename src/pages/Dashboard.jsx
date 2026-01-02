@@ -198,6 +198,7 @@ const Dashboard = () => {
             price: item.price,
             unit: item.unit,
             quantity: 1,
+            discount: 0,
             type: "SERVICE",
           },
         ];
@@ -210,6 +211,7 @@ const Dashboard = () => {
             price: item.price,
             quantity: 1,
             maxStock: item.quantity,
+            discount: 0,
             type: "PRODUCT",
           },
         ];
@@ -249,22 +251,48 @@ const Dashboard = () => {
     );
   };
 
+  const updateCartDiscount = (id, newDiscount, type) => {
+    if (newDiscount < 0) return;
+    setCart((prev) =>
+      prev.map((item) => {
+        const isTarget =
+          type === "SERVICE" ? item.serviceId === id : item.productId === id;
+        if (isTarget) {
+          // Ensure discount doesn't exceed price
+          if (newDiscount > item.price) {
+            setToast({
+              isOpen: true,
+              message: "Discount cannot exceed item price",
+              type: "warning",
+            });
+            return item;
+          }
+          return { ...item, discount: newDiscount };
+        }
+        return item;
+      })
+    );
+  };
+
   const calculateTotal = () => {
-    return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    return cart.reduce(
+      (sum, item) => sum + (item.price - (item.discount || 0)) * item.quantity,
+      0
+    );
   };
 
   const processSale = async () => {
     if (!selectedShopId || cart.length === 0) return;
     setProcessing(true);
     try {
-      const total = calculateTotal();
-
       const saleData = {
         shopId: parseInt(selectedShopId),
         items: cart.map((item) => ({
           productId: item.type === "SERVICE" ? null : item.productId,
           serviceId: item.type === "SERVICE" ? item.serviceId : null,
           quantity: item.quantity,
+          unitPrice: item.price,
+          discountAmount: item.discount || 0,
         })),
         paymentMethodId: paymentMethod,
       };
@@ -455,9 +483,18 @@ const Dashboard = () => {
               <table className="w-full text-left">
                 <thead className="text-gray-600 border-b border-gray-200">
                   <tr>
-                    <th className="py-1 text-base font-bold">Item</th>
-                    <th className="py-1 text-base font-bold">Price</th>
-                    <th className="py-1 text-base font-bold">Qty</th>
+                    <th className="py-1 text-base font-bold text-left w-1/3">
+                      Item
+                    </th>
+                    <th className="py-1 text-base font-bold text-center">
+                      Price
+                    </th>
+                    <th className="py-1 text-base font-bold text-center">
+                      Discount
+                    </th>
+                    <th className="py-1 text-base font-bold text-center">
+                      Qty
+                    </th>
                     <th className="py-1 text-base font-bold text-right">
                       Total
                     </th>
@@ -482,10 +519,40 @@ const Dashboard = () => {
                           </span>
                         )}
                       </td>
-                      <td className="py-1.5 text-gray-600">
+                      <td className="py-1.5 text-center text-gray-600">
                         {item.price.toLocaleString()}
                       </td>
-                      <td className="py-1.5">
+                      <td className="py-1.5 text-center">
+                        <input
+                          type="number"
+                          min="0"
+                          max={item.price}
+                          value={item.discount || ""}
+                          onChange={(e) => {
+                            const val = parseFloat(e.target.value);
+                            if (!isNaN(val)) {
+                              updateCartDiscount(
+                                item.type === "SERVICE"
+                                  ? item.serviceId
+                                  : item.productId,
+                                val,
+                                item.type
+                              );
+                            } else if (e.target.value === "") {
+                              updateCartDiscount(
+                                item.type === "SERVICE"
+                                  ? item.serviceId
+                                  : item.productId,
+                                0,
+                                item.type
+                              );
+                            }
+                          }}
+                          placeholder="0"
+                          className="w-20 text-center border border-gray-300 rounded p-1 text-sm focus:ring-blue-500 focus:border-blue-500"
+                        />
+                      </td>
+                      <td className="py-1.5 justify-center flex">
                         <div className="flex items-center w-max bg-white border border-gray-200 rounded-lg">
                           <button
                             onClick={() =>
@@ -537,7 +604,16 @@ const Dashboard = () => {
                         </div>
                       </td>
                       <td className="py-1.5 text-right font-medium text-gray-900">
-                        {(item.price * item.quantity).toLocaleString()}
+                        {(
+                          (item.price - (item.discount || 0)) *
+                          item.quantity
+                        ).toLocaleString()}
+                        {item.discount > 0 && (
+                          <div className="text-xs text-green-600">
+                            Saved:{" "}
+                            {(item.discount * item.quantity).toLocaleString()}
+                          </div>
+                        )}
                       </td>
                       <td className="py-1.5 text-right">
                         <button
