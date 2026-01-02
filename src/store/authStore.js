@@ -94,6 +94,39 @@ const useAuthStore = create(
         const { user } = get();
         // Super/Business Owner always has access
         if (["SUPER_ADMIN", "BUSINESS_OWNER"].includes(user?.role)) return true;
+
+        // Implicit grants for other roles (to avoid database migration for sidebar visibility)
+        if (
+          user?.role === "SHOP_MANAGER" &&
+          [
+            "VIEW_PRODUCTS",
+            "MANAGE_EMPLOYEES",
+            "MANAGE_SHOPS",
+            "VIEW_SALES",
+            "VIEW_STOCK",
+            "MANAGE_STOCK",
+            "PROCESS_RETURNS",
+            "VIEW_REPORTS",
+            "CREATE_EXPENSES",
+            "VIEW_EXPENSES",
+            "MANAGE_PRODUCT_CATEGORIES",
+          ].includes(permission)
+        ) {
+          return true;
+        }
+
+        if (
+          user?.role === "SALES_REP" &&
+          [
+            "VIEW_PRODUCTS",
+            "CREATE_SALES",
+            "VIEW_SALES",
+            "VIEW_STOCK",
+          ].includes(permission)
+        ) {
+          return true;
+        }
+
         // Check granted permissions from backend
         return user?.permissions?.includes(permission);
       },

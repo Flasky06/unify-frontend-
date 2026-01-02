@@ -21,7 +21,6 @@ const Profile = () => {
     businessName: "",
     businessType: "",
     address: "",
-    county: "",
   });
 
   const [hasBusiness, setHasBusiness] = useState(false);
@@ -58,7 +57,6 @@ const Profile = () => {
           businessName: business.businessName || "",
           businessType: business.businessType || "",
           address: business.address || "",
-          county: business.county || "",
         });
         setHasBusiness(true);
       } catch (err) {
@@ -134,7 +132,6 @@ const Profile = () => {
           businessName: business.businessName || "",
           businessType: business.businessType || "",
           address: business.address || "",
-          county: business.county || "",
         });
       });
     }
@@ -265,19 +262,6 @@ const Profile = () => {
                   }
                   disabled={!isEditing}
                   placeholder="Business Address"
-                />
-
-                <Input
-                  label="County"
-                  value={businessData.county}
-                  onChange={(e) =>
-                    setBusinessData({
-                      ...businessData,
-                      county: e.target.value,
-                    })
-                  }
-                  disabled={!isEditing}
-                  placeholder="County"
                 />
               </div>
             </div>
