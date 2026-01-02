@@ -211,7 +211,7 @@ const StockList = () => {
       header: "Quantity",
       render: (row) => (
         <span
-          className={`font-semibold ${
+          className={`${
             row.quantity < 10
               ? "text-red-600"
               : row.quantity < 50

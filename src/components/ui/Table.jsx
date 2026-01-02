@@ -146,7 +146,7 @@ const Table = ({
                     {columns.map((column, colIndex) => (
                       <td
                         key={colIndex}
-                        className={`px-6 py-2.5 text-base font-medium text-gray-900 ${
+                        className={`px-6 py-3 text-sm text-gray-700 ${
                           column.truncate ? "" : "whitespace-nowrap"
                         }`}
                         style={{

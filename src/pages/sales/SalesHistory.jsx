@@ -163,7 +163,7 @@ const SalesHistory = () => {
       render: (row) => (
         <button
           onClick={() => openDetails(row)}
-          className="text-blue-600 hover:text-blue-800 font-medium hover:underline"
+          className="text-blue-600 hover:text-blue-800 hover:underline"
         >
           {row.saleNumber}
         </button>

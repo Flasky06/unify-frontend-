@@ -41,9 +41,7 @@ const Dashboard = () => {
       accessor: "quantity",
       render: (row) => (
         <span
-          className={`font-mono ${
-            row.quantity < 10 ? "text-red-600 font-bold" : ""
-          }`}
+          className={`font-mono ${row.quantity < 10 ? "text-red-600" : ""}`}
         >
           {row.quantity}
         </span>

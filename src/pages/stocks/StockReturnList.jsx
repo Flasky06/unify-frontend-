@@ -175,9 +175,7 @@ const StockReturnList = () => {
               accessor: "productName",
               triggerView: true,
               render: (item) => (
-                <span className="font-medium text-gray-900">
-                  {item.productName}
-                </span>
+                <span className="text-gray-900">{item.productName}</span>
               ),
             },
             {

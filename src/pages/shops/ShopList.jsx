@@ -209,7 +209,7 @@ export const ShopList = () => {
               accessor: "name",
               triggerView: true,
               render: (shop) => (
-                <span className="font-medium text-gray-900">{shop.name}</span>
+                <span className="text-gray-900">{shop.name}</span>
               ),
             },
             {
