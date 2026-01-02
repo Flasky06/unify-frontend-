@@ -12,6 +12,18 @@ body {
 }
 
 @media print {
+  /* Hide everything by default */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Reset layout for printing */
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: white;
+  }
   /* Show the printable receipt and its children */
   #printable-receipt,
   #printable-receipt * {
