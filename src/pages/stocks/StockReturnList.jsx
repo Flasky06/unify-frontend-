@@ -242,23 +242,22 @@ const StockReturnList = () => {
         title="Process Stock Return"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-            <Select
-              label="Product"
-              required
-              value={formData.productId}
-              onChange={(e) =>
-                setFormData({ ...formData, productId: e.target.value })
-              }
-              className="w-full"
-            >
-              <option value="">Select Product</option>
-              {products.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name}
-                </option>
-              ))}
-            </Select>
-          </div>
+          <Select
+            label="Product"
+            required
+            value={formData.productId}
+            onChange={(e) =>
+              setFormData({ ...formData, productId: e.target.value })
+            }
+            className="w-full"
+          >
+            <option value="">Select Product</option>
+            {products.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </Select>
 
           <div>
             <Select
