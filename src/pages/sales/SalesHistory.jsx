@@ -184,22 +184,7 @@ const SalesHistory = () => {
       accessor: "total",
       render: (row) => `KSH ${row.total.toLocaleString()}`,
     },
-    {
-      header: "Paid",
-      render: (row) => `KSH ${(row.amountPaid || 0).toLocaleString()}`,
-    },
-    {
-      header: "Balance",
-      render: (row) => (
-        <span
-          className={
-            row.balance > 0 ? "text-red-600 font-bold" : "text-green-600"
-          }
-        >
-          KSH {(row.balance || 0).toLocaleString()}
-        </span>
-      ),
-    },
+
     {
       header: "Actions",
       render: (row) => (
