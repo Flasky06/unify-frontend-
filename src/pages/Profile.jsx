@@ -181,13 +181,13 @@ const Profile = () => {
         )}
 
         <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200">
+          <div className="p-2 md:p-6 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900">
               Personal Information
             </h2>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          <form onSubmit={handleSubmit} className="p-2 md:p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Input
                 label="Phone Number"

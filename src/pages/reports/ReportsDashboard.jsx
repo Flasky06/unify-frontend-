@@ -52,11 +52,11 @@ const ReportsDashboard = () => {
     );
 
   return (
-    <div className="p-6">
+    <div className="p-2 md:p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Reports Dashboard</h1>
-        <Link to="/reports/daily-sales">
-          <Button>View Daily Sales Report</Button>
+        <Link to="/reports/sales">
+          <Button>View Sales Report</Button>
         </Link>
       </div>
 

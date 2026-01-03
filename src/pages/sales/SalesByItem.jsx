@@ -120,7 +120,7 @@ const SalesByItem = () => {
   );
 
   return (
-    <div className="p-6">
+    <div className="p-2 md:p-6">
       {/* Tabs for Sales Type */}
       <div className="mb-6 border-b border-gray-200">
         <nav className="-mb-px flex space-x-8">

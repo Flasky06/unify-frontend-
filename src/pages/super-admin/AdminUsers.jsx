@@ -2,8 +2,8 @@ import React from "react";
 
 const AdminUsers = () => {
   return (
-    <div className="p-6">
-      <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="p-2 md:p-6">
+      <div className="bg-white rounded-lg shadow-md p-2 md:p-6">
         <div className="text-center py-12">
           <svg
             className="mx-auto h-12 w-12 text-gray-400"

@@ -33,7 +33,7 @@ import ExpenseAnalytics from "../pages/expenses/ExpenseAnalytics";
 import { PaymentMethodList } from "../pages/paymentMethods/PaymentMethodList";
 import SalesAnalytics from "../pages/sales/SalesAnalytics";
 import ReportsDashboard from "../pages/reports/ReportsDashboard";
-import DailySalesReport from "../pages/reports/DailySalesReport";
+import { SalesReport } from "../pages/reports/SalesReport";
 import StockMovementReport from "../pages/reports/StockMovementReport";
 
 export const router = createBrowserRouter([
@@ -167,8 +167,8 @@ export const router = createBrowserRouter([
         element: <ReportsDashboard />,
       },
       {
-        path: "reports/daily-sales",
-        element: <DailySalesReport />,
+        path: "reports/sales",
+        element: <SalesReport />,
       },
       {
         path: "reports/stock-movement",

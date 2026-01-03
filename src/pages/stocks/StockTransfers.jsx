@@ -269,7 +269,7 @@ const StockTransfers = () => {
 
   return (
     <div className="flex flex-col h-full bg-white rounded-lg shadow-sm">
-      <div className="p-4 sm:p-6 border-b border-gray-200 space-y-4">
+      <div className="p-2 md:p-6 border-b border-gray-200 space-y-4">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <h1 className="text-2xl font-bold text-blue-600">Stock Transfers</h1>
           <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 sm:items-center w-full sm:w-auto">

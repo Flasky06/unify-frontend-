@@ -171,7 +171,7 @@ const AddStock = () => {
   console.log("Products state:", products);
 
   return (
-    <div className="p-6">
+    <div className="p-2 md:p-6">
       <div className="flex flex-col gap-6">
         {/* Header Actions */}
         <div className="flex justify-between items-center gap-4">

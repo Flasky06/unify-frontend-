@@ -187,7 +187,7 @@ const RoleManagement = () => {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-2 md:p-6">
       <div className="flex justify-between items-center mb-6">
         <div></div>
         <button

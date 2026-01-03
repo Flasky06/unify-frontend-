@@ -6,12 +6,13 @@ export const reportService = {
     return response;
   },
 
-  getDailySalesReport: async (date, shopId) => {
+  getSalesReport: async (startDate, endDate, shopId) => {
     const params = {};
-    if (date) params.date = date;
+    if (startDate) params.startDate = startDate;
+    if (endDate) params.endDate = endDate;
     if (shopId) params.shopId = shopId;
 
-    const response = await api.get("/reports/daily-sales", { params });
+    const response = await api.get("/reports/sales", { params });
     return response;
   },
 
