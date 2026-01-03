@@ -34,6 +34,7 @@ import { PaymentMethodList } from "../pages/paymentMethods/PaymentMethodList";
 import SalesAnalytics from "../pages/sales/SalesAnalytics";
 import ReportsDashboard from "../pages/reports/ReportsDashboard";
 import DailySalesReport from "../pages/reports/DailySalesReport";
+import StockMovementReport from "../pages/reports/StockMovementReport";
 
 export const router = createBrowserRouter([
   {
@@ -168,6 +169,10 @@ export const router = createBrowserRouter([
       {
         path: "reports/daily-sales",
         element: <DailySalesReport />,
+      },
+      {
+        path: "reports/stock-movement",
+        element: <StockMovementReport />,
       },
       {
         path: "payment-methods",
