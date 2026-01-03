@@ -89,7 +89,7 @@ const SalesHistory = () => {
     }
   };
 
-  const handleCancelSale = async (saleId) => {
+  const handleVoidSale = async (saleId) => {
     try {
       await saleService.cancelSale(saleId);
       // Refresh list
@@ -101,14 +101,14 @@ const SalesHistory = () => {
       }
       setToast({
         isOpen: true,
-        message: "Sale cancelled successfully.",
+        message: "Sale voided successfully.",
         type: "success",
       });
     } catch (error) {
-      console.error("Failed to cancel sale", error);
+      console.error("Failed to void sale", error);
       setToast({
         isOpen: true,
-        message: `Failed to cancel sale: ${error.message}`,
+        message: `Failed to void sale: ${error.message}`,
         type: "error",
       });
     }
@@ -210,7 +210,7 @@ const SalesHistory = () => {
               }}
               className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
             >
-              Cancel
+              Void
             </Button>
           )}
         </div>
@@ -493,7 +493,7 @@ const SalesHistory = () => {
                     }
                     className="text-red-600 border-red-200 hover:bg-red-50"
                   >
-                    Cancel Sale
+                    Void Sale
                   </Button>
                 )}
                 <Button onClick={() => setIsDetailsModalOpen(false)}>
@@ -509,10 +509,10 @@ const SalesHistory = () => {
       <ConfirmDialog
         isOpen={confirmDialog.isOpen}
         onClose={() => setConfirmDialog({ isOpen: false, saleId: null })}
-        onConfirm={() => handleCancelSale(confirmDialog.saleId)}
-        title="Cancel Sale"
-        message="Are you sure you want to cancel this sale? This action cannot be undone."
-        confirmText="Yes, Cancel Sale"
+        onConfirm={() => handleVoidSale(confirmDialog.saleId)}
+        title="Void Sale"
+        message="Are you sure you want to void this sale? This action cannot be undone."
+        confirmText="Yes, Void Sale"
         variant="danger"
       />
 
