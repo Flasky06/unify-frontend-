@@ -375,10 +375,10 @@ const SalesHistory = () => {
                             {item.productName || item.serviceName}
                           </div>
                           <div className="text-gray-500 text-xs mt-0.5">
-                            @ KSH {(item.unitPrice || 0).toLocaleString()}
+                            @ KSH {finalPrice.toLocaleString()}
                             {hasDiscount && (
-                              <span className="text-green-600 ml-1">
-                                (-{item.discountAmount.toLocaleString()})
+                              <span className="text-gray-400 line-through ml-1">
+                                {(item.unitPrice || 0).toLocaleString()}
                               </span>
                             )}
                           </div>
