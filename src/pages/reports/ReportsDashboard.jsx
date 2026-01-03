@@ -35,7 +35,9 @@ const ReportsDashboard = () => {
         <Button onClick={fetchDashboardReport}>Retry</Button>
       </div>
     );
-  if (!data)
+
+  // Check if data exists and has the required properties
+  if (!data || typeof data.todaySales === "undefined")
     return (
       <div className="p-8 text-center">
         <p className="text-gray-600 mb-4">
