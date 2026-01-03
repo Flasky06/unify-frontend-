@@ -360,41 +360,95 @@ const SalesHistory = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-dashed divide-gray-100">
-                  {selectedSale.items?.map((item, idx) => (
-                    <tr key={idx}>
-                      <td className="py-1.5 pr-2">
-                        <div className="font-medium text-gray-900">
-                          {item.productName}
-                        </div>
-                        <div className="text-gray-500 text-xs mt-0.5">
-                          @ KSH {(item.unitPrice || 0).toLocaleString()}
-                        </div>
-                      </td>
-                      <td className="py-1.5 text-center align-top pt-2">
-                        {item.quantity}
-                      </td>
-                      <td className="py-1.5 text-right align-top pt-2 font-medium text-gray-900">
-                        KSH{" "}
-                        {(
-                          (item.unitPrice || 0) * item.quantity
-                        ).toLocaleString()}
-                      </td>
-                    </tr>
-                  ))}
+                  {selectedSale.items?.map((item, idx) => {
+                    const hasDiscount =
+                      item.discountAmount && item.discountAmount > 0;
+                    const finalPrice =
+                      item.finalPrice ||
+                      item.unitPrice - (item.discountAmount || 0);
+                    const itemTotal = finalPrice * item.quantity;
+
+                    return (
+                      <tr key={idx}>
+                        <td className="py-1.5 pr-2">
+                          <div className="font-medium text-gray-900">
+                            {item.productName || item.serviceName}
+                          </div>
+                          <div className="text-gray-500 text-xs mt-0.5">
+                            @ KSH {(item.unitPrice || 0).toLocaleString()}
+                            {hasDiscount && (
+                              <span className="text-green-600 ml-1">
+                                (-{item.discountAmount.toLocaleString()})
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="py-1.5 text-center align-top pt-2">
+                          {item.quantity}
+                        </td>
+                        <td className="py-1.5 text-right align-top pt-2 font-medium text-gray-900">
+                          KSH {itemTotal.toLocaleString()}
+                          {hasDiscount && (
+                            <div className="text-xs text-gray-500 line-through">
+                              {(
+                                (item.unitPrice || 0) * item.quantity
+                              ).toLocaleString()}
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
 
             {/* Totals Section */}
             <div className="border-t-2 border-gray-900 pt-4 space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-lg font-bold text-gray-900">
-                  Grand Total
-                </span>
-                <span className="text-2xl font-bold text-gray-900">
-                  KSH {selectedSale.total.toLocaleString()}
-                </span>
-              </div>
+              {(() => {
+                const subtotal =
+                  selectedSale.items?.reduce(
+                    (sum, item) => sum + (item.unitPrice || 0) * item.quantity,
+                    0
+                  ) || 0;
+                const totalDiscount =
+                  selectedSale.items?.reduce(
+                    (sum, item) =>
+                      sum + (item.discountAmount || 0) * item.quantity,
+                    0
+                  ) || 0;
+
+                return (
+                  <>
+                    {totalDiscount > 0 && (
+                      <>
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-gray-600">Subtotal</span>
+                          <span className="text-gray-900">
+                            KSH {subtotal.toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-green-600 font-medium">
+                            Discount
+                          </span>
+                          <span className="text-green-600 font-medium">
+                            - KSH {totalDiscount.toLocaleString()}
+                          </span>
+                        </div>
+                      </>
+                    )}
+                    <div className="flex justify-between items-center">
+                      <span className="text-lg font-bold text-gray-900">
+                        Grand Total
+                      </span>
+                      <span className="text-2xl font-bold text-gray-900">
+                        KSH {selectedSale.total.toLocaleString()}
+                      </span>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
 
             {/* Thank You Footer */}
