@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { reportService } from "../../services/reportService";
 import { format } from "date-fns";
+import Button from "../../components/ui/Button";
 
 const ReportsDashboard = () => {
   const [data, setData] = useState(null);
@@ -30,9 +32,12 @@ const ReportsDashboard = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">
-        Reports Dashboard
-      </h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">Reports Dashboard</h1>
+        <Link to="/reports/daily-sales">
+          <Button>View Daily Sales Report</Button>
+        </Link>
+      </div>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
