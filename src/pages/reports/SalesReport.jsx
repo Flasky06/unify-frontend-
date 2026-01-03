@@ -5,7 +5,6 @@ import { reportService } from "../../services/reportService";
 import { shopService } from "../../services/shopService";
 import { useShopStore } from "../../store/shopStore";
 import { DateRangePicker } from "../../components/ui/DateRangePicker";
-import { toast } from "react-hot-toast";
 
 const SummaryCard = ({ title, value, icon, isProfit }) => (
   <div className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 flex items-center gap-4 transition-transform hover:scale-105">
