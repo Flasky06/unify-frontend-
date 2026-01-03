@@ -389,12 +389,17 @@ export const UserList = () => {
             >
               <option value="BUSINESS_MANAGER">Business Manager</option>
               <option value="SHOP_MANAGER">Shop Manager</option>
+              <option value="CASHIER">Cashier</option>
               <option value="SALES_REP">Sales Representative</option>
+              <option value="STOCK_KEEPER">Stock Keeper</option>
+              <option value="ACCOUNTANT">Accountant</option>
+              <option value="SUPERVISOR">Supervisor</option>
             </select>
           </div>
 
           {(formData.role === "SHOP_MANAGER" ||
-            formData.role === "SALES_REP") && (
+            formData.role === "SALES_REP" ||
+            formData.role === "CASHIER") && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Assigned Shop <span className="text-red-500">*</span>
