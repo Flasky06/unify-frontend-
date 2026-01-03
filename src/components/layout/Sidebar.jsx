@@ -105,7 +105,6 @@ export const Sidebar = ({ isOpen, onClose }) => {
     },
     {
       name: "Reports",
-      path: "/reports",
       permission: "VIEW_REPORTS",
       icon: (
         <svg
@@ -122,6 +121,23 @@ export const Sidebar = ({ isOpen, onClose }) => {
           />
         </svg>
       ),
+      children: [
+        {
+          name: "Dashboard",
+          path: "/reports",
+          permission: "VIEW_REPORTS",
+        },
+        {
+          name: "Sales",
+          path: "/reports/sales",
+          permission: "VIEW_REPORTS",
+        },
+        {
+          name: "Stock Movement",
+          path: "/reports/stock-movement",
+          permission: "VIEW_REPORTS",
+        },
+      ],
     },
 
     // 2. PRODUCTS
