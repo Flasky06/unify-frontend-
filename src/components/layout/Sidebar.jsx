@@ -336,7 +336,16 @@ export const Sidebar = ({ isOpen, onClose }) => {
   const getFilteredBusinessNav = () => {
     return businessNav.reduce((acc, item) => {
       // 1. Check Item Permission
-      if (item.permission && !hasPermission(item.permission)) {
+      const isOwner =
+        user?.role === "BUSINESS_OWNER" || user?.role === "BUSINESS_MANAGER";
+      const isReports = item.name === "Reports";
+
+      // Ensure specific items are always visible to owners regardless of permission check glitches
+      if (
+        item.permission &&
+        !hasPermission(item.permission) &&
+        !(isOwner && isReports)
+      ) {
         // Special case: Admin block check - if it has children that are allowed, we might want to show it?
         // But for now, strict parent permission check.
         // Wait, "Admin" usually requires general admin access.
