@@ -3,7 +3,7 @@ import { api } from "../lib/api";
 export const reportService = {
   getDashboardReport: async () => {
     const response = await api.get("/reports/dashboard");
-    return response.data;
+    return response;
   },
 
   getDailySalesReport: async (date, shopId) => {
@@ -12,7 +12,7 @@ export const reportService = {
     if (shopId) params.shopId = shopId;
 
     const response = await api.get("/reports/daily-sales", { params });
-    return response.data;
+    return response;
   },
 
   getStockMovementReport: async (startDate, endDate, shopId) => {
@@ -22,6 +22,6 @@ export const reportService = {
     if (shopId) params.shopId = shopId;
 
     const response = await api.get("/reports/stock-movement", { params });
-    return response.data;
+    return response;
   },
 };
