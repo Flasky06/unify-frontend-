@@ -61,7 +61,7 @@ const ReportsDashboard = () => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* Product Sales */}
         <Link to="/products" className="block">
           <div className="bg-white p-6 rounded-lg shadow border-l-4 border-blue-500 hover:shadow-lg transition-shadow cursor-pointer">
@@ -98,6 +98,16 @@ const ReportsDashboard = () => {
             <p className="text-sm text-gray-500 mb-1">Low Stock Items</p>
             <h2 className="text-2xl font-bold text-gray-800">
               {data.lowStockCount || 0}
+            </h2>
+          </div>
+        </Link>
+
+        {/* Total Stock Value */}
+        <Link to="/stocks" className="block">
+          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-green-500 hover:shadow-lg transition-shadow cursor-pointer">
+            <p className="text-sm text-gray-500 mb-1">Total Stock Value</p>
+            <h2 className="text-2xl font-bold text-gray-800">
+              KSH {data.todayStockAdded?.toLocaleString() || "0"}
             </h2>
           </div>
         </Link>
