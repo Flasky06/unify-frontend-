@@ -7,6 +7,25 @@ import { Toast } from "../../components/ui/ConfirmDialog";
 import { format, subDays, startOfMonth, endOfMonth } from "date-fns";
 import useAuthStore from "../../store/authStore";
 
+// SummaryCard Component
+const SummaryCard = ({ title, value, icon, isProfit }) => (
+  <div className="bg-white p-4 rounded-lg shadow border-l-4 border-blue-500">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-xs text-gray-500 mb-1">{title}</p>
+        <h3
+          className={`text-lg font-bold ${
+            isProfit ? "text-emerald-600" : "text-gray-800"
+          }`}
+        >
+          {value}
+        </h3>
+      </div>
+      <div>{icon}</div>
+    </div>
+  </div>
+);
+
 const StockMovementReport = () => {
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
@@ -94,6 +113,14 @@ const StockMovementReport = () => {
       type: "info",
     });
   };
+
+  const formatCurrency = (val) =>
+    new Intl.NumberFormat("en-KE", {
+      style: "currency",
+      currency: "KSH",
+    }).format(val || 0);
+
+  const formatNumber = (val) => new Intl.NumberFormat("en-KE").format(val || 0);
 
   if (loading && !reportData) {
     return (
@@ -200,7 +227,7 @@ const StockMovementReport = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
             <SummaryCard
               title="Opening Stock"
-              value={formatNumber(data?.summary?.totalOpeningStock)}
+              value={formatNumber(reportData?.summary?.totalOpeningStock)}
               icon={
                 <svg
                   className="w-6 h-6 text-blue-500"
@@ -219,7 +246,7 @@ const StockMovementReport = () => {
             />
             <SummaryCard
               title="Closing Stock"
-              value={formatNumber(data?.summary?.totalClosingStock)}
+              value={formatNumber(reportData?.summary?.totalClosingStock)}
               icon={
                 <svg
                   className="w-6 h-6 text-purple-500"
@@ -238,7 +265,7 @@ const StockMovementReport = () => {
             />
             <SummaryCard
               title="Total Sales (Qty)"
-              value={formatNumber(data?.summary?.totalSales)}
+              value={formatNumber(reportData?.summary?.totalSales)}
               icon={
                 <svg
                   className="w-6 h-6 text-green-500"
@@ -257,7 +284,7 @@ const StockMovementReport = () => {
             />
             <SummaryCard
               title="Sales Revenue"
-              value={formatCurrency(data?.summary?.totalRevenue)}
+              value={formatCurrency(reportData?.summary?.totalRevenue)}
               icon={
                 <svg
                   className="w-6 h-6 text-yellow-500"
@@ -276,7 +303,7 @@ const StockMovementReport = () => {
             />
             <SummaryCard
               title="Total Profit"
-              value={formatCurrency(data?.summary?.totalProfit)}
+              value={formatCurrency(reportData?.summary?.totalProfit)}
               isProfit={true}
               icon={
                 <svg
@@ -296,7 +323,7 @@ const StockMovementReport = () => {
             />
             <SummaryCard
               title="Net Movement"
-              value={formatNumber(data?.summary?.netMovement)}
+              value={formatNumber(reportData?.summary?.netMovement)}
               icon={
                 <svg
                   className="w-6 h-6 text-gray-500"
@@ -340,8 +367,8 @@ const StockMovementReport = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-700">
-                  {data?.productMovements?.length > 0 ? (
-                    data.productMovements.map((item) => (
+                  {reportData?.productMovements?.length > 0 ? (
+                    reportData.productMovements.map((item) => (
                       <tr key={item.productId} className="hover:bg-gray-700/50">
                         <td className="px-6 py-4 font-medium text-white truncate max-w-xs">
                           {item.productName}
