@@ -183,19 +183,23 @@ const StockTransfers = () => {
     }
   };
 
-  const handleCancel = async (id) => {
+  const handleVoidTransfer = async (id) => {
     try {
       if (submitting) return;
       setSubmitting(true);
       await stockTransferService.cancelTransfer(id);
       setToast({
         isOpen: true,
-        message: "Transfer cancelled",
+        message: "Transfer voided",
         type: "success",
       });
       fetchTransfers();
     } catch (err) {
-      setToast({ isOpen: true, message: "Failed to cancel", type: "error" });
+      setToast({
+        isOpen: true,
+        message: "Failed to void transfer",
+        type: "error",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -253,9 +257,9 @@ const StockTransfers = () => {
               variant="ghost"
               size="sm"
               className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
-              onClick={() => handleCancel(row.id)}
+              onClick={() => handleVoidTransfer(row.id)}
             >
-              Cancel
+              Void Transfer
             </Button>
           )}
         </div>
