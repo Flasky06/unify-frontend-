@@ -63,36 +63,44 @@ const ReportsDashboard = () => {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {/* Product Sales */}
-        <div className="bg-white p-6 rounded-lg shadow border-l-4 border-blue-500">
-          <p className="text-sm text-gray-500 mb-1">Product Sales (Today)</p>
-          <h2 className="text-2xl font-bold text-gray-800">
-            KSH {data.todayProductSales?.toLocaleString() || "0"}
-          </h2>
-        </div>
+        <Link to="/products" className="block">
+          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-blue-500 hover:shadow-lg transition-shadow cursor-pointer">
+            <p className="text-sm text-gray-500 mb-1">Product Sales (Today)</p>
+            <h2 className="text-2xl font-bold text-gray-800">
+              KSH {data.todayProductSales?.toLocaleString() || "0"}
+            </h2>
+          </div>
+        </Link>
 
         {/* Service Sales */}
-        <div className="bg-white p-6 rounded-lg shadow border-l-4 border-purple-500">
-          <p className="text-sm text-gray-500 mb-1">Service Sales (Today)</p>
-          <h2 className="text-2xl font-bold text-gray-800">
-            KSH {data.todayServiceSales?.toLocaleString() || "0"}
-          </h2>
-        </div>
+        <Link to="/services/products" className="block">
+          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-purple-500 hover:shadow-lg transition-shadow cursor-pointer">
+            <p className="text-sm text-gray-500 mb-1">Service Sales (Today)</p>
+            <h2 className="text-2xl font-bold text-gray-800">
+              KSH {data.todayServiceSales?.toLocaleString() || "0"}
+            </h2>
+          </div>
+        </Link>
 
         {/* Expenses */}
-        <div className="bg-white p-6 rounded-lg shadow border-l-4 border-red-500">
-          <p className="text-sm text-gray-500 mb-1">Today's Expenses</p>
-          <h2 className="text-2xl font-bold text-gray-800">
-            KSH {data.todayExpenses?.toLocaleString() || "0"}
-          </h2>
-        </div>
+        <Link to="/expenses" className="block">
+          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-red-500 hover:shadow-lg transition-shadow cursor-pointer">
+            <p className="text-sm text-gray-500 mb-1">Today's Expenses</p>
+            <h2 className="text-2xl font-bold text-gray-800">
+              KSH {data.todayExpenses?.toLocaleString() || "0"}
+            </h2>
+          </div>
+        </Link>
 
         {/* Low Stock */}
-        <div className="bg-white p-6 rounded-lg shadow border-l-4 border-orange-500">
-          <p className="text-sm text-gray-500 mb-1">Low Stock Items</p>
-          <h2 className="text-2xl font-bold text-gray-800">
-            {data.lowStockCount || 0}
-          </h2>
-        </div>
+        <Link to="/stocks" className="block">
+          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-orange-500 hover:shadow-lg transition-shadow cursor-pointer">
+            <p className="text-sm text-gray-500 mb-1">Low Stock Items</p>
+            <h2 className="text-2xl font-bold text-gray-800">
+              {data.lowStockCount || 0}
+            </h2>
+          </div>
+        </Link>
       </div>
 
       {/* Last 7 Days (Optional Visualization - List for now) */}
