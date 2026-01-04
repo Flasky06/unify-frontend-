@@ -227,14 +227,32 @@ const Dashboard = () => {
   };
 
   const updateCartQuantity = (id, newQty, type) => {
-    if (newQty <= 0) return;
+    // If input is empty string, allow it (user deleting input)
+    if (newQty === "" || newQty === undefined) {
+      setCart((prev) =>
+        prev.map((item) => {
+          const isTarget =
+            type === "SERVICE" ? item.serviceId === id : item.productId === id;
+          return isTarget ? { ...item, quantity: "" } : item;
+        })
+      );
+      return;
+    }
+
+    const qtyNum = parseFloat(newQty);
+    if (isNaN(qtyNum)) return; // Don't update if invalid number (e.g. text)
+
+    // Only check <= 0 for finished inputs (number type), but for typing, let's allow partials?
+    // Actually, sticking to checking limits on the parsed number is safer.
+    if (qtyNum <= 0) return;
+
     setCart((prev) =>
       prev.map((item) => {
         const isTarget =
           type === "SERVICE" ? item.serviceId === id : item.productId === id;
 
         if (isTarget) {
-          if (type !== "SERVICE" && newQty > item.maxStock) {
+          if (type !== "SERVICE" && qtyNum > item.maxStock) {
             setToast({
               isOpen: true,
               message: `Only ${item.maxStock} units available`,
@@ -242,6 +260,8 @@ const Dashboard = () => {
             });
             return item;
           }
+          // Store exactly what was passed (newQty) to preserve typing "1."
+          // But ensure we store number if it came from buttons
           return { ...item, quantity: newQty };
         }
         return item;
@@ -559,7 +579,7 @@ const Dashboard = () => {
                                 item.type === "SERVICE"
                                   ? item.serviceId
                                   : item.productId,
-                                item.quantity - 1,
+                                parseFloat(item.quantity) - 1,
                                 item.type
                               )
                             }
@@ -574,16 +594,13 @@ const Dashboard = () => {
                             max={item.type === "SERVICE" ? 9999 : item.maxStock}
                             value={item.quantity}
                             onChange={(e) => {
-                              const val = parseFloat(e.target.value);
-                              if (!isNaN(val)) {
-                                updateCartQuantity(
-                                  item.type === "SERVICE"
-                                    ? item.serviceId
-                                    : item.productId,
-                                  val,
-                                  item.type
-                                );
-                              }
+                              updateCartQuantity(
+                                item.type === "SERVICE"
+                                  ? item.serviceId
+                                  : item.productId,
+                                e.target.value,
+                                item.type
+                              );
                             }}
                             className="w-12 text-center border-none focus:ring-0 p-1 text-sm font-medium remove-arrow"
                           />
@@ -593,7 +610,7 @@ const Dashboard = () => {
                                 item.type === "SERVICE"
                                   ? item.serviceId
                                   : item.productId,
-                                item.quantity + 1,
+                                parseFloat(item.quantity) + 1,
                                 item.type
                               )
                             }
