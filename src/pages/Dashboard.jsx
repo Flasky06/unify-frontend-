@@ -25,6 +25,7 @@ const Dashboard = () => {
   const [processing, setProcessing] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState([]);
+  const [saleDiscount, setSaleDiscount] = useState(0); // Global discount
   const [isCartModalOpen, setCartModalOpen] = useState(false);
   const [toast, setToast] = useState({
     isOpen: false,
@@ -123,6 +124,7 @@ const Dashboard = () => {
   // Clear cart when shop changes
   useEffect(() => {
     setCart([]);
+    setSaleDiscount(0);
   }, [selectedShopId]);
 
   // Fetch Stock when shop or products change
@@ -299,6 +301,19 @@ const Dashboard = () => {
     );
   };
 
+  const calculateSubTotal = () => {
+    return cart.reduce(
+      (sum, item) => sum + (item.price - (item.discount || 0)) * item.quantity,
+      0
+    );
+  };
+
+  const calculateFinalTotal = () => {
+    const subTotal = calculateSubTotal();
+    const final = subTotal - saleDiscount;
+    return final > 0 ? final : 0;
+  };
+
   const processSale = async () => {
     if (!selectedShopId || cart.length === 0) return;
     setProcessing(true);
@@ -312,6 +327,7 @@ const Dashboard = () => {
           unitPrice: item.price,
           discountAmount: item.discount || 0,
         })),
+        discountAmount: saleDiscount,
         paymentMethodId: paymentMethod,
       };
 
@@ -322,6 +338,7 @@ const Dashboard = () => {
         type: "success",
       });
       setCart([]);
+      setSaleDiscount(0);
       setCheckoutModalOpen(false);
       fetchStock(selectedShopId); // Refresh stock
     } catch (err) {
@@ -672,7 +689,7 @@ const Dashboard = () => {
                 Total Amount
               </span>
               <span className="text-3xl font-bold text-gray-900">
-                KSH {calculateTotal().toLocaleString()}
+                KSH {calculateSubTotal().toLocaleString()}
               </span>
             </div>
             <div className="flex gap-4">
@@ -708,11 +725,31 @@ const Dashboard = () => {
           <div className="bg-gray-50 p-4 rounded-lg text-center">
             <p className="text-gray-600 mb-1">Total to Pay</p>
             <p className="text-3xl font-bold text-blue-600">
-              KSH {calculateTotal().toLocaleString()}
+              KSH {calculateFinalTotal().toLocaleString()}
             </p>
             <p className="text-sm text-gray-500 mt-2">
               {cart.reduce((a, b) => a + b.quantity, 0)} Items
             </p>
+          </div>
+
+            <div className="flex justify-between text-sm text-gray-500 mt-1">
+               <span>Subtotal: KSH {calculateSubTotal().toLocaleString()}</span>
+            </div>
+          </div>
+
+          <div>
+             <label className="block text-sm font-medium text-gray-700 mb-1">Total Discount</label>
+             <Input 
+               type="number"
+               min="0"
+               placeholder="0.00"
+               value={saleDiscount > 0 ? saleDiscount : ""}
+               onChange={(e) => {
+                 const val = parseFloat(e.target.value);
+                 if (isNaN(val)) setSaleDiscount(0);
+                 else setSaleDiscount(val);
+               }}
+             />
           </div>
 
           <div>
