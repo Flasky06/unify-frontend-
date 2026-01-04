@@ -82,10 +82,11 @@ export const InvoiceList = () => {
     }
 
     try {
-      await saleService.addPayment(selectedSale.id, {
-        amount: parseFloat(paymentAmount),
-        paymentMethodId: 1, // Default - should be selectable
-      });
+      await saleService.addPayment(
+        selectedSale.id,
+        parseFloat(paymentAmount),
+        1 // Default payment method - should be selectable
+      );
 
       setToast({
         isOpen: true,
