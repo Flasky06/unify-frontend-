@@ -86,12 +86,8 @@ export const InvoiceList = () => {
 
   const handlePayInvoice = (sale) => {
     setSelectedSale(sale);
-    // Use balance if available, otherwise use total
-    const amountDue =
-      sale.balance !== null && sale.balance !== undefined
-        ? sale.balance
-        : sale.total;
-    setPaymentAmount(amountDue);
+    // Balance should never be null, use it directly (falls back to total if undefined for safety)
+    setPaymentAmount(sale.balance ?? sale.total);
     setPaymentModalOpen(true);
   };
 
