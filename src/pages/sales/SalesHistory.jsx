@@ -284,18 +284,6 @@ const SalesHistory = () => {
       header: "Actions",
       render: (row) => (
         <div className="flex gap-2">
-          {row.status === "PENDING" && (
-            <Button
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                handlePayInvoice(row);
-              }}
-              className="bg-green-600 hover:bg-green-700 text-white px-3"
-            >
-              Pay
-            </Button>
-          )}
           {row.status !== "CANCELLED" && (
             <Button
               variant="ghost"
