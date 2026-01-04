@@ -575,7 +575,7 @@ export const ExpenseList = () => {
             label="Expense Name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="e.g., Electricity, Repair..."
+            placeholder="e.g., Shop Rent, Vehicle Fuel"
             required
           />
 

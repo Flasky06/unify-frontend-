@@ -346,7 +346,7 @@ export const ServiceList = () => {
                 setFormData({ ...formData, name: e.target.value })
               }
               required
-              placeholder="e.g., Shoe Cleaning"
+              placeholder="e.g., Oil Change"
             />
           </div>
 
@@ -396,7 +396,7 @@ export const ServiceList = () => {
                   setFormData({ ...formData, unit: e.target.value })
                 }
                 required
-                placeholder="e.g., per pair"
+                placeholder="e.g., per service"
               />
             </div>
           </div>

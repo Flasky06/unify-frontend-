@@ -215,7 +215,7 @@ export const BrandList = () => {
             label="Brand Name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="e.g., Nike, Coca-Cola"
+            placeholder="e.g., Toyota"
             required
           />
 

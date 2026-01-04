@@ -249,7 +249,7 @@ export const ServiceCategoryList = () => {
                 setFormData({ ...formData, name: e.target.value })
               }
               required
-              placeholder="e.g., Laundry Services"
+              placeholder="e.g., Maintenance"
             />
           </div>
 

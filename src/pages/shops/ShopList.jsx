@@ -271,7 +271,7 @@ export const ShopList = () => {
             label="Shop Name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="e.g., Main Branch"
+            placeholder="e.g., Nairobi CBD Branch"
             required
           />
 

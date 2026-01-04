@@ -223,7 +223,7 @@ export const ExpenseCategoryList = () => {
             label="Category Name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="e.g., Rent, Utilities, Salaries"
+            placeholder="e.g., Rent, Utilities, Staff Salaries"
             required
           />
 

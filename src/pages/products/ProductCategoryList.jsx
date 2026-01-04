@@ -217,7 +217,7 @@ export const ProductCategoryList = () => {
             label="Category Name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="e.g., Electronics, Beverages"
+            placeholder="e.g., Brakes"
             required
           />
 
