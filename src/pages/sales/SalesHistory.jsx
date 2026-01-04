@@ -296,17 +296,6 @@ const SalesHistory = () => {
               Pay
             </Button>
           )}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleViewLogs(row);
-            }}
-            className="text-gray-600 hover:bg-gray-100 font-medium px-3"
-          >
-            History
-          </Button>
           {row.status !== "CANCELLED" && (
             <Button
               variant="ghost"

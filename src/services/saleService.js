@@ -20,6 +20,19 @@ export const saleService = {
   },
 
   /**
+   * Get sales with filters
+   */
+  getSales: async (filters) => {
+    const params = new URLSearchParams();
+    if (filters?.startDate) params.append("startDate", filters.startDate);
+    if (filters?.endDate) params.append("endDate", filters.endDate);
+    if (filters?.shopId) params.append("shopId", filters.shopId);
+
+    const queryString = params.toString();
+    return await apiFetch(`/sales${queryString ? `?${queryString}` : ""}`);
+  },
+
+  /**
    * Get sale by ID
    */
   getSaleById: async (id) => {
