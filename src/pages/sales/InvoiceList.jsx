@@ -67,8 +67,10 @@ export const InvoiceList = () => {
     try {
       setLoading(true);
       const data = await saleService.getSales(filters);
-      // Filter only PENDING invoices
-      const invoices = (data || []).filter((sale) => sale.status === "PENDING");
+      // Filter PENDING and PARTIALLY_PAID invoices (those with outstanding balance)
+      const invoices = (data || []).filter(
+        (sale) => sale.status === "PENDING" || sale.status === "PARTIALLY_PAID"
+      );
       setSales(invoices);
     } catch (err) {
       console.error("Failed to fetch invoices", err);
@@ -84,7 +86,12 @@ export const InvoiceList = () => {
 
   const handlePayInvoice = (sale) => {
     setSelectedSale(sale);
-    setPaymentAmount(sale.balance || sale.total);
+    // Use balance if available, otherwise use total
+    const amountDue =
+      sale.balance !== null && sale.balance !== undefined
+        ? sale.balance
+        : sale.total;
+    setPaymentAmount(amountDue);
     setPaymentModalOpen(true);
   };
 
