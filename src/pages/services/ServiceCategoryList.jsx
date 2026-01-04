@@ -35,11 +35,7 @@ export const ServiceCategoryList = () => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const businessId = user?.businessId;
-      if (!businessId) {
-        throw new Error("Business ID not found");
-      }
-      const data = await serviceCategoryService.getAll(businessId);
+      const data = await serviceCategoryService.getAll();
       setCategories(data || []);
     } catch (err) {
       console.error("Failed to fetch service categories", err);
@@ -60,11 +56,10 @@ export const ServiceCategoryList = () => {
     setError(null);
     setSubmitting(true);
     try {
-      const businessId = user?.businessId;
       if (editingCategory) {
         await serviceCategoryService.update(editingCategory.id, formData);
       } else {
-        await serviceCategoryService.create(businessId, formData);
+        await serviceCategoryService.create(formData);
       }
       fetchCategories();
       closeModal();

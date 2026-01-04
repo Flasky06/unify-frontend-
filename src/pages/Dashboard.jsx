@@ -8,7 +8,7 @@ import { shopService } from "../services/shopService";
 import { productService } from "../services/productService";
 import { stockService } from "../services/stockService";
 import { saleService } from "../services/saleService";
-import { serviceProductService } from "../services/serviceProductService";
+import { serviceItemService } from "../services/serviceItemService";
 import { paymentMethodService } from "../services/paymentMethodService";
 import { Toast } from "../components/ui/ConfirmDialog";
 
@@ -178,9 +178,7 @@ const Dashboard = () => {
 
         // Fetch services if businessId is available
         if (user?.businessId) {
-          const servicesData = await serviceProductService.getAll(
-            user.businessId
-          );
+          const servicesData = await serviceItemService.getAll();
           setServices(servicesData || []);
         }
 

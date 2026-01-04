@@ -3,7 +3,7 @@ import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
-import { serviceProductService } from "../../services/serviceProductService";
+import { serviceItemService } from "../../services/serviceItemService";
 import { serviceCategoryService } from "../../services/serviceCategoryService";
 import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
 import useAuthStore from "../../store/authStore";
@@ -52,8 +52,8 @@ export const ServiceList = () => {
       }
 
       const [servicesData, categoriesData] = await Promise.all([
-        serviceProductService.getAll(businessId, selectedCategory || null),
-        serviceCategoryService.getAll(businessId),
+        serviceItemService.getAll(selectedCategory || null),
+        serviceCategoryService.getAll(),
       ]);
 
       setServices(servicesData || []);
@@ -77,7 +77,6 @@ export const ServiceList = () => {
     setError(null);
     setSubmitting(true);
     try {
-      const businessId = user?.businessId;
       const dataToSubmit = {
         ...formData,
         price: parseFloat(formData.price),
@@ -86,9 +85,9 @@ export const ServiceList = () => {
       };
 
       if (editingService) {
-        await serviceProductService.update(editingService.id, dataToSubmit);
+        await serviceItemService.update(editingService.id, dataToSubmit);
       } else {
-        await serviceProductService.create(businessId, dataToSubmit);
+        await serviceItemService.create(dataToSubmit);
       }
       fetchData();
       closeModal();
@@ -113,7 +112,7 @@ export const ServiceList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await serviceProductService.delete(id);
+      await serviceItemService.delete(id);
       fetchData();
       setToast({
         isOpen: true,
