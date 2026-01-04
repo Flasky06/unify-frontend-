@@ -218,19 +218,19 @@ export const ExpenseList = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleVoid = async (id) => {
     try {
-      await expenseService.delete(id);
+      await expenseService.void(id);
       fetchData();
       setToast({
         isOpen: true,
-        message: "Expense deleted successfully",
+        message: "Expense voided successfully",
         type: "success",
       });
     } catch (err) {
       setToast({
         isOpen: true,
-        message: err.message || "Failed to delete expense",
+        message: err.message || "Failed to void expense",
         type: "error",
       });
     }
@@ -322,6 +322,19 @@ export const ExpenseList = () => {
     },
     { header: "Category", accessor: "categoryName" },
     { header: "Shop", accessor: "shopName" },
+    {
+      header: "Status",
+      render: (expense) =>
+        expense.voided ? (
+          <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 font-medium">
+            VOIDED
+          </span>
+        ) : (
+          <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 font-medium">
+            ACTIVE
+          </span>
+        ),
+    },
     ...(user?.role === "SALES_REP"
       ? []
       : [
@@ -354,13 +367,13 @@ export const ExpenseList = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
+                  className="text-orange-600 hover:bg-orange-50 hover:text-orange-700 font-medium px-3"
                   onClick={(e) => {
                     e.stopPropagation();
                     setConfirmDialog({ isOpen: true, expenseId: expense.id });
                   }}
                 >
-                  Delete
+                  Void
                 </Button>
               </div>
             ),
@@ -524,6 +537,11 @@ export const ExpenseList = () => {
               emptyMessage="No expenses found matching your criteria."
               showViewAction={false}
               searchable={false}
+              getRowClassName={(expense) =>
+                expense.voided
+                  ? "opacity-60 bg-gray-50 line-through text-gray-500"
+                  : ""
+              }
             />
             {/* Pagination Controls Reuse */}
             {/* ... Simplified pagination render ... */}
@@ -692,11 +710,11 @@ export const ExpenseList = () => {
       <ConfirmDialog
         isOpen={confirmDialog.isOpen}
         onClose={() => setConfirmDialog({ isOpen: false, expenseId: null })}
-        onConfirm={() => handleDelete(confirmDialog.expenseId)}
-        title="Delete Expense"
-        message="Are you sure you want to delete this expense? This cannot be undone."
-        confirmText="Delete"
-        variant="danger"
+        onConfirm={() => handleVoid(confirmDialog.expenseId)}
+        title="Void Expense"
+        message="Are you sure you want to void this expense? This will mark it as cancelled but maintain the record for audit purposes."
+        confirmText="Void"
+        variant="warning"
       />
 
       <AuditLogModal

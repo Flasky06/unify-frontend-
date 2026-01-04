@@ -43,6 +43,12 @@ export const expenseService = {
     });
   },
 
+  async void(id) {
+    return await apiFetch(`/expenses/${id}/void`, {
+      method: "POST",
+    });
+  },
+
   async getLogs(id) {
     return await apiFetch(`/expenses/${id}/logs`);
   },

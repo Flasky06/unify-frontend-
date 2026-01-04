@@ -40,6 +40,8 @@ export const ConfirmDialog = ({
               className={
                 variant === "danger"
                   ? "bg-red-600 hover:bg-red-700 text-white"
+                  : variant === "warning"
+                  ? "bg-orange-600 hover:bg-orange-700 text-white"
                   : ""
               }
             >

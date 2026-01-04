@@ -184,6 +184,19 @@ const SalesHistory = () => {
       accessor: "total",
       render: (row) => `KSH ${row.total.toLocaleString()}`,
     },
+    {
+      header: "Status",
+      render: (row) =>
+        row.status === "CANCELLED" ? (
+          <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 font-medium">
+            VOIDED
+          </span>
+        ) : (
+          <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 font-medium">
+            ACTIVE
+          </span>
+        ),
+    },
 
     {
       header: "Actions",
@@ -208,7 +221,7 @@ const SalesHistory = () => {
                 e.stopPropagation();
                 setConfirmDialog({ isOpen: true, saleId: row.id });
               }}
-              className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
+              className="text-orange-600 hover:bg-orange-50 hover:text-orange-700 font-medium px-3"
             >
               Void
             </Button>
@@ -288,6 +301,11 @@ const SalesHistory = () => {
           emptyMessage="No sales found."
           showViewAction={false}
           searchable={false}
+          getRowClassName={(sale) =>
+            sale.status === "CANCELLED"
+              ? "opacity-60 bg-gray-50 line-through text-gray-500"
+              : ""
+          }
         />
       </div>
 
@@ -491,7 +509,7 @@ const SalesHistory = () => {
                         saleId: selectedSale.id,
                       })
                     }
-                    className="text-red-600 border-red-200 hover:bg-red-50"
+                    className="text-orange-600 border-orange-200 hover:bg-orange-50"
                   >
                     Void Sale
                   </Button>
@@ -511,9 +529,9 @@ const SalesHistory = () => {
         onClose={() => setConfirmDialog({ isOpen: false, saleId: null })}
         onConfirm={() => handleVoidSale(confirmDialog.saleId)}
         title="Void Sale"
-        message="Are you sure you want to void this sale? This action cannot be undone."
-        confirmText="Yes, Void Sale"
-        variant="danger"
+        message="Are you sure you want to void this sale? This will mark it as cancelled but maintain the record for audit purposes."
+        confirmText="Void"
+        variant="warning"
       />
 
       {/* Audit Log Modal */}

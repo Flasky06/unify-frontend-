@@ -13,6 +13,7 @@ const Table = ({
   searchPlaceholder = "Search...",
   pageSize = 10,
   pageSizeOptions = [10, 25, 50, 100],
+  getRowClassName,
 }) => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -137,11 +138,11 @@ const Table = ({
                   <tr
                     key={rowIndex}
                     onClick={() => onRowClick?.(row)}
-                    className={
+                    className={`${
                       onRowClick
                         ? "cursor-pointer hover:bg-gray-50 transition"
                         : ""
-                    }
+                    } ${getRowClassName ? getRowClassName(row) : ""}`}
                   >
                     {columns.map((column, colIndex) => (
                       <td
