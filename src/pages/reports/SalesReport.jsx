@@ -58,13 +58,13 @@ export const SalesReport = () => {
 
     switch (newPeriod) {
       case "daily":
-        start = now;
-        end = now;
+        start = new Date();
+        end = new Date();
         break;
       case "weekly":
         const day = now.getDay();
-        const diff = now.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-        start = new Date(now.setDate(diff));
+        const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+        start = new Date(now.getFullYear(), now.getMonth(), diff);
         end = new Date();
         break;
       case "monthly":
@@ -77,7 +77,7 @@ export const SalesReport = () => {
         break;
       case "custom":
         // Keep existing range or default to today
-        break;
+        return; // Don't update dateRange for custom
       default:
         break;
     }
