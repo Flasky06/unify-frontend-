@@ -7,6 +7,7 @@ import { saleService } from "../../services/saleService";
 import { Toast } from "../../components/ui/ConfirmDialog";
 import useAuthStore from "../../store/authStore";
 import { shopService } from "../../services/shopService";
+import { paymentMethodService } from "../../services/paymentMethodService";
 
 export const InvoiceList = () => {
   const { user } = useAuthStore();
@@ -17,6 +18,8 @@ export const InvoiceList = () => {
   const [isDetailsModalOpen, setDetailsModalOpen] = useState(false);
   const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState("");
+  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [toast, setToast] = useState({
     isOpen: false,
     message: "",
@@ -31,6 +34,7 @@ export const InvoiceList = () => {
 
   useEffect(() => {
     fetchShops();
+    fetchPaymentMethods();
   }, []);
 
   useEffect(() => {
@@ -43,6 +47,19 @@ export const InvoiceList = () => {
       setShops(data || []);
     } catch (err) {
       console.error("Failed to fetch shops", err);
+    }
+  };
+
+  const fetchPaymentMethods = async () => {
+    try {
+      const data = await paymentMethodService.getAll();
+      const activeMethods = (data || []).filter((pm) => pm.isActive);
+      setPaymentMethods(activeMethods);
+      if (activeMethods.length > 0) {
+        setSelectedPaymentMethod(activeMethods[0].id);
+      }
+    } catch (err) {
+      console.error("Failed to fetch payment methods", err);
     }
   };
 
@@ -81,11 +98,20 @@ export const InvoiceList = () => {
       return;
     }
 
+    if (!selectedPaymentMethod) {
+      setToast({
+        isOpen: true,
+        message: "Please select a payment method",
+        type: "error",
+      });
+      return;
+    }
+
     try {
       await saleService.addPayment(
         selectedSale.id,
         parseFloat(paymentAmount),
-        1 // Default payment method - should be selectable
+        selectedPaymentMethod
       );
 
       setToast({
@@ -399,6 +425,25 @@ export const InvoiceList = () => {
                 onChange={(e) => setPaymentAmount(e.target.value)}
                 placeholder="Enter amount"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Payment Method
+              </label>
+              <select
+                value={selectedPaymentMethod || ""}
+                onChange={(e) =>
+                  setSelectedPaymentMethod(parseInt(e.target.value))
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                {paymentMethods.map((pm) => (
+                  <option key={pm.id} value={pm.id}>
+                    {pm.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="flex gap-3 pt-4">
