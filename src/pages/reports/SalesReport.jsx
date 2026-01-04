@@ -247,32 +247,32 @@ export const SalesReport = () => {
           </div>
 
           {/* Top Products */}
-          <div className="bg-gray-800 rounded-lg shadow-lg border border-gray-700 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-700">
-              <h2 className="text-lg font-medium text-white">
+          <div className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-medium text-gray-900">
                 Top Selling Products
               </h2>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-gray-400">
-                <thead className="text-xs uppercase bg-gray-900/50 text-gray-300">
+              <table className="w-full text-left text-sm text-gray-700">
+                <thead className="text-xs uppercase bg-gray-50 text-gray-700">
                   <tr>
                     <th className="px-6 py-3">Product Name</th>
                     <th className="px-6 py-3 text-right">Qty Sold</th>
                     <th className="px-6 py-3 text-right">Revenue</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-700">
+                <tbody className="divide-y divide-gray-200">
                   {data?.topProducts?.length > 0 ? (
                     data.topProducts.map((product, idx) => (
-                      <tr key={idx} className="hover:bg-gray-700/50">
-                        <td className="px-6 py-4 font-medium text-white">
+                      <tr key={idx} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 font-medium text-gray-900">
                           {product.productName}
                         </td>
                         <td className="px-6 py-4 text-right">
                           {product.quantity}
                         </td>
-                        <td className="px-6 py-4 text-right text-yellow-400">
+                        <td className="px-6 py-4 text-right text-yellow-600">
                           {formatCurrency(product.revenue)}
                         </td>
                       </tr>

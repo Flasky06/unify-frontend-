@@ -343,15 +343,15 @@ const StockMovementReport = () => {
           </div>
 
           {/* Movement Table */}
-          <div className="bg-gray-800 rounded-lg shadow-lg border border-gray-700 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-700">
-              <h2 className="text-lg font-medium text-white">
+          <div className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-medium text-gray-900">
                 Detailed Product Movement
               </h2>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-gray-400">
-                <thead className="text-xs uppercase bg-gray-900/50 text-gray-300">
+              <table className="w-full text-left text-sm text-gray-700">
+                <thead className="text-xs uppercase bg-gray-50 text-gray-700">
                   <tr>
                     <th className="px-6 py-3">Product Name</th>
                     <th className="px-6 py-3 text-right">Opening</th>
@@ -360,47 +360,47 @@ const StockMovementReport = () => {
                     <th className="px-6 py-3 text-right">Returns</th>
                     <th className="px-6 py-3 text-right">Closing</th>
                     <th className="px-6 py-3 text-right">Revenue</th>
-                    <th className="px-6 py-3 text-right text-emerald-400">
+                    <th className="px-6 py-3 text-right text-emerald-600">
                       Profit
                     </th>
                     <th className="px-6 py-3 text-right">Net Move</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-700">
+                <tbody className="divide-y divide-gray-200">
                   {reportData?.productMovements?.length > 0 ? (
                     reportData.productMovements.map((item) => (
-                      <tr key={item.productId} className="hover:bg-gray-700/50">
-                        <td className="px-6 py-4 font-medium text-white truncate max-w-xs">
+                      <tr key={item.productId} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 font-medium text-gray-900 truncate max-w-xs">
                           {item.productName}
                         </td>
                         <td className="px-6 py-4 text-right">
                           {formatNumber(item.openingStock)}
                         </td>
-                        <td className="px-6 py-4 text-right text-blue-400">
+                        <td className="px-6 py-4 text-right text-blue-600">
                           {item.stockAdded || "-"}
                         </td>
-                        <td className="px-6 py-4 text-right text-red-400">
+                        <td className="px-6 py-4 text-right text-red-600">
                           {item.stockSold || "-"}
                         </td>
-                        <td className="px-6 py-4 text-right text-orange-400">
+                        <td className="px-6 py-4 text-right text-orange-600">
                           {item.stockReturned || "-"}
                         </td>
-                        <td className="px-6 py-4 text-right font-medium text-white">
+                        <td className="px-6 py-4 text-right font-medium text-gray-900">
                           {formatNumber(item.closingStock)}
                         </td>
-                        <td className="px-6 py-4 text-right text-yellow-400">
+                        <td className="px-6 py-4 text-right text-yellow-600">
                           {formatCurrency(item.salesRevenue)}
                         </td>
-                        <td className="px-6 py-4 text-right text-emerald-400 font-medium">
+                        <td className="px-6 py-4 text-right text-emerald-600 font-medium">
                           {formatCurrency(item.profit)}
                         </td>
                         <td
                           className={`px-6 py-4 text-right font-medium ${
                             item.netMovement > 0
-                              ? "text-green-400"
+                              ? "text-green-600"
                               : item.netMovement < 0
-                              ? "text-red-400"
-                              : "text-gray-400"
+                              ? "text-red-600"
+                              : "text-gray-600"
                           }`}
                         >
                           {item.netMovement > 0 ? "+" : ""}
