@@ -27,11 +27,85 @@ const Dashboard = () => {
   const [products, setProducts] = useState([]);
   const [saleDiscount, setSaleDiscount] = useState(0); // Global discount
   const [isCartModalOpen, setCartModalOpen] = useState(false);
+
+  // Invoice / Customer Details State
+  const [isInvoiceModalOpen, setInvoiceModalOpen] = useState(false);
+  const [customerDetails, setCustomerDetails] = useState({
+    name: "",
+    phone: "",
+    note: "",
+  });
+
   const [toast, setToast] = useState({
     isOpen: false,
     message: "",
     type: "success",
   });
+
+  // ... [fetch logic] ... (omitted for brevity, assume existing)
+
+  // ... [calculations] ...
+
+  const processSale = async (status = "COMPLETED") => {
+    if (!selectedShopId || cart.length === 0) return;
+
+    // For COMPLETED sales, payment method is required
+    if (status === "COMPLETED" && !paymentMethod) {
+      setToast({
+        isOpen: true,
+        message: "Please select a payment method",
+        type: "error",
+      });
+      return;
+    }
+
+    setProcessing(true);
+    try {
+      const saleData = {
+        shopId: parseInt(selectedShopId),
+        items: cart.map((item) => ({
+          productId: item.type === "SERVICE" ? null : item.productId,
+          serviceId: item.type === "SERVICE" ? item.serviceId : null,
+          quantity: item.quantity,
+          unitPrice: item.price,
+          discountAmount: item.discount || 0,
+        })),
+        paymentMethodId: status === "COMPLETED" ? paymentMethod : null,
+        discountAmount: saleDiscount,
+        status: status,
+        customerName: customerDetails.name,
+        customerPhone: customerDetails.phone,
+        saleNote: customerDetails.note,
+      };
+
+      await saleService.createSale(saleData);
+
+      setToast({
+        isOpen: true,
+        message:
+          status === "PENDING"
+            ? "Invoice saved successfully!"
+            : "Sale processed successfully!",
+        type: "success",
+      });
+
+      // Reset State
+      setCart([]);
+      setSaleDiscount(0);
+      setCheckoutModalOpen(false);
+      setInvoiceModalOpen(false);
+      setCustomerDetails({ name: "", phone: "", note: "" });
+    } catch (error) {
+      console.error("Sale processing error:", error);
+      setToast({
+        isOpen: true,
+        message: error.response?.data?.message || "Failed to process sale",
+        type: "error",
+      });
+    } finally {
+      setProcessing(false);
+    }
+  };
 
   // ... [fetch logic]
 
@@ -803,16 +877,99 @@ const Dashboard = () => {
                 setCheckoutModalOpen(false);
                 setCartModalOpen(true);
               }}
+              className="px-4"
+            >
+              Back
+            </Button>
+
+            <Button
+              variant="outline"
+              onClick={() => {
+                setCheckoutModalOpen(false);
+                setInvoiceModalOpen(true);
+              }}
+              className="flex-1 border-blue-600 text-blue-600 hover:bg-blue-50"
+            >
+              Save as Invoice
+            </Button>
+
+            <Button
+              onClick={() => processSale("COMPLETED")}
+              disabled={processing}
+              className="flex-[2] py-3 text-lg bg-green-600 hover:bg-green-700"
+            >
+              {processing ? "Processing..." : "Complete Payment"}
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Invoice Details Modal */}
+      <Modal
+        isOpen={isInvoiceModalOpen}
+        onClose={() => setInvoiceModalOpen(false)}
+        title="Invoice Details"
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Customer Name (Optional)
+            </label>
+            <Input
+              placeholder="Enter customer name"
+              value={customerDetails.name}
+              onChange={(e) =>
+                setCustomerDetails({ ...customerDetails, name: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Phone Number (Optional)
+            </label>
+            <Input
+              placeholder="Enter phone number"
+              value={customerDetails.phone}
+              onChange={(e) =>
+                setCustomerDetails({
+                  ...customerDetails,
+                  phone: e.target.value,
+                })
+              }
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Note (Optional)
+            </label>
+            <textarea
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              rows="3"
+              placeholder="Add a note (e.g., Project details)"
+              value={customerDetails.note}
+              onChange={(e) =>
+                setCustomerDetails({ ...customerDetails, note: e.target.value })
+              }
+            />
+          </div>
+
+          <div className="pt-4 flex gap-3">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setInvoiceModalOpen(false);
+                setCheckoutModalOpen(true);
+              }}
               className="flex-1"
             >
               Back
             </Button>
             <Button
-              onClick={processSale}
+              onClick={() => processSale("PENDING")}
               disabled={processing}
-              className="flex-[2] py-3 text-lg bg-green-600 hover:bg-green-700"
+              className="flex-[2] bg-blue-600 hover:bg-blue-700"
             >
-              {processing ? "Processing..." : "Complete Payment"}
+              {processing ? "Saving..." : "Save Invoice"}
             </Button>
           </div>
         </div>

@@ -7,19 +7,28 @@ import AuditLogModal from "../../components/ui/AuditLogModal";
 import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
 import { saleService } from "../../services/saleService";
 import { shopService } from "../../services/shopService";
+import { paymentMethodService } from "../../services/paymentMethodService";
 import { format } from "date-fns";
 
 const SalesHistory = () => {
   const [sales, setSales] = useState([]);
   const [shops, setShops] = useState([]);
+  const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedShopId, setSelectedShopId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL"); // ALL, COMPLETED, PENDING, CANCELLED
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedSale, setSelectedSale] = useState(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+
+  // Payment Modal State
+  const [isPayModalOpen, setIsPayModalOpen] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+  const [processingPayment, setProcessingPayment] = useState(false);
+
   const [auditModal, setAuditModal] = useState({
     isOpen: false,
     logs: [],
@@ -39,6 +48,7 @@ const SalesHistory = () => {
   useEffect(() => {
     fetchShops();
     fetchSales();
+    fetchPaymentMethods();
   }, []);
 
   useEffect(() => {
@@ -55,6 +65,15 @@ const SalesHistory = () => {
       setShops(data);
     } catch (error) {
       console.error("Failed to fetch shops", error);
+    }
+  };
+
+  const fetchPaymentMethods = async () => {
+    try {
+      const data = await paymentMethodService.getAll();
+      setPaymentMethods(data?.filter((pm) => pm.isActive) || []);
+    } catch (error) {
+      console.error("Failed to fetch payment methods");
     }
   };
 
@@ -114,6 +133,43 @@ const SalesHistory = () => {
     }
   };
 
+  const handlePayInvoice = (sale) => {
+    setSelectedSale(sale);
+    if (paymentMethods.length > 0) {
+      setSelectedPaymentMethod(paymentMethods[0].id);
+    }
+    setIsPayModalOpen(true);
+  };
+
+  const confirmPayment = async () => {
+    if (!selectedPaymentMethod) return;
+    setProcessingPayment(true);
+    try {
+      await saleService.updateStatus(
+        selectedSale.id,
+        "COMPLETED",
+        selectedPaymentMethod
+      );
+      setToast({
+        isOpen: true,
+        message: "Invoice paid successfully!",
+        type: "success",
+      });
+      setIsPayModalOpen(false);
+      // Refresh
+      if (selectedShopId) fetchSalesByShop(selectedShopId);
+      else fetchSales();
+    } catch (error) {
+      setToast({
+        isOpen: true,
+        message: "Failed to process payment",
+        type: "error",
+      });
+    } finally {
+      setProcessingPayment(false);
+    }
+  };
+
   const openDetails = (sale) => {
     setSelectedSale(sale);
     setIsDetailsModalOpen(true);
@@ -134,7 +190,14 @@ const SalesHistory = () => {
     // Text search
     const matchesSearch =
       sale.saleNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      sale.customerName?.toLowerCase().includes(searchTerm.toLowerCase()); // Assuming customerName exists, otherwise rely on saleNumber or other fields if available. Let's check columns. Column has saleNumber.
+      sale.customerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      sale.saleNote?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // Status Filter
+    let matchesStatus = true;
+    if (statusFilter !== "ALL") {
+      matchesStatus = sale.status === statusFilter;
+    }
 
     // Date filtering
     let dateMatch = true;
@@ -152,7 +215,7 @@ const SalesHistory = () => {
       }
     }
 
-    return dateMatch && matchesSearch;
+    return dateMatch && matchesSearch && matchesStatus;
   });
 
   const columns = [
@@ -161,12 +224,17 @@ const SalesHistory = () => {
       accessor: "saleNumber",
       triggerView: true,
       render: (row) => (
-        <button
-          onClick={() => openDetails(row)}
-          className="text-blue-600 hover:text-blue-800 hover:underline"
-        >
-          {row.saleNumber}
-        </button>
+        <div>
+          <button
+            onClick={() => openDetails(row)}
+            className="text-blue-600 hover:text-blue-800 hover:underline block"
+          >
+            {row.saleNumber}
+          </button>
+          {row.customerName && (
+            <div className="text-xs text-gray-500">{row.customerName}</div>
+          )}
+        </div>
       ),
     },
     {
@@ -186,22 +254,42 @@ const SalesHistory = () => {
     },
     {
       header: "Status",
-      render: (row) =>
-        row.status === "CANCELLED" ? (
-          <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 font-medium">
-            VOIDED
-          </span>
-        ) : (
+      render: (row) => {
+        if (row.status === "CANCELLED")
+          return (
+            <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 font-medium">
+              VOIDED
+            </span>
+          );
+        if (row.status === "PENDING")
+          return (
+            <span className="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 font-medium">
+              PENDING
+            </span>
+          );
+        return (
           <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 font-medium">
-            ACTIVE
+            COMPLETED
           </span>
-        ),
+        );
+      },
     },
-
     {
       header: "Actions",
       render: (row) => (
-        <div className="flex gap-3">
+        <div className="flex gap-2">
+          {row.status === "PENDING" && (
+            <Button
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePayInvoice(row);
+              }}
+              className="bg-green-600 hover:bg-green-700 text-white px-3"
+            >
+              Pay
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="sm"
@@ -236,11 +324,30 @@ const SalesHistory = () => {
       <div className="flex flex-col gap-3 mb-4 lg:flex-row lg:justify-between lg:items-end">
         <div className="w-full lg:flex-1">
           <h1 className="text-2xl font-bold text-blue-600 mb-3">
-            Sales History
+            Sales & Invoices
           </h1>
-          <div className="w-full lg:max-w-xs mt-2">
+
+          <div className="flex gap-2 mb-3">
+            {["ALL", "COMPLETED", "PENDING", "CANCELLED"].map((status) => (
+              <button
+                key={status}
+                onClick={() => setStatusFilter(status)}
+                className={`px-3 py-1 rounded-full text-sm font-medium transition ${
+                  statusFilter === status
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                {status === "ALL"
+                  ? "All"
+                  : status.charAt(0) + status.slice(1).toLowerCase()}
+              </button>
+            ))}
+          </div>
+
+          <div className="w-full lg:max-w-xs">
             <Input
-              placeholder="Search Sale No..."
+              placeholder="Search Sale No, Customer..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full"
@@ -313,7 +420,11 @@ const SalesHistory = () => {
       <Modal
         isOpen={isDetailsModalOpen}
         onClose={() => setIsDetailsModalOpen(false)}
-        title="Sale Receipt"
+        title={
+          selectedSale?.status === "PENDING"
+            ? "Invoice Details"
+            : "Sale Receipt"
+        }
       >
         {selectedSale && (
           <div className="space-y-6" id="printable-receipt">
@@ -326,11 +437,27 @@ const SalesHistory = () => {
                 {selectedSale.shopName}
               </h2>
               <p className="text-sm text-gray-500 font-mono mb-1">
-                Receipt #{selectedSale.saleNumber}
+                {selectedSale.status === "PENDING" ? "Invoice #" : "Receipt #"}
+                {selectedSale.saleNumber}
               </p>
               <p className="text-sm text-gray-500">
                 {format(new Date(selectedSale.saleDate), "MMM d, yyyy, h:mm a")}
               </p>
+
+              {/* Customer Details in Receipt */}
+              {selectedSale.customerName && (
+                <div className="mt-2 pt-2 border-t border-dashed border-gray-200">
+                  <p className="text-sm font-medium text-gray-800">Bill To:</p>
+                  <p className="text-sm text-gray-600">
+                    {selectedSale.customerName}
+                  </p>
+                  {selectedSale.customerPhone && (
+                    <p className="text-xs text-gray-500">
+                      {selectedSale.customerPhone}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Metadata Badges */}
@@ -342,6 +469,8 @@ const SalesHistory = () => {
                 <span className="font-medium text-gray-900">
                   {selectedSale.paymentMethod
                     ? selectedSale.paymentMethod.replace("_", " ")
+                    : selectedSale.status === "PENDING"
+                    ? "Unpaid"
                     : "-"}
                 </span>
               </div>
@@ -353,6 +482,8 @@ const SalesHistory = () => {
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     selectedSale.status === "CANCELLED"
                       ? "bg-red-100 text-red-800"
+                      : selectedSale.status === "PENDING"
+                      ? "bg-yellow-100 text-yellow-800"
                       : "bg-green-100 text-green-800"
                   } print:border print:border-gray-300`}
                 >
@@ -456,6 +587,16 @@ const SalesHistory = () => {
                         </div>
                       </>
                     )}
+                    {selectedSale.discountAmount > 0 && (
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-green-600 font-medium">
+                          Sale Discount
+                        </span>
+                        <span className="text-green-600 font-medium">
+                          - KSH {selectedSale.discountAmount.toLocaleString()}
+                        </span>
+                      </div>
+                    )}
                     <div className="flex justify-between items-center">
                       <span className="text-lg font-bold text-gray-900">
                         Grand Total
@@ -469,10 +610,22 @@ const SalesHistory = () => {
               })()}
             </div>
 
+            {/* Note Display */}
+            {selectedSale.saleNote && (
+              <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200 mt-4">
+                <p className="text-xs font-bold text-yellow-800 uppercase">
+                  Note
+                </p>
+                <p className="text-sm text-gray-700">{selectedSale.saleNote}</p>
+              </div>
+            )}
+
             {/* Thank You Footer */}
             <div className="text-center pt-6 pb-2">
               <p className="text-gray-400 text-sm font-medium italic">
-                Thank you for your business!
+                {selectedSale.status === "PENDING"
+                  ? "Invoice due for payment."
+                  : "Thank you for your business!"}
               </p>
             </div>
 
@@ -496,10 +649,22 @@ const SalesHistory = () => {
                     d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
                   />
                 </svg>
-                Print Receipt
+                Print{" "}
+                {selectedSale.status === "PENDING" ? "Invoice" : "Receipt"}
               </Button>
 
               <div className="flex gap-2">
+                {selectedSale.status === "PENDING" && (
+                  <Button
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                    onClick={() => {
+                      setIsDetailsModalOpen(false);
+                      handlePayInvoice(selectedSale);
+                    }}
+                  >
+                    Pay
+                  </Button>
+                )}
                 {selectedSale.status !== "CANCELLED" && (
                   <Button
                     variant="outline"
@@ -521,6 +686,60 @@ const SalesHistory = () => {
             </div>
           </div>
         )}
+      </Modal>
+
+      {/* Pay Invoice Modal */}
+      <Modal
+        isOpen={isPayModalOpen}
+        onClose={() => setIsPayModalOpen(false)}
+        title="Collect Payment"
+      >
+        <div className="space-y-4">
+          <div className="bg-gray-50 p-4 rounded-lg text-center">
+            <p className="text-gray-600">Total Due</p>
+            <p className="text-3xl font-bold text-green-600">
+              KSH {selectedSale?.total.toLocaleString()}
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Select Payment Method
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              {paymentMethods.map((pm) => (
+                <button
+                  key={pm.id}
+                  onClick={() => setSelectedPaymentMethod(pm.id)}
+                  className={`p-3 rounded-lg border text-sm font-medium transition ${
+                    selectedPaymentMethod === pm.id
+                      ? "border-green-600 bg-green-50 text-green-700"
+                      : "border-gray-200 hover:bg-gray-50"
+                  }`}
+                >
+                  {pm.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-4">
+            <Button
+              variant="outline"
+              onClick={() => setIsPayModalOpen(false)}
+              className="flex-1"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={confirmPayment}
+              disabled={processingPayment || !selectedPaymentMethod}
+              className="flex-[2] bg-green-600 hover:bg-green-700"
+            >
+              {processingPayment ? "Processing..." : "Confirm Payment"}
+            </Button>
+          </div>
+        </div>
       </Modal>
 
       {/* Confirm Dialog */}

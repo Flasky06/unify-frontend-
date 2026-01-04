@@ -45,4 +45,14 @@ export const saleService = {
   getLogs: async (id) => {
     return await apiFetch(`/sales/${id}/logs`);
   },
+
+  updateStatus: async (saleId, status, paymentMethodId) => {
+    let url = `/sales/${saleId}/status?status=${status}`;
+    if (paymentMethodId) {
+      url += `&paymentMethodId=${paymentMethodId}`;
+    }
+    return await apiFetch(url, {
+      method: "PUT",
+    });
+  },
 };
