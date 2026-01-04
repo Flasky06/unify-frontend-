@@ -29,7 +29,6 @@ const SummaryCard = ({ title, value, icon, isProfit }) => (
 );
 
 export const SalesReport = () => {
-  const [period, setPeriod] = useState("daily");
   const [dateRange, setDateRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
@@ -48,41 +47,6 @@ export const SalesReport = () => {
     };
     loadShops();
   }, []);
-
-  // Period change handler
-  const handlePeriodChange = (newPeriod) => {
-    setPeriod(newPeriod);
-    const now = new Date();
-    let start = new Date();
-    let end = new Date();
-
-    switch (newPeriod) {
-      case "daily":
-        start = new Date();
-        end = new Date();
-        break;
-      case "weekly":
-        const day = now.getDay();
-        const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-        start = new Date(now.getFullYear(), now.getMonth(), diff);
-        end = new Date();
-        break;
-      case "monthly":
-        start = new Date(now.getFullYear(), now.getMonth(), 1);
-        end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-        break;
-      case "yearly":
-        start = new Date(now.getFullYear(), 0, 1);
-        end = new Date(now.getFullYear(), 11, 31);
-        break;
-      case "custom":
-        // Keep existing range or default to today
-        return; // Don't update dateRange for custom
-      default:
-        break;
-    }
-    setDateRange({ startDate: start, endDate: end });
-  };
 
   const { data, isLoading, error } = useQuery({
     queryKey: [
@@ -124,48 +88,30 @@ export const SalesReport = () => {
   return (
     <div className="p-2 md:p-6 space-y-6">
       {/* Header & Filters */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-700">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-lg shadow border border-gray-200">
         <div>
-          <h1 className="text-2xl font-bold text-white">Sales Report</h1>
-          <p className="text-sm text-gray-400 mt-1">
-            {data?.periodLabel || "Select a period"}
+          <h1 className="text-2xl font-bold text-gray-900">Sales Report</h1>
+          <p className="text-sm text-gray-600 mt-1">
+            {format(dateRange.startDate, "MMM d, yyyy")} -{" "}
+            {format(dateRange.endDate, "MMM d, yyyy")}
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          {/* Period Selector */}
-          <div className="flex rounded-lg bg-gray-700 p-1">
-            {["daily", "weekly", "monthly", "yearly", "custom"].map((p) => (
-              <button
-                key={p}
-                onClick={() => handlePeriodChange(p)}
-                className={`px-3 py-1.5 text-xs font-medium rounded-md capitalize transition-all ${
-                  period === p
-                    ? "bg-blue-600 text-white shadow-sm"
-                    : "text-gray-300 hover:text-white hover:bg-gray-600"
-                }`}
-              >
-                {p}
-              </button>
-            ))}
-          </div>
-
-          {/* Date Picker (only if custom) */}
-          {period === "custom" && (
-            <DateRangePicker
-              startDate={dateRange.startDate}
-              endDate={dateRange.endDate}
-              onChange={(start, end) =>
-                setDateRange({ startDate: start, endDate: end })
-              }
-            />
-          )}
+          {/* Date Range Picker */}
+          <DateRangePicker
+            startDate={dateRange.startDate}
+            endDate={dateRange.endDate}
+            onChange={(start, end) =>
+              setDateRange({ startDate: start, endDate: end })
+            }
+          />
 
           {/* Shop Selector */}
           <select
             value={selectedShopId}
             onChange={(e) => setSelectedShopId(e.target.value)}
-            className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
           >
             <option value="">All Shops</option>
             {shops.map((shop) => (
