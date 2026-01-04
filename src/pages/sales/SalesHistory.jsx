@@ -706,17 +706,18 @@ const SalesHistory = () => {
             <div>
               <p className="text-gray-600">Total Due</p>
               <p className="text-xl font-bold text-gray-800">
-                KSH {selectedSale?.total.toLocaleString()}
+                KSH {(selectedSale?.total || 0).toLocaleString()}
               </p>
             </div>
             <div>
               <p className="text-gray-600">Balance</p>
               <p className="text-xl font-bold text-green-600">
                 KSH{" "}
-                {(selectedSale?.balance !== undefined &&
-                selectedSale?.balance !== null
-                  ? selectedSale.balance
-                  : selectedSale?.total
+                {(
+                  (selectedSale?.balance !== undefined &&
+                  selectedSale?.balance !== null
+                    ? selectedSale.balance
+                    : selectedSale?.total) || 0
                 ).toLocaleString()}
               </p>
             </div>
