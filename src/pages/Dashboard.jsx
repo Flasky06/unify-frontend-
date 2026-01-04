@@ -227,7 +227,7 @@ const Dashboard = () => {
   };
 
   const updateCartQuantity = (id, newQty, type) => {
-    if (newQty < 1) return;
+    if (newQty <= 0) return;
     setCart((prev) =>
       prev.map((item) => {
         const isTarget =
@@ -569,11 +569,12 @@ const Dashboard = () => {
                           </button>
                           <input
                             type="number"
-                            min="1"
+                            min="0.1"
+                            step="any"
                             max={item.type === "SERVICE" ? 9999 : item.maxStock}
                             value={item.quantity}
                             onChange={(e) => {
-                              const val = parseInt(e.target.value);
+                              const val = parseFloat(e.target.value);
                               if (!isNaN(val)) {
                                 updateCartQuantity(
                                   item.type === "SERVICE"
