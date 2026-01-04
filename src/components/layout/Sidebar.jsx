@@ -123,11 +123,6 @@ export const Sidebar = ({ isOpen, onClose }) => {
       ),
       children: [
         {
-          name: "Dashboard",
-          path: "/reports",
-          permission: "VIEW_REPORTS",
-        },
-        {
           name: "Sales",
           path: "/reports/sales",
           permission: "VIEW_REPORTS",
