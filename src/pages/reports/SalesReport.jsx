@@ -87,8 +87,8 @@ export const SalesReport = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: [
       "salesReport",
-      dateRange.startDate,
-      dateRange.endDate,
+      format(dateRange.startDate, "yyyy-MM-dd"),
+      format(dateRange.endDate, "yyyy-MM-dd"),
       selectedShopId,
     ],
     queryFn: () =>
@@ -97,7 +97,6 @@ export const SalesReport = () => {
         format(dateRange.endDate, "yyyy-MM-dd"),
         selectedShopId || null
       ),
-    keepPreviousData: true,
   });
 
   const formatCurrency = (val) =>
