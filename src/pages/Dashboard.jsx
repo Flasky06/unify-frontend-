@@ -388,44 +388,7 @@ const Dashboard = () => {
     return final > 0 ? final : 0;
   };
 
-  const processSale = async () => {
-    if (!selectedShopId || cart.length === 0) return;
-    setProcessing(true);
-    try {
-      const saleData = {
-        shopId: parseInt(selectedShopId),
-        items: cart.map((item) => ({
-          productId: item.type === "SERVICE" ? null : item.productId,
-          serviceId: item.type === "SERVICE" ? item.serviceId : null,
-          quantity: item.quantity,
-          unitPrice: item.price,
-          discountAmount: item.discount || 0,
-        })),
-        discountAmount: saleDiscount,
-        paymentMethodId: paymentMethod,
-      };
-
-      await saleService.createSale(saleData);
-      setToast({
-        isOpen: true,
-        message: "Sale processed successfully!",
-        type: "success",
-      });
-      setCart([]);
-      setSaleDiscount(0);
-      setCheckoutModalOpen(false);
-      fetchStock(selectedShopId); // Refresh stock
-    } catch (err) {
-      console.error(" Checkout failed", err);
-      setToast({
-        isOpen: true,
-        message: err.message || "Failed to process sale",
-        type: "error",
-      });
-    } finally {
-      setProcessing(false);
-    }
-  };
+  // processSale is already defined above.
 
   // Deprecated: existing handleCheckout is now processSale or unnecessary
   // But wait, the button 'Checkout' calls handleCheckout in the original code?
