@@ -351,7 +351,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
           permission: "MANAGE_BUSINESS_SETTINGS",
         }, // Assuming Users = Business Settings scope for now
         {
-          name: "Payment Methods",
+          name: "Accounts",
           path: "/payment-methods",
           permission: "MANAGE_BUSINESS_SETTINGS",
         },

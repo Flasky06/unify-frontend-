@@ -6,12 +6,33 @@ import Modal from "../../components/ui/Modal";
 import AuditLogModal from "../../components/ui/AuditLogModal";
 import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
 import { saleService } from "../../services/saleService";
+import { reportService } from "../../services/reportService";
 import { shopService } from "../../services/shopService";
 import { paymentMethodService } from "../../services/paymentMethodService";
 import { format } from "date-fns";
 
+// SummaryCard Component
+const SummaryCard = ({ title, value, icon, isProfit }) => (
+  <div className="bg-white p-4 rounded-lg shadow border-l-4 border-blue-500">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-xs text-gray-500 mb-1">{title}</p>
+        <h3
+          className={`text-lg font-bold ${
+            isProfit ? "text-emerald-600" : "text-gray-800"
+          }`}
+        >
+          {value}
+        </h3>
+      </div>
+      <div>{icon}</div>
+    </div>
+  </div>
+);
+
 const SalesHistory = () => {
   const [sales, setSales] = useState([]);
+  const [stockSummary, setStockSummary] = useState(null);
   const [shops, setShops] = useState([]);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedShopId, setSelectedShopId] = useState("");
@@ -59,6 +80,10 @@ const SalesHistory = () => {
       fetchSales();
     }
   }, [selectedShopId]);
+
+  useEffect(() => {
+    fetchStockSummary();
+  }, [startDate, endDate, selectedShopId]);
 
   const fetchShops = async () => {
     try {
@@ -108,6 +133,25 @@ const SalesHistory = () => {
       setLoading(false);
     }
   };
+
+  const fetchStockSummary = async () => {
+    try {
+      const today = format(new Date(), "yyyy-MM-dd");
+      const start = startDate || today;
+      const end = endDate || today;
+
+      const data = await reportService.getStockMovementReport(
+        start,
+        end,
+        selectedShopId || null
+      );
+      setStockSummary(data?.summary);
+    } catch (error) {
+      console.error("Failed to fetch stock summary", error);
+    }
+  };
+
+  const formatNumber = (val) => new Intl.NumberFormat("en-KE").format(val || 0);
 
   const handleVoidSale = async (saleId) => {
     try {
@@ -310,6 +354,88 @@ const SalesHistory = () => {
             Sales & Invoices
           </h1>
 
+          {/* Stock Movement Summary Cards */}
+          {stockSummary && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <SummaryCard
+                title="Opening Stock"
+                value={formatNumber(stockSummary.totalOpeningStock)}
+                icon={
+                  <svg
+                    className="w-6 h-6 text-blue-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                    />
+                  </svg>
+                }
+              />
+              <SummaryCard
+                title="Closing Stock"
+                value={formatNumber(stockSummary.totalClosingStock)}
+                icon={
+                  <svg
+                    className="w-6 h-6 text-purple-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"
+                    />
+                  </svg>
+                }
+              />
+              <SummaryCard
+                title="Total Sales (Qty)"
+                value={formatNumber(stockSummary.totalSales)}
+                icon={
+                  <svg
+                    className="w-6 h-6 text-green-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                    />
+                  </svg>
+                }
+              />
+              <SummaryCard
+                title="Net Movement"
+                value={formatNumber(stockSummary.netMovement)}
+                icon={
+                  <svg
+                    className="w-6 h-6 text-gray-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                    />
+                  </svg>
+                }
+              />
+            </div>
+          )}
+
           <div className="flex gap-2 mb-3">
             {["ALL", "COMPLETED", "PENDING", "CANCELLED"].map((status) => (
               <button
@@ -447,7 +573,7 @@ const SalesHistory = () => {
             <div className="flex justify-between items-center px-4 py-3 bg-gray-50 rounded-lg print:bg-gray-50">
               <div className="flex flex-col">
                 <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">
-                  Payment
+                  Account To
                 </span>
                 <span className="font-medium text-gray-900">
                   {selectedSale.paymentMethod
@@ -716,7 +842,7 @@ const SalesHistory = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Select Payment Method
+              Select Account
             </label>
             <div className="grid grid-cols-2 gap-2">
               {paymentMethods.map((pm) => (

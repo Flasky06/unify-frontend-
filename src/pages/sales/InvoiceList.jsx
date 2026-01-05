@@ -104,7 +104,7 @@ export const InvoiceList = () => {
     if (!selectedPaymentMethod) {
       setToast({
         isOpen: true,
-        message: "Please select a payment method",
+        message: "Please select an account",
         type: "error",
       });
       return;
@@ -432,7 +432,7 @@ export const InvoiceList = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Payment Method
+                Account To
               </label>
               <select
                 value={selectedPaymentMethod || ""}

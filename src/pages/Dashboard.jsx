@@ -53,7 +53,7 @@ const Dashboard = () => {
     if (status === "COMPLETED" && !paymentMethod) {
       setToast({
         isOpen: true,
-        message: "Please select a payment method",
+        message: "Please select an account",
         type: "error",
       });
       return;
@@ -790,13 +790,12 @@ const Dashboard = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">
-              Payment Method
+              Account To
             </label>
             {paymentMethods.length === 0 ? (
               <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
                 <p className="text-sm text-yellow-800">
-                  No payment methods available. Please add payment methods in
-                  Settings.
+                  No accounts available. Please add accounts in Settings.
                 </p>
               </div>
             ) : (

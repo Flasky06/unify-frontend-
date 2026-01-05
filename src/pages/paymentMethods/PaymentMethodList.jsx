@@ -192,7 +192,7 @@ export const PaymentMethodList = () => {
         <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
           <div className="w-full sm:flex-1 sm:max-w-md">
             <Input
-              placeholder="Search payment methods..."
+              placeholder="Search accounts..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full"
@@ -216,7 +216,7 @@ export const PaymentMethodList = () => {
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              Add Payment Method
+              Add Account
             </Button>
           )}
         </div>
@@ -224,7 +224,7 @@ export const PaymentMethodList = () => {
         <div className="bg-white rounded-lg shadow overflow-hidden">
           {loading ? (
             <div className="p-8 text-center text-gray-500">
-              Loading payment methods...
+              Loading accounts...
             </div>
           ) : (
             <Table
@@ -232,7 +232,7 @@ export const PaymentMethodList = () => {
               data={(paymentMethods || []).filter((method) =>
                 method.name.toLowerCase().includes(searchTerm.toLowerCase())
               )}
-              emptyMessage="No payment methods found."
+              emptyMessage="No accounts found."
               showViewAction={false}
               searchable={false}
             />
@@ -243,7 +243,7 @@ export const PaymentMethodList = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
-        title={editingMethod ? "Edit Payment Method" : "Add New Payment Method"}
+        title={editingMethod ? "Edit Account" : "Add New Account"}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
@@ -253,7 +253,7 @@ export const PaymentMethodList = () => {
           )}
 
           <Input
-            label="Payment Method Name"
+            label="Account Name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="e.g., Cash, BUY GOODS 20647, Paybill Equity 0707051128"
@@ -290,8 +290,8 @@ export const PaymentMethodList = () => {
               {submitting
                 ? "Saving..."
                 : editingMethod
-                ? "Update Method"
-                : "Create Method"}
+                ? "Update Account"
+                : "Create Account"}
             </Button>
           </div>
         </form>
@@ -301,8 +301,8 @@ export const PaymentMethodList = () => {
         isOpen={confirmDialog.isOpen}
         onClose={() => setConfirmDialog({ isOpen: false, methodId: null })}
         onConfirm={() => handleDelete(confirmDialog.methodId)}
-        title="Delete Payment Method"
-        message="Are you sure you want to delete this payment method? It will be marked as inactive and hidden from new sales."
+        title="Delete Account"
+        message="Are you sure you want to delete this account? It will be marked as inactive and hidden from new sales."
         confirmText="Delete"
         variant="danger"
       />

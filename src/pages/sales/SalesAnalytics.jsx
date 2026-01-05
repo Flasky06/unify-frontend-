@@ -226,7 +226,7 @@ export const SalesAnalytics = () => {
                 <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
                   <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
                     <span className="w-1 h-5 bg-blue-600 rounded-full"></span>
-                    Sales by Payment Method
+                    Sales by Account To
                   </h3>
                   <div className="space-y-3">
                     {Object.entries(salesAnalytics.salesByPaymentMethod).map(
