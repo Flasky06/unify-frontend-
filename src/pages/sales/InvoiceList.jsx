@@ -304,50 +304,53 @@ export const InvoiceList = () => {
           <>
             <div
               id="printable-invoice"
-              className="print:w-[80mm] print:mx-auto print:font-mono print:text-xs"
+              className="print:p-8 print:max-w-[210mm] print:mx-auto"
             >
               {/* Invoice Header */}
-              <div className="text-center pb-4 border-b-2 border-dashed border-gray-300 mb-4 print:pb-2 print:mb-2">
-                <h1 className="text-xl font-bold text-gray-900 uppercase tracking-wide">
-                  {selectedSale.businessName || "Miale"}
-                </h1>
-                <h2 className="text-sm font-semibold text-gray-700">
-                  {selectedSale.shopName}
-                  <div className="text-xs font-normal text-gray-500 mt-1">
-                    Main Branch, Nairobi
+              <div className="mb-8 print:mb-6">
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2 print:text-2xl">
+                      {selectedSale.businessName || "Miale"}
+                    </h1>
+                    <p className="text-gray-600">{selectedSale.shopName}</p>
+                    <p className="text-sm text-gray-500">
+                      Main Branch, Nairobi
+                    </p>
                   </div>
-                </h2>
-
-                <div className="mt-3 flex flex-col gap-0.5 text-sm text-gray-600">
-                  <p>
-                    <span className="font-semibold">Invoice #:</span>{" "}
-                    {selectedSale.saleNumber}
-                  </p>
-                  <p>
-                    {new Date(selectedSale.saleDate).toLocaleDateString(
-                      "en-US",
-                      {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }
-                    )}
-                  </p>
+                  <div className="text-right">
+                    <h2 className="text-2xl font-bold text-blue-600 mb-2 print:text-xl">
+                      INVOICE
+                    </h2>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Invoice #:</span>{" "}
+                      {selectedSale.saleNumber}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Date:</span>{" "}
+                      {new Date(selectedSale.saleDate).toLocaleDateString(
+                        "en-US",
+                        {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                        }
+                      )}
+                    </p>
+                  </div>
                 </div>
 
                 {/* Customer Info */}
                 {selectedSale.customerName && (
-                  <div className="mt-3 pt-3 border-t border-dashed border-gray-200 text-left">
-                    <p className="text-xs font-semibold text-gray-700 uppercase">
+                  <div className="bg-gray-50 p-4 rounded-lg print:bg-white print:border print:border-gray-300">
+                    <p className="text-xs font-semibold text-gray-500 uppercase mb-2">
                       Bill To:
                     </p>
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="font-semibold text-gray-900 text-lg">
                       {selectedSale.customerName}
                     </p>
                     {selectedSale.customerPhone && (
-                      <p className="text-xs text-gray-500">
+                      <p className="text-sm text-gray-600">
                         {selectedSale.customerPhone}
                       </p>
                     )}
@@ -356,99 +359,127 @@ export const InvoiceList = () => {
               </div>
 
               {/* Items Table */}
-              <table className="w-full text-sm mb-4">
-                <thead>
-                  <tr className="border-b border-gray-900">
-                    <th className="py-1 text-left w-[55%]">Product</th>
-                    <th className="py-1 text-center w-[15%]">Qty</th>
-                    <th className="py-1 text-right w-[30%]">Amount</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-dashed divide-gray-200">
-                  {selectedSale.items?.map((item, idx) => {
-                    const itemTotal =
-                      item.quantity *
-                      (item.unitPrice - (item.discountAmount || 0));
-                    return (
-                      <tr key={idx} className="print:leading-tight">
-                        <td className="py-2 pr-1 align-top">
-                          <div className="font-medium text-gray-900">
+              <div className="mb-8">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b-2 border-gray-900">
+                      <th className="py-3 text-left font-bold text-gray-700">
+                        Description
+                      </th>
+                      <th className="py-3 text-center font-bold text-gray-700 w-24">
+                        Quantity
+                      </th>
+                      <th className="py-3 text-right font-bold text-gray-700 w-32">
+                        Unit Price
+                      </th>
+                      <th className="py-3 text-right font-bold text-gray-700 w-32">
+                        Amount
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {selectedSale.items?.map((item, idx) => {
+                      const itemTotal =
+                        item.quantity *
+                        (item.unitPrice - (item.discountAmount || 0));
+                      return (
+                        <tr key={idx}>
+                          <td className="py-3 text-gray-900">
                             {item.productName || item.serviceName}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            @ KSH {(item.unitPrice || 0).toLocaleString()}
-                          </div>
-                        </td>
-                        <td className="py-2 text-center align-top font-medium">
-                          {item.quantity}
-                        </td>
-                        <td className="py-2 text-right align-top font-bold text-gray-900">
-                          {itemTotal.toLocaleString()}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                          </td>
+                          <td className="py-3 text-center text-gray-700">
+                            {item.quantity}
+                          </td>
+                          <td className="py-3 text-right text-gray-700">
+                            KSH {(item.unitPrice || 0).toLocaleString()}
+                          </td>
+                          <td className="py-3 text-right font-semibold text-gray-900">
+                            KSH {itemTotal.toLocaleString()}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
 
               {/* Totals Section */}
-              <div className="border-t-2 border-gray-900 pt-3 space-y-1 text-sm border-dashed">
-                {selectedSale.discountAmount > 0 && (
-                  <>
-                    <div className="flex justify-between text-gray-600">
-                      <span>Subtotal</span>
-                      <span>
-                        KSH {(selectedSale.subTotal || 0).toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-gray-600 print:font-bold">
-                      <span>Discount</span>
-                      <span>
-                        - KSH {selectedSale.discountAmount.toLocaleString()}
-                      </span>
-                    </div>
-                  </>
-                )}
+              <div className="flex justify-end mb-8">
+                <div className="w-80">
+                  {selectedSale.discountAmount > 0 && (
+                    <>
+                      <div className="flex justify-between py-2 text-gray-700">
+                        <span>Subtotal:</span>
+                        <span>
+                          KSH {(selectedSale.subTotal || 0).toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="flex justify-between py-2 text-green-600">
+                        <span>Discount:</span>
+                        <span>
+                          - KSH {selectedSale.discountAmount.toLocaleString()}
+                        </span>
+                      </div>
+                    </>
+                  )}
 
-                <div className="flex justify-between items-center text-base font-bold text-gray-900 pt-2 border-t border-gray-300 mt-2">
-                  <span className="uppercase">Total</span>
-                  <span>KSH {selectedSale.total.toLocaleString()}</span>
-                </div>
+                  <div className="flex justify-between py-3 text-lg font-bold text-gray-900 border-t-2 border-gray-900">
+                    <span>Total:</span>
+                    <span>KSH {selectedSale.total.toLocaleString()}</span>
+                  </div>
 
-                <div className="flex justify-between text-sm text-blue-600 pt-1">
-                  <span>Paid</span>
-                  <span>
-                    KSH {(selectedSale.paidAmount || 0).toLocaleString()}
-                  </span>
-                </div>
+                  <div className="flex justify-between py-2 text-blue-600 border-t border-gray-200">
+                    <span>Amount Paid:</span>
+                    <span>
+                      KSH {(selectedSale.paidAmount || 0).toLocaleString()}
+                    </span>
+                  </div>
 
-                <div className="flex justify-between items-center text-base font-bold text-orange-600 pt-1 border-t border-gray-200 mt-1">
-                  <span className="uppercase">Balance Due</span>
-                  <span>
-                    KSH{" "}
-                    {(
-                      selectedSale.balance ||
-                      selectedSale.total ||
-                      0
-                    ).toLocaleString()}
-                  </span>
+                  <div className="flex justify-between py-3 text-xl font-bold text-orange-600 border-t-2 border-orange-200 bg-orange-50 px-3 rounded print:bg-transparent">
+                    <span>Balance Due:</span>
+                    <span>
+                      KSH{" "}
+                      {(
+                        selectedSale.balance ||
+                        selectedSale.total ||
+                        0
+                      ).toLocaleString()}
+                    </span>
+                  </div>
                 </div>
               </div>
 
               {/* Note */}
               {selectedSale.saleNote && (
-                <div className="mt-4 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs">
-                  <p className="font-semibold text-yellow-800">Note:</p>
+                <div className="mb-8 p-4 bg-yellow-50 border-l-4 border-yellow-400 print:bg-white print:border print:border-yellow-400">
+                  <p className="font-semibold text-yellow-800 mb-1">Note:</p>
                   <p className="text-gray-700">{selectedSale.saleNote}</p>
                 </div>
               )}
 
-              {/* Footer */}
-              <div className="text-center pt-8 border-t-2 border-dashed border-gray-200 mt-6 print:mt-4 print:pt-4">
-                <p className="font-bold text-gray-900 mb-1">Payment Due</p>
-                <p className="text-xs text-gray-500">
-                  Please settle this invoice at your earliest convenience.
-                </p>
+              {/* Payment Terms / Footer */}
+              <div className="border-t-2 border-gray-200 pt-6 mt-8 print:mt-12">
+                <div className="grid grid-cols-2 gap-8 text-sm">
+                  <div>
+                    <p className="font-semibold text-gray-900 mb-2">
+                      Payment Terms:
+                    </p>
+                    <p className="text-gray-600">
+                      Payment is due upon receipt of this invoice.
+                    </p>
+                    <p className="text-gray-600">
+                      Please reference the invoice number when making payment.
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-semibold text-gray-900 mb-2">
+                      Thank You For Your Business!
+                    </p>
+                    <p className="text-gray-600">
+                      For any queries, please contact us.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -456,7 +487,16 @@ export const InvoiceList = () => {
             <div className="flex justify-between pt-6 border-t border-gray-100 print:hidden">
               <Button
                 variant="outline"
-                onClick={() => window.print()}
+                onClick={() => {
+                  // Set document title for print filename
+                  const originalTitle = document.title;
+                  document.title = `Invoice-${selectedSale.saleNumber}`;
+                  window.print();
+                  // Restore original title after print dialog
+                  setTimeout(() => {
+                    document.title = originalTitle;
+                  }, 100);
+                }}
                 className="gap-2"
               >
                 <svg

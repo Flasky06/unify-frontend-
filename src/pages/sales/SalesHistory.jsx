@@ -564,7 +564,7 @@ const SalesHistory = () => {
                   Thank you for your business!
                 </p>
                 <p className="text-xs text-gray-500">
-                  Please keep this receipt for your records.
+                  This receipt serves as proof of purchase.
                 </p>
               </div>
             </div>
