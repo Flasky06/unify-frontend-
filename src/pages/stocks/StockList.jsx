@@ -148,6 +148,7 @@ const StockList = () => {
           shopId: parseInt(formData.shopId),
           productId: parseInt(formData.productId),
           quantity: parseInt(formData.quantity),
+          reason: formData.reason,
         });
       }
       setIsModalOpen(false);
