@@ -18,6 +18,7 @@ const AddStock = () => {
   const [formData, setFormData] = useState({
     shopId: "",
     quantity: 0,
+    reason: "Opening Stock",
   });
 
   useEffect(() => {
@@ -54,7 +55,7 @@ const AddStock = () => {
 
   const handleSelectProduct = (product) => {
     setSelectedProduct(product);
-    setFormData({ shopId: "", quantity: 0 });
+    setFormData({ shopId: "", quantity: 0, reason: "Opening Stock" });
     setIsModalOpen(true);
     setSuccess(null);
     setError(null);
@@ -83,12 +84,14 @@ const AddStock = () => {
         shopId: parseInt(formData.shopId),
         productId: selectedProduct.id,
         quantity: parseInt(formData.quantity),
+        reason: formData.reason,
       });
 
       await stockService.createStock({
         shopId: parseInt(formData.shopId),
         productId: selectedProduct.id,
         quantity: parseInt(formData.quantity),
+        reason: formData.reason,
       });
 
       const shopName = shops.find(
@@ -103,7 +106,7 @@ const AddStock = () => {
       // Close modal and reset
       setIsModalOpen(false);
       setSelectedProduct(null);
-      setFormData({ shopId: "", quantity: 0 });
+      setFormData({ shopId: "", quantity: 0, reason: "Opening Stock" });
     } catch (err) {
       console.error("Failed to add stock:", err);
 
@@ -114,7 +117,7 @@ const AddStock = () => {
       );
       setIsModalOpen(false);
       setSelectedProduct(null);
-      setFormData({ shopId: "", quantity: 0 });
+      setFormData({ shopId: "", quantity: 0, reason: "Opening Stock" });
     } finally {
       setLoading(false);
     }
@@ -332,6 +335,26 @@ const AddStock = () => {
             min="1"
             placeholder="Enter quantity"
           />
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Reason
+            </label>
+            <select
+              value={formData.reason}
+              onChange={(e) =>
+                setFormData({ ...formData, reason: e.target.value })
+              }
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="Opening Stock">
+                Opening Stock (Initial Inventory)
+              </option>
+              <option value="Found Stock">Found Stock / Adjustment</option>
+              <option value="Bonus/Gift">Bonus / Gift Received</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
           <div className="flex justify-end gap-3 pt-4">
             <Button
