@@ -86,7 +86,8 @@ const RoleManagement = () => {
         permissionService.getAllPermissionEnums(),
       ]);
 
-      // Filter out system roles that shouldn't be edited
+      // Filter out only SUPER_ADMIN and BUSINESS_OWNER (they shouldn't be edited)
+      // BUSINESS_MANAGER will be shown but read-only
       const editableRoles = rolesData.filter(
         (r) => r !== "SUPER_ADMIN" && r !== "BUSINESS_OWNER"
       );
