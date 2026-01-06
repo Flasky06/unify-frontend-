@@ -186,31 +186,17 @@ export const InvoiceList = () => {
     {
       header: "Actions",
       render: (row) => (
-        <div className="flex gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedSale(row);
-              setDetailsModalOpen(true);
-            }}
-            className="text-blue-600 hover:bg-blue-50 font-medium px-3"
-          >
-            View
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              handlePayInvoice(row);
-            }}
-            className="text-green-600 hover:bg-green-50 font-medium px-3"
-          >
-            Pay
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            handlePayInvoice(row);
+          }}
+          className="text-green-600 hover:bg-green-50 font-medium px-3"
+        >
+          Pay
+        </Button>
       ),
     },
   ];
