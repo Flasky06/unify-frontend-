@@ -155,27 +155,43 @@ const RoleManagement = () => {
 
   // Group permissions by category (first word of enum usually)
   const groupedPermissions = allPermissions.reduce((acc, permission) => {
-    const category = permission.split("_")[0]; // e.g., VIEW_PRODUCTS -> VIEW, or we can use suffix?
-    // Actually proper categories would be better. Let's try to group by Module.
     let module = "General";
+
     if (
       permission.includes("PRODUCT") ||
       permission.includes("BRAND") ||
       permission.includes("CATEGORY")
     )
       module = "Products";
-    else if (permission.includes("SALE")) module = "Sales";
+    else if (permission.includes("SERVICE")) module = "Services";
+    else if (
+      permission.includes("SALE") ||
+      permission.includes("DISCOUNT") ||
+      permission.includes("RETURN")
+    )
+      module = "Sales";
     else if (
       permission.includes("STOCK") ||
+      permission.includes("TRANSFER") ||
       permission.includes("PURCHASE") ||
       permission.includes("SUPPLIER")
     )
-      module = "Inventory";
+      module = "Inventory & Purchasing";
     else if (permission.includes("EMPLOYEE") || permission.includes("USER"))
       module = "People";
-    else if (permission.includes("REPORT") || permission.includes("EXPENSE"))
+    else if (
+      permission.includes("REPORT") ||
+      permission.includes("EXPENSE") ||
+      permission.includes("FINANCIAL")
+    )
       module = "Finance & Reports";
-    else if (permission.includes("SETTINGS")) module = "Settings";
+    else if (permission.includes("PAYMENT_METHOD")) module = "Settings";
+    else if (
+      permission.includes("SETTINGS") ||
+      permission.includes("SHOP") ||
+      permission.includes("BUSINESS")
+    )
+      module = "Settings";
 
     if (!acc[module]) acc[module] = [];
     acc[module].push(permission);
