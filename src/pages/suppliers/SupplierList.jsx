@@ -13,9 +13,7 @@ export const SupplierList = () => {
   const [editingSupplier, setEditingSupplier] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
-    contactPerson: "",
     phoneNumber: "",
-    email: "",
     address: "",
     notes: "",
   });
@@ -103,9 +101,7 @@ export const SupplierList = () => {
     setEditingSupplier(null);
     setFormData({
       name: "",
-      contactPerson: "",
       phoneNumber: "",
-      email: "",
       address: "",
       notes: "",
     });
@@ -117,9 +113,7 @@ export const SupplierList = () => {
     setEditingSupplier(supplier);
     setFormData({
       name: supplier.name,
-      contactPerson: supplier.contactPerson || "",
       phoneNumber: supplier.phoneNumber || "",
-      email: supplier.email || "",
       address: supplier.address || "",
       notes: supplier.notes || "",
     });
@@ -132,9 +126,7 @@ export const SupplierList = () => {
     setEditingSupplier(null);
     setFormData({
       name: "",
-      contactPerson: "",
       phoneNumber: "",
-      email: "",
       address: "",
       notes: "",
     });
@@ -265,31 +257,12 @@ export const SupplierList = () => {
           />
 
           <Input
-            label="Contact Person"
-            value={formData.contactPerson}
-            onChange={(e) =>
-              setFormData({ ...formData, contactPerson: e.target.value })
-            }
-            placeholder="e.g., John Doe"
-          />
-
-          <Input
             label="Phone Number"
             value={formData.phoneNumber}
             onChange={(e) =>
               setFormData({ ...formData, phoneNumber: e.target.value })
             }
             placeholder="e.g., 0712345678"
-          />
-
-          <Input
-            label="Email"
-            type="email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-            placeholder="e.g., supplier@example.com"
           />
 
           <Input
