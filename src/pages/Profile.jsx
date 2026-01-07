@@ -1,12 +1,100 @@
+import { useState, useEffect } from "react";
+import useAuthStore from "../store/authStore";
 import { MySubscription } from "./MySubscription";
+import Button from "../components/ui/Button";
+import Input from "../components/ui/Input";
+import { PageHeader } from "../components/layout/PageHeader";
+import { userService } from "../services/userService";
+import { businessService } from "../services/businessService";
 
 const Profile = () => {
   const { user, updateUser } = useAuthStore();
   const [activeTab, setActiveTab] = useState("overview");
   const [isEditing, setIsEditing] = useState(false);
-  // ... (keep existing state)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
-  // ... (keep existing effects and handlers)
+  const [formData, setFormData] = useState({
+    phoneNo: "",
+  });
+
+  const [businessData, setBusinessData] = useState({
+    businessName: "",
+    businessType: "",
+    address: "",
+  });
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        phoneNo: user.phoneNo || "",
+      });
+      if (user.business) {
+        setBusinessData({
+          businessName: user.business.name || "",
+          businessType: user.business.businessType || "",
+          address: user.business.address || "",
+        });
+      }
+    }
+  }, [user]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      // Update User
+      const updatedUser = await userService.updateMyProfile({
+        phoneNo: formData.phoneNo,
+      });
+
+      // Update Business (if applicable)
+      let updatedBusiness = null;
+      if (
+        user.business &&
+        (user.role === "BUSINESS_OWNER" || user.role === "BUSINESS_MANAGER")
+      ) {
+        updatedBusiness = await businessService.updateBusiness({
+          name: businessData.businessName,
+          businessType: businessData.businessType,
+          address: businessData.address,
+        });
+      }
+
+      // Update Local Store
+      updateUser({
+        ...updatedUser,
+        business: updatedBusiness || user.business,
+      });
+
+      setSuccess("Profile updated successfully");
+      setIsEditing(false);
+    } catch (err) {
+      setError(err.message || "Failed to update profile");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setError(null);
+    setSuccess(null);
+    if (user) {
+      setFormData({ phoneNo: user.phoneNo || "" });
+      if (user.business) {
+        setBusinessData({
+          businessName: user.business.name || "",
+          businessType: user.business.businessType || "",
+          address: user.business.address || "",
+        });
+      }
+    }
+  };
 
   const isBusinessUser =
     user?.role === "BUSINESS_OWNER" || user?.role === "BUSINESS_MANAGER";
@@ -89,7 +177,6 @@ const Profile = () => {
               </div>
 
               <form onSubmit={handleSubmit} className="p-4 md:p-6 space-y-6">
-                {/* ... Use existing form fields here ... */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <Input
                     label="Phone Number"
