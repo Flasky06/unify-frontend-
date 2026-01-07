@@ -28,6 +28,7 @@ export const EmployeeList = () => {
     salary: "",
     hireDate: "",
     shopId: "",
+    active: true,
     notes: "",
   });
 
@@ -120,6 +121,7 @@ export const EmployeeList = () => {
         salary: formData.salary ? parseFloat(formData.salary) : null,
         hireDate: formData.hireDate || new Date().toISOString().split("T")[0],
         shopId: formData.shopId ? parseInt(formData.shopId) : null,
+        active: formData.active,
         notes: formData.notes || null,
       };
 
@@ -197,6 +199,7 @@ export const EmployeeList = () => {
       salary: employee.salary?.toString() || "",
       hireDate: employee.hireDate || "",
       shopId: employee.shopId?.toString() || "",
+      active: employee.active !== undefined ? employee.active : true,
       notes: employee.notes || "",
     });
     setIsModalOpen(true);
@@ -522,6 +525,27 @@ export const EmployeeList = () => {
               </select>
             </div>
           </div>
+
+          {editingEmployee && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Status
+              </label>
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                value={formData.active ? "active" : "inactive"}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    active: e.target.value === "active",
+                  })
+                }
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          )}
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
