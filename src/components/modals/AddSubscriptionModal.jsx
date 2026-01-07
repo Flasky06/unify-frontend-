@@ -61,14 +61,33 @@ export const AddSubscriptionModal = ({
     setFormData((prev) => ({ ...prev, endDate }));
   };
 
+  const calculatePrice = (period, shops) => {
+    const rates = {
+      MONTHLY: 1500,
+      QUARTERLY: 4000,
+      ANNUALLY: 15000,
+    };
+    const rate = rates[period] || 0;
+    return rate * (parseInt(shops) || 0);
+  };
+
   const handleBillingPeriodChange = (e) => {
     const period = e.target.value;
     const endDate = calculateEndDate(period, formData.startDate);
+    const newPrice = calculatePrice(period, formData.shopLimit);
+
     setFormData({
       ...formData,
       billingPeriod: period,
       endDate: endDate,
+      pricePerPeriod: newPrice,
     });
+  };
+
+  const handleShopLimitChange = (e) => {
+    const limit = e.target.value;
+    const newPrice = calculatePrice(formData.billingPeriod, limit);
+    setFormData({ ...formData, shopLimit: limit, pricePerPeriod: newPrice });
   };
 
   const handleStartDateChange = (e) => {
@@ -160,9 +179,7 @@ export const AddSubscriptionModal = ({
                   min="1"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
                   value={formData.shopLimit}
-                  onChange={(e) =>
-                    setFormData({ ...formData, shopLimit: e.target.value })
-                  }
+                  onChange={handleShopLimitChange}
                 />
               </div>
               <div>
