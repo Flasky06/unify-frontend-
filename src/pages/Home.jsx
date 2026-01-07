@@ -288,11 +288,11 @@ const Home = () => {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition cursor-pointer"
+              className="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition cursor-pointer"
               onClick={() => toggleFaq(index)}
             >
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="text-xl font-bold text-gray-900">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-bold text-gray-900">
                   {faq.question}
                 </h3>
                 <svg
