@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { subscriptionService } from "../services/subscriptionService";
-import Card from "../../components/ui/Card";
-import Table from "../../components/ui/Table";
+import { Card } from "../components/ui/Card";
+import Table from "../components/ui/Table";
 
 export const MySubscription = () => {
   const [subscription, setSubscription] = useState(null);
