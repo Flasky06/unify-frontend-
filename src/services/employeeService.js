@@ -36,4 +36,11 @@ export const employeeService = {
       method: "DELETE",
     });
   },
+
+  async paySalary(id, data) {
+    return await apiFetch(`/employees/${id}/pay`, {
+      method: "POST",
+      body: data,
+    });
+  },
 };
