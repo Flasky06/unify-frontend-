@@ -14,6 +14,7 @@ import Profile from "../pages/Profile";
 import { UserList } from "../pages/users/UserList";
 import { SuperAdminUserList } from "../pages/users/SuperAdminUserList";
 import { BusinessDetails } from "../pages/super-admin/BusinessDetails";
+import SubscriptionsManagement from "../pages/super-admin/SubscriptionsManagement";
 import RoleManagement from "../pages/users/RoleManagement";
 import { ProductList } from "../pages/products/ProductList";
 import { ProductCategoryList } from "../pages/products/ProductCategoryList";
@@ -234,6 +235,10 @@ export const router = createBrowserRouter([
       {
         path: "business/:id",
         element: <BusinessDetails />,
+      },
+      {
+        path: "subscriptions",
+        element: <SubscriptionsManagement />,
       },
     ],
   },
