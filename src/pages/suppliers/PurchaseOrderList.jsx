@@ -18,6 +18,10 @@ export const PurchaseOrderList = () => {
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [viewModal, setViewModal] = useState({
+    isOpen: false,
+    order: null,
+  });
   const [paymentModal, setPaymentModal] = useState({
     isOpen: false,
     order: null,
@@ -358,6 +362,7 @@ export const PurchaseOrderList = () => {
               emptyMessage="No purchase orders found. Create one to get started."
               showViewAction={false}
               searchable={false}
+              onView={(order) => setViewModal({ isOpen: true, order })}
             />
           )}
         </div>
@@ -523,6 +528,155 @@ export const PurchaseOrderList = () => {
         }
         variant="danger"
       />
+
+      {/* View Details Modal */}
+      <Modal
+        isOpen={viewModal.isOpen}
+        onClose={() => setViewModal({ isOpen: false, order: null })}
+        title="Purchase Order Details"
+        size="lg"
+      >
+        {viewModal.order && (
+          <div className="space-y-6">
+            {/* Order Header */}
+            <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {viewModal.order.orderNumber}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {viewModal.order.supplierName}
+                  </p>
+                </div>
+                {getStatusBadge(viewModal.order)}
+              </div>
+              <div className="grid grid-cols-2 gap-4 pt-3 border-t">
+                <div>
+                  <span className="text-xs text-gray-500">Order Date</span>
+                  <p className="font-medium">
+                    {viewModal.order.orderDate
+                      ? new Date(viewModal.order.orderDate).toLocaleDateString()
+                      : "-"}
+                  </p>
+                </div>
+                {viewModal.order.deliveryDate && (
+                  <div>
+                    <span className="text-xs text-gray-500">Delivery Date</span>
+                    <p className="font-medium">
+                      {new Date(
+                        viewModal.order.deliveryDate
+                      ).toLocaleDateString()}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Items */}
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-3">Items</h4>
+              <div className="border rounded-lg overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        Item
+                      </th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">
+                        Qty
+                      </th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">
+                        Unit Price
+                      </th>
+                      <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">
+                        Total
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {viewModal.order.items?.map((item, index) => (
+                      <tr key={index}>
+                        <td className="px-4 py-3 text-sm text-gray-900">
+                          {item.itemName || item.productName || "-"}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-900 text-right">
+                          {item.quantity}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-900 text-right">
+                          KES {(item.unitPrice || 0).toLocaleString()}
+                        </td>
+                        <td className="px-4 py-3 text-sm font-medium text-gray-900 text-right">
+                          KES {(item.total || 0).toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Payment Summary */}
+            <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Subtotal:</span>
+                <span className="font-semibold">
+                  KES {(viewModal.order.total || 0).toLocaleString()}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Paid Amount:</span>
+                <span className="font-semibold text-green-600">
+                  KES {(viewModal.order.paidAmount || 0).toLocaleString()}
+                </span>
+              </div>
+              <div className="flex justify-between border-t pt-2">
+                <span className="text-gray-900 font-semibold">Balance:</span>
+                <span
+                  className={`font-bold ${
+                    viewModal.order.balance > 0
+                      ? "text-red-600"
+                      : "text-green-600"
+                  }`}
+                >
+                  KES {(viewModal.order.balance || 0).toLocaleString()}
+                </span>
+              </div>
+            </div>
+
+            {/* Notes */}
+            {viewModal.order.notes && (
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Notes</h4>
+                <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+                  {viewModal.order.notes}
+                </p>
+              </div>
+            )}
+
+            {/* Actions */}
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <Button
+                variant="outline"
+                onClick={() => setViewModal({ isOpen: false, order: null })}
+              >
+                Close
+              </Button>
+              {viewModal.order.balance > 0 &&
+                viewModal.order.status !== "CANCELLED" && (
+                  <Button
+                    onClick={() => {
+                      openPaymentModal(viewModal.order);
+                      setViewModal({ isOpen: false, order: null });
+                    }}
+                  >
+                    Record Payment
+                  </Button>
+                )}
+            </div>
+          </div>
+        )}
+      </Modal>
 
       {/* Toast */}
       <Toast

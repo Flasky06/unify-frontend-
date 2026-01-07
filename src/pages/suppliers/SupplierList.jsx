@@ -19,6 +19,10 @@ export const SupplierList = () => {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState(null);
+  const [viewModal, setViewModal] = useState({
+    isOpen: false,
+    supplier: null,
+  });
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     supplierId: null,
@@ -231,6 +235,7 @@ export const SupplierList = () => {
               emptyMessage="No suppliers found. Create one to get started."
               showViewAction={false}
               searchable={false}
+              onView={(supplier) => setViewModal({ isOpen: true, supplier })}
             />
           )}
         </div>
@@ -313,6 +318,119 @@ export const SupplierList = () => {
         confirmText="Delete"
         variant="danger"
       />
+
+      {/* View Details Modal */}
+      <Modal
+        isOpen={viewModal.isOpen}
+        onClose={() => setViewModal({ isOpen: false, supplier: null })}
+        title="Supplier Details"
+        size="lg"
+      >
+        {viewModal.supplier && (
+          <div className="space-y-6">
+            {/* Supplier Header */}
+            <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {viewModal.supplier.name}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {viewModal.supplier.phoneNumber || "No phone number"}
+                  </p>
+                </div>
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    viewModal.supplier.active
+                      ? "bg-green-100 text-green-800"
+                      : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  {viewModal.supplier.active ? "Active" : "Inactive"}
+                </span>
+              </div>
+            </div>
+
+            {/* Contact Information */}
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-3">
+                Contact Information
+              </h4>
+              <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Phone:</span>
+                  <span className="font-medium">
+                    {viewModal.supplier.phoneNumber || "-"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Address:</span>
+                  <span className="font-medium text-right">
+                    {viewModal.supplier.address || "-"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Financial Summary */}
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-3">
+                Financial Summary
+              </h4>
+              <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Total Debt:</span>
+                  <span
+                    className={`font-bold ${
+                      (viewModal.supplier.totalDebt || 0) > 0
+                        ? "text-red-600"
+                        : "text-green-600"
+                    }`}
+                  >
+                    KES {(viewModal.supplier.totalDebt || 0).toLocaleString()}
+                  </span>
+                </div>
+                {viewModal.supplier.purchaseCount !== undefined && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Purchase Orders:</span>
+                    <span className="font-medium">
+                      {viewModal.supplier.purchaseCount}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Notes */}
+            {viewModal.supplier.notes && (
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">Notes</h4>
+                <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+                  {viewModal.supplier.notes}
+                </p>
+              </div>
+            )}
+
+            {/* Actions */}
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <Button
+                variant="outline"
+                onClick={() => setViewModal({ isOpen: false, supplier: null })}
+              >
+                Close
+              </Button>
+              <Button
+                onClick={() => {
+                  openEditModal(viewModal.supplier);
+                  setViewModal({ isOpen: false, supplier: null });
+                }}
+              >
+                Edit Supplier
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
 
       <Toast
         isOpen={toast.isOpen}
