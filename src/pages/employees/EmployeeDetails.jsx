@@ -394,8 +394,8 @@ export const EmployeeDetails = () => {
             : "Not Set"}
         </p>
         <p className="text-sm opacity-90 mt-1">
-          {salaryRecords.length} salary record
-          {salaryRecords.length !== 1 ? "s" : ""} in history
+          {employee.salaryRecordCount || 0} salary record
+          {employee.salaryRecordCount !== 1 ? "s" : ""} in history
         </p>
       </div>
 

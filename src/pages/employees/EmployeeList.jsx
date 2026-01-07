@@ -29,6 +29,7 @@ export const EmployeeList = () => {
     hireDate: "",
     shopId: "",
     active: true,
+    terminationDate: "",
     notes: "",
   });
 
@@ -122,6 +123,7 @@ export const EmployeeList = () => {
         hireDate: formData.hireDate || new Date().toISOString().split("T")[0],
         shopId: formData.shopId ? parseInt(formData.shopId) : null,
         active: formData.active,
+        terminationDate: formData.terminationDate || null,
         notes: formData.notes || null,
       };
 
@@ -200,6 +202,7 @@ export const EmployeeList = () => {
       hireDate: employee.hireDate || "",
       shopId: employee.shopId?.toString() || "",
       active: employee.active !== undefined ? employee.active : true,
+      terminationDate: employee.terminationDate || "",
       notes: employee.notes || "",
     });
     setIsModalOpen(true);
@@ -527,24 +530,35 @@ export const EmployeeList = () => {
           </div>
 
           {editingEmployee && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Status
-              </label>
-              <select
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                value={formData.active ? "active" : "inactive"}
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Status
+                </label>
+                <select
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  value={formData.active ? "active" : "inactive"}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      active: e.target.value === "active",
+                    })
+                  }
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+
+              <Input
+                label="Termination Date (Optional)"
+                type="date"
+                value={formData.terminationDate}
                 onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    active: e.target.value === "active",
-                  })
+                  setFormData({ ...formData, terminationDate: e.target.value })
                 }
-              >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </div>
+              />
+            </>
           )}
 
           <div>
