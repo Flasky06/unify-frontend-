@@ -4,6 +4,7 @@ import Button from "../../components/ui/Button";
 import { businessService } from "../../services/businessService";
 import { subscriptionService } from "../../services/subscriptionService";
 import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
+import { AddSubscriptionModal } from "../../components/modals/AddSubscriptionModal";
 
 export const BusinessDetails = () => {
   const { id } = useParams();
