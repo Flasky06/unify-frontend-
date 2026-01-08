@@ -273,6 +273,162 @@ const Home = () => {
         </div>
       </div>
 
+      {/* Pricing Section */}
+      <div className="bg-white py-20 border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Simple, Transparent Pricing
+            </h2>
+            <p className="text-xl text-gray-600">
+              Choose the plan that's right for your business
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Starter Plan */}
+            <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 transition hover:shadow-lg flex flex-col">
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Starter</h3>
+              <div className="flex items-baseline mb-6">
+                <span className="text-4xl font-bold text-gray-900">
+                  KSH 2,000
+                </span>
+                <span className="text-gray-500 ml-2">/month</span>
+              </div>
+              <p className="text-gray-600 mb-8">
+                Perfect for small businesses just getting started.
+              </p>
+              <ul className="space-y-4 mb-8 flex-1">
+                {[
+                  "1 Shop Location",
+                  "2 Staff Accounts",
+                  "Basic Reporting",
+                  "Inventory Management",
+                  "Email Support",
+                ].map((feature) => (
+                  <li key={feature} className="flex items-center text-gray-600">
+                    <svg
+                      className="w-5 h-5 text-green-500 mr-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="mailto:bonnienjuguna106@gmail.com?subject=Enquiry about Starter Plan"
+                className="block w-full py-3 px-4 bg-white border-2 border-blue-600 text-blue-600 font-bold rounded-xl text-center hover:bg-blue-50 transition"
+              >
+                Contact Sales
+              </a>
+            </div>
+
+            {/* Growth Plan */}
+            <div className="bg-blue-600 rounded-2xl p-8 shadow-xl transform md:scale-105 relative flex flex-col z-10">
+              <div className="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-lg">
+                MOST POPULAR
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">Growth</h3>
+              <div className="flex items-baseline mb-6">
+                <span className="text-4xl font-bold text-white">KSH 5,000</span>
+                <span className="text-blue-100 ml-2">/month</span>
+              </div>
+              <p className="text-blue-100 mb-8">
+                Everything you need to expand your operations.
+              </p>
+              <ul className="space-y-4 mb-8 flex-1">
+                {[
+                  "Up to 3 Shop Locations",
+                  "10 Staff Accounts",
+                  "Advanced Analytics",
+                  "Stock Transfers",
+                  "Priority Support",
+                  "Employee Permissions",
+                ].map((feature) => (
+                  <li key={feature} className="flex items-center text-blue-50">
+                    <svg
+                      className="w-5 h-5 text-blue-300 mr-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="mailto:bonnienjuguna106@gmail.com?subject=Enquiry about Growth Plan"
+                className="block w-full py-3 px-4 bg-white text-blue-600 font-bold rounded-xl text-center hover:bg-gray-50 transition shadow-lg"
+              >
+                Contact Sales
+              </a>
+            </div>
+
+            {/* Enterprise Plan */}
+            <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 transition hover:shadow-lg flex flex-col">
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Enterprise
+              </h3>
+              <div className="flex items-baseline mb-6">
+                <span className="text-4xl font-bold text-gray-900">Custom</span>
+              </div>
+              <p className="text-gray-600 mb-8">
+                For large organizations with specific requirements.
+              </p>
+              <ul className="space-y-4 mb-8 flex-1">
+                {[
+                  "Unlimited Locations",
+                  "Unlimited Staff",
+                  "Custom Reporting",
+                  "Dedicated Account Manager",
+                  "API Access",
+                  "SLA Guarantee",
+                ].map((feature) => (
+                  <li key={feature} className="flex items-center text-gray-600">
+                    <svg
+                      className="w-5 h-5 text-green-500 mr-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="mailto:bonnienjuguna106@gmail.com?subject=Enquiry about Enterprise Plan"
+                className="block w-full py-3 px-4 bg-white border-2 border-blue-600 text-blue-600 font-bold rounded-xl text-center hover:bg-blue-50 transition"
+              >
+                Contact Sales
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* FAQ Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 mb-20">
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
