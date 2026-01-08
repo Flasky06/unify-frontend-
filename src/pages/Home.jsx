@@ -99,7 +99,12 @@ const Home = () => {
                 </Link>
               ) : (
                 <>
-                  <></>
+                  <Link
+                    to="/login"
+                    className="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-200 transform hover:-translate-y-1"
+                  >
+                    Sign In
+                  </Link>
                 </>
               )}
             </div>
