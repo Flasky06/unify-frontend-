@@ -66,10 +66,10 @@ const Home = () => {
               </Link>
             ) : (
               <Link
-                to="/register"
+                to="/login"
                 className="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
               >
-                Get Started
+                Sign In
               </Link>
             )}
           </div>
@@ -99,12 +99,6 @@ const Home = () => {
                 </Link>
               ) : (
                 <>
-                  <Link
-                    to="/register"
-                    className="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-200 transform hover:-translate-y-1"
-                  >
-                    Get Started
-                  </Link>
                   <Link
                     to="/login"
                     className="px-8 py-4 bg-white text-blue-600 border-2 border-blue-100 rounded-xl font-bold text-lg hover:border-blue-200 hover:bg-blue-50 transition duration-300"

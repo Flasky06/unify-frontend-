@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { DashboardLayout } from "../components/layout/DashboardLayout";
 import Home from "../pages/Home";
@@ -53,7 +53,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/register",
-    element: <Register />,
+    element: <Navigate to="/login" replace />,
   },
   {
     path: "/create-business",
