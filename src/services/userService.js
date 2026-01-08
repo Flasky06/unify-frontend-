@@ -18,6 +18,22 @@ export const userService = {
   },
 
   /**
+   * Get all users (SUPER_ADMIN only)
+   */
+  getAllUsers: async () => {
+    const data = await api.get("/users");
+    return data;
+  },
+
+  /**
+   * Create user (SUPER_ADMIN only)
+   */
+  createUser: async (userData) => {
+    const data = await api.post("/users", userData);
+    return data;
+  },
+
+  /**
    * Get all business owners (SUPER_ADMIN only)
    */
   getAllBusinessOwners: async () => {

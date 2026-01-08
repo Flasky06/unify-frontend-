@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
+import Table from "../../components/ui/Table";
 import { businessService } from "../../services/businessService";
 import { subscriptionService } from "../../services/subscriptionService";
 import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
 import { AddSubscriptionModal } from "../../components/modals/AddSubscriptionModal";
+import { RecordPaymentModal } from "../../components/modals/RecordPaymentModal";
+import { UpdateSubscriptionModal } from "../../components/modals/UpdateSubscriptionModal";
 
 export const BusinessDetails = () => {
   const { id } = useParams();
@@ -12,10 +15,13 @@ export const BusinessDetails = () => {
 
   const [stats, setStats] = useState(null);
   const [subscription, setSubscription] = useState(null);
+  const [payments, setPayments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [showSubModal, setShowSubModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showUpdateSubModal, setShowUpdateSubModal] = useState(false);
 
   const [toast, setToast] = useState({
     isOpen: false,
@@ -41,14 +47,27 @@ export const BusinessDetails = () => {
       setStats(statsData);
 
       // Fetch Subscription
+      let subData = null;
       try {
-        const subData = await subscriptionService.getSubscriptionByBusinessId(
-          id
-        );
+        subData = await subscriptionService.getSubscriptionByBusinessId(id);
         setSubscription(subData);
       } catch (subErr) {
-        // 404 or empty means no subscription
         setSubscription(null);
+      }
+
+      // Fetch Payments if subscription exists
+      if (subData) {
+        try {
+          const paymentHistory = await subscriptionService.getPaymentHistory(
+            subData.id
+          );
+          setPayments(paymentHistory);
+        } catch (payErr) {
+          console.error("Error fetching payments", payErr);
+          setPayments([]);
+        }
+      } else {
+        setPayments([]);
       }
     } catch (err) {
       console.error("Error fetching business data:", err);
@@ -69,7 +88,7 @@ export const BusinessDetails = () => {
         type: "success",
       });
       setConfirmDialog({ isOpen: false, action: null });
-      loadData();
+      loadData(); // Reload to reflect status change
     } catch (err) {
       setToast({
         isOpen: true,
@@ -88,6 +107,61 @@ export const BusinessDetails = () => {
     });
     loadData();
   };
+
+  const handlePaymentRecorded = () => {
+    setShowPaymentModal(false);
+    setToast({
+      isOpen: true,
+      message: "Payment recorded successfully",
+      type: "success",
+    });
+    loadData();
+  };
+
+  const handleSubscriptionUpdated = () => {
+    setShowUpdateSubModal(false);
+    setToast({
+      isOpen: true,
+      message: "Subscription updated successfully",
+      type: "success",
+    });
+    loadData();
+  };
+
+  // Payment History Columns
+  const paymentColumns = [
+    {
+      header: "Date",
+      render: (payment) => new Date(payment.paymentDate).toLocaleDateString(),
+    },
+    {
+      header: "Amount",
+      render: (payment) => `KES ${payment.amount?.toLocaleString()}`,
+    },
+    {
+      header: "Method",
+      accessor: "paymentMethod",
+    },
+    {
+      header: "Reference",
+      accessor: "transactionReference",
+      render: (payment) => payment.transactionReference || "-",
+    },
+    {
+      header: "Period",
+      render: (payment) => (
+        <span className="text-xs text-gray-500">
+          {new Date(payment.periodStart).toLocaleDateString()} -{" "}
+          {new Date(payment.periodEnd).toLocaleDateString()}
+        </span>
+      ),
+    },
+    {
+      header: "Notes",
+      accessor: "notes",
+      render: (payment) => payment.notes || "-",
+    },
+  ];
 
   if (isLoading) {
     return (
@@ -119,8 +193,8 @@ export const BusinessDetails = () => {
   }
 
   return (
-    <div className="flex flex-col h-full max-w-full overflow-hidden">
-      <div className="flex flex-col gap-4 sm:gap-6">
+    <div className="flex flex-col h-full max-w-full overflow-hidden p-2 md:p-6 overflow-y-auto">
+      <div className="flex flex-col gap-4 sm:gap-6 pb-20">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center gap-3">
@@ -212,11 +286,13 @@ export const BusinessDetails = () => {
           <SubscriptionCard
             subscription={subscription}
             onAddClick={() => setShowSubModal(true)}
+            onRecordPayment={() => setShowPaymentModal(true)}
+            onEdit={() => setShowUpdateSubModal(true)}
           />
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <StatCard
             title="Total Shops"
             value={stats.totalShops}
@@ -318,6 +394,22 @@ export const BusinessDetails = () => {
             color="pink"
           />
         </div>
+
+        {/* Payment History */}
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h3 className="text-lg font-medium text-gray-900">
+              Payment History
+            </h3>
+          </div>
+          <Table
+            columns={paymentColumns}
+            data={payments}
+            emptyMessage="No payments recorded."
+            searchable={false}
+            showViewAction={false}
+          />
+        </div>
       </div>
 
       {/* Confirm Dialog */}
@@ -348,6 +440,27 @@ export const BusinessDetails = () => {
           onClose={() => setShowSubModal(false)}
           onSuccess={handleSubscriptionCreated}
           businessId={id}
+        />
+      )}
+
+      {/* Record Payment Modal */}
+      {showPaymentModal && subscription && (
+        <RecordPaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          onSuccess={handlePaymentRecorded}
+          subscriptionId={subscription.id}
+          currentEndDate={subscription.subscriptionEndDate}
+        />
+      )}
+
+      {/* Update Subscription Modal */}
+      {showUpdateSubModal && subscription && (
+        <UpdateSubscriptionModal
+          isOpen={showUpdateSubModal}
+          onClose={() => setShowUpdateSubModal(false)}
+          onSuccess={handleSubscriptionUpdated}
+          subscription={subscription}
         />
       )}
 
@@ -386,7 +499,12 @@ const StatCard = ({ title, value, icon, color }) => {
 };
 
 // Subscription Card Component
-const SubscriptionCard = ({ subscription, onAddClick }) => {
+const SubscriptionCard = ({
+  subscription,
+  onAddClick,
+  onRecordPayment,
+  onEdit,
+}) => {
   if (!subscription) {
     return (
       <div className="bg-white rounded-lg shadow p-6 border-l-4 border-red-400">
@@ -457,9 +575,23 @@ const SubscriptionCard = ({ subscription, onAddClick }) => {
                 {subscription.shopLimit} Shops
               </span>
             </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-500 w-24">Rate:</span>
+              <span className="font-medium text-gray-900">
+                {subscription.monthlyRate?.toLocaleString()} KES / month
+              </span>
+            </div>
           </div>
         </div>
-        {/* Future: Add 'Edit' button here */}
+
+        <div className="flex flex-col gap-2">
+          <Button onClick={onRecordPayment} size="sm" variant="primary">
+            Record Payment
+          </Button>
+          <Button onClick={onEdit} size="sm" variant="outline">
+            Edit Subscription
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -483,4 +615,3 @@ const StatusBadge = ({ status }) => {
     </span>
   );
 };
-

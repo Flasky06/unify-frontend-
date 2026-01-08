@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { subscriptionService } from "../../services/subscriptionService";
 import { Toast } from "../../components/ui/ConfirmDialog";
+import { RecordPaymentModal } from "../../components/modals/RecordPaymentModal";
 
 const SubscriptionsManagement = () => {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -8,7 +9,6 @@ const SubscriptionsManagement = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSubscription, setSelectedSubscription] = useState(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [showCreateModal, setShowCreateModal] = useState(false);
   const [filterStatus, setFilterStatus] = useState("ALL");
   const [toastState, setToastState] = useState({
     isOpen: false,
@@ -43,16 +43,10 @@ const SubscriptionsManagement = () => {
     }
   };
 
-  const handleRecordPayment = async (subscriptionId, paymentData) => {
-    try {
-      await subscriptionService.recordPayment(subscriptionId, paymentData);
-      showToast("Payment recorded successfully!", "success");
-      setShowPaymentModal(false);
-      fetchData();
-    } catch (error) {
-      showToast("Failed to record payment", "error");
-      console.error(error);
-    }
+  const handlePaymentSuccess = () => {
+    showToast("Payment recorded successfully!", "success");
+    setShowPaymentModal(false);
+    fetchData();
   };
 
   const handleCreateTrial = async (businessId) => {
@@ -252,12 +246,14 @@ const SubscriptionsManagement = () => {
         </div>
       </div>
 
-      {/* Payment Modal */}
+      {/* Record Payment Modal */}
       {showPaymentModal && selectedSubscription && (
-        <PaymentModal
-          subscription={selectedSubscription}
+        <RecordPaymentModal
+          isOpen={showPaymentModal}
           onClose={() => setShowPaymentModal(false)}
-          onSubmit={handleRecordPayment}
+          onSuccess={handlePaymentSuccess}
+          subscriptionId={selectedSubscription.id}
+          currentEndDate={selectedSubscription.subscriptionEndDate}
         />
       )}
 
@@ -304,94 +300,6 @@ const StatCard = ({ title, value, color }) => {
     <div className="bg-white rounded-lg shadow p-4">
       <p className="text-sm font-medium text-gray-500">{title}</p>
       <p className={`mt-2 text-3xl font-bold ${colors[color]}`}>{value}</p>
-    </div>
-  );
-};
-
-// Payment Modal Component
-const PaymentModal = ({ subscription, onClose, onSubmit }) => {
-  const [formData, setFormData] = useState({
-    amount: subscription.pricePerPeriod,
-    paymentDate: new Date().toISOString().split("T")[0],
-    notes: "",
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(subscription.id, formData);
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full">
-        <h2 className="text-xl font-bold mb-4">Record Payment</h2>
-        <p className="text-sm text-gray-600 mb-4">
-          Business: {subscription.businessName}
-        </p>
-
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Amount (KSH)
-            </label>
-            <input
-              type="number"
-              value={formData.amount}
-              onChange={(e) =>
-                setFormData({ ...formData, amount: parseFloat(e.target.value) })
-              }
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Payment Date
-            </label>
-            <input
-              type="date"
-              value={formData.paymentDate}
-              onChange={(e) =>
-                setFormData({ ...formData, paymentDate: e.target.value })
-              }
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Notes (Payment method, reference, etc.)
-            </label>
-            <textarea
-              value={formData.notes}
-              onChange={(e) =>
-                setFormData({ ...formData, notes: e.target.value })
-              }
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              rows="3"
-              placeholder="e.g., M-Pesa QXY123456, Cash payment, etc."
-            />
-          </div>
-
-          <div className="flex gap-2">
-            <button
-              type="submit"
-              className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-            >
-              Record Payment
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
     </div>
   );
 };
