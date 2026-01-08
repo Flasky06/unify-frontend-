@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
@@ -40,6 +41,8 @@ const AdminUsers = () => {
     isOpen: false,
     user: null,
   });
+
+  const navigate = useNavigate();
 
   const { isSuperAdmin } = useAuthStore();
 
@@ -176,6 +179,14 @@ const AdminUsers = () => {
     {
       header: "Email",
       accessor: "email",
+      render: (user) => (
+        <span
+          className="text-blue-600 cursor-pointer hover:underline"
+          onClick={() => openEditModal(user)}
+        >
+          {user.email}
+        </span>
+      ),
     },
     {
       header: "Role",
@@ -196,8 +207,22 @@ const AdminUsers = () => {
     {
       header: "Business",
       render: (user) => {
-        if (user.businessName) return user.businessName;
-        if (user.business?.businessName) return user.business?.businessName;
+        if (user.businessName || user.business?.businessName) {
+          const name = user.businessName || user.business?.businessName;
+          const businessId = user.businessId || user.business?.id;
+
+          if (businessId) {
+            return (
+              <span
+                className="text-blue-600 cursor-pointer hover:underline"
+                onClick={() => navigate(`/super-admin/business/${businessId}`)}
+              >
+                {name}
+              </span>
+            );
+          }
+          return name;
+        }
         return "-";
       },
     },

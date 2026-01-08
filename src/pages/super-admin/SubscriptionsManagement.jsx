@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { subscriptionService } from "../../services/subscriptionService";
 import { Toast } from "../../components/ui/ConfirmDialog";
 import { RecordPaymentModal } from "../../components/modals/RecordPaymentModal";
@@ -21,6 +22,8 @@ const SubscriptionsManagement = () => {
   const showToast = (message, type = "success") => {
     setToastState({ isOpen: true, message, type });
   };
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -107,7 +110,7 @@ const SubscriptionsManagement = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <StatCard
           title="Total Subscriptions"
           value={subscriptions.length}
@@ -180,7 +183,12 @@ const SubscriptionsManagement = () => {
               {subscriptions.map((sub) => (
                 <tr key={sub.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
+                    <div
+                      className="text-sm font-medium text-blue-600 cursor-pointer hover:underline"
+                      onClick={() =>
+                        navigate(`/super-admin/business/${sub.businessId}`)
+                      }
+                    >
                       {sub.businessName}
                     </div>
                   </td>
