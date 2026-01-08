@@ -148,7 +148,7 @@ const SubscriptionsManagement = () => {
       </div>
 
       {/* Subscriptions Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden flex-1">
+      <div className="bg-white rounded-lg shadow flex-1 h-full overflow-y-auto min-h-0">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
