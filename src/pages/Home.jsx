@@ -105,7 +105,7 @@ const Home = () => {
               Manage Stock, Sales & Expenses
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
                 {" "}
-                &mdash; Without Guesswork
+                Without Guesswork
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-12 leading-relaxed max-w-4xl mx-auto">
