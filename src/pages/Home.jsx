@@ -109,8 +109,8 @@ const Home = () => {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-12 leading-relaxed max-w-4xl mx-auto">
-              Track what comes in, what goes out, and what you actually make —
-              across one or multiple shops — all in one simple system.
+              Track what comes in, what goes out, and what you actually make,
+              across one or multiple shops, all in one simple system.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {isAuthenticated ? (
