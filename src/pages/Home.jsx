@@ -12,19 +12,19 @@ const Home = () => {
 
   const faqs = [
     {
-      question: "Can I use mflow for multiple separate businesses?",
+      question: "Is mflow hard to learn?",
       answer:
-        "mflow is designed for a single business entity but supports multiple locations and shops, giving you a centralized view of your entire operation.",
+        "No. mflow is designed to feel familiar. If you can use WhatsApp or write in a notebook, you can use mflow. Most businesses are fully set up in under a day.",
     },
     {
-      question: "Who has access to my data?",
+      question: "Can I use mflow for my specific business?",
       answer:
-        "You have complete control. Our granular permissions system allows you to define exactly what each staff member can see and do. Your data is encrypted and secure.",
+        "Yes. mflow works effectively for retail shops, spare parts dealers, electronics, laundry businesses, and other stock-based businesses.",
     },
     {
-      question: "Can I export my financial reports?",
+      question: "What if I have multiple shops?",
       answer:
-        "Absolutely. You can export detailed sales, expense, and profit reports to help with accounting and performance analysis.",
+        "You can manage multiple shops under one business, transfer stock between them, and view reports per shop or combined—all from one account.",
     },
     {
       question: "Does mflow work offline?",
@@ -32,14 +32,14 @@ const Home = () => {
         "Yes, keep selling even without internet. Your sales data syncs automatically the moment you're back online, so business never stops.",
     },
     {
-      question: "Is it hard to switch to mflow?",
+      question: "Can I export my data?",
       answer:
-        "Not at all. We offer seamless data migration tools and dedicated support to ensure a smooth, zero-downtime transition from your old system.",
+        "Absolutely. You can export detailed sales, expense, and profit reports to help with accounting and performance analysis.",
     },
     {
       question: "What kind of support do you offer?",
       answer:
-        "We provide 24/7 priority support via chat and email for all plans. Our expert team is always ready to help you resolve any issues quickly.",
+        "We provide 24/7 priority support via chat and email. Our expert team is ready to help you resolve any issues quickly.",
     },
   ];
 
@@ -65,29 +65,52 @@ const Home = () => {
                 Go to Dashboard
               </Link>
             ) : (
-              <Link
-                to="/login"
-                className="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-              >
-                Sign In
-              </Link>
+              <>
+                <Link
+                  to="/login"
+                  className="font-medium text-gray-500 hover:text-gray-900 transition"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  className="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                >
+                  Start Free Trial
+                </Link>
+              </>
             )}
           </div>
         </nav>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-48">
           <div className="text-center w-full">
+            <div className="flex justify-center mb-8">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold border border-blue-100">
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Trusted by growing retail businesses in Kenya
+              </span>
+            </div>
             <h1 className="text-4xl md:text-7xl font-extrabold text-gray-900 mb-12 md:mb-8 tracking-tight leading-tight md:leading-tight">
-              Manage Your Entire Business
+              Manage Stock, Sales & Expenses
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                & Simplify Your Business Operations
+                {" "}
+                &mdash; Without Guesswork
               </span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 mb-12 leading-relaxed">
-              The comprehensive business management solution for modern
-              businesses. Effortlessly manage stock across multiple locations,
-              track product & service sales, and gain deep insights with
-              real-time analytics all in one place.
+            <p className="text-xl md:text-2xl text-gray-600 mb-12 leading-relaxed max-w-4xl mx-auto">
+              Track what comes in, what goes out, and what you actually make —
+              across one or multiple shops — all in one simple system.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {isAuthenticated ? (
@@ -100,10 +123,10 @@ const Home = () => {
               ) : (
                 <>
                   <Link
-                    to="/login"
+                    to="/register"
                     className="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-200 transform hover:-translate-y-1"
                   >
-                    Sign In
+                    Start Free Trial
                   </Link>
                 </>
               )}
@@ -118,6 +141,9 @@ const Home = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 bg-white/80 inline-block px-6 py-2 rounded-full backdrop-blur-sm border border-gray-100 shadow-sm">
             Simple, Transparent Pricing
           </h2>
+          <p className="text-lg text-gray-600 mt-2">
+            Subscription per shop. No commissions. No hidden fees.
+          </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -126,7 +152,7 @@ const Home = () => {
             <h3 className="text-xl font-bold text-gray-900 mb-2">Monthly</h3>
             <div className="flex items-baseline mb-6">
               <span className="text-4xl font-bold text-gray-900">
-                KSH 1,500
+                KES 1,500
               </span>
               <span className="text-gray-500 ml-2">/shop</span>
             </div>
@@ -135,7 +161,7 @@ const Home = () => {
             </p>
             <ul className="space-y-4 mb-8 flex-1">
               {[
-                "Full POS Features",
+                "Sales, stock, expenses & staff management",
                 "Inventory Management",
                 "Unlimited Staff",
                 "Sales Analytics",
@@ -174,14 +200,15 @@ const Home = () => {
             </div>
             <h3 className="text-xl font-bold text-white mb-2">Quarterly</h3>
             <div className="flex items-baseline mb-1">
-              <span className="text-4xl font-bold text-white">KSH 4,000</span>
+              <span className="text-4xl font-bold text-white">KES 4,000</span>
               <span className="text-blue-100 ml-2">/shop</span>
             </div>
             <p className="text-yellow-300 text-sm font-bold mb-6">
-              Save KSH 500 every 3 months
+              Save KES 500 every 3 months
             </p>
             <p className="text-blue-100 mb-8">
-              Perfect for growing businesses. Billed every 3 months.
+              Perfect for growing businesses. Billed every 3 months. Cancel
+              anytime.
             </p>
             <ul className="space-y-4 mb-8 flex-1">
               {[
@@ -222,15 +249,16 @@ const Home = () => {
             <h3 className="text-xl font-bold text-gray-900 mb-2">Annually</h3>
             <div className="flex items-baseline mb-1">
               <span className="text-4xl font-bold text-gray-900">
-                KSH 15,000
+                KES 15,000
               </span>
               <span className="text-gray-500 ml-2">/shop</span>
             </div>
             <p className="text-green-600 text-sm font-bold mb-6">
-              Save KSH 3,000 per year
+              Save KES 3,000 per year
             </p>
             <p className="text-gray-600 mb-8">
-              Best value for established businesses. Billed annually.
+              Best value for established businesses. Billed annually. Cancel
+              anytime.
             </p>
             <ul className="space-y-4 mb-8 flex-1">
               {[
@@ -301,8 +329,9 @@ const Home = () => {
                 Advanced Inventory
               </h3>
               <p className="text-gray-600">
-                Take full control of your stock. Real-time tracking across all
-                your locations ensures you never run out of what sells best.
+                Know what you have at any time. Track stock levels across one or
+                multiple shops. See what’s selling, what’s stuck, and when to
+                restock.
               </p>
             </div>
 
@@ -379,8 +408,9 @@ const Home = () => {
                 Expense Tracking
               </h3>
               <p className="text-gray-600">
-                Maximize your profits. Keep a pulse on every penny spent and
-                optimize your operational costs for a healthier bottom line.
+                See where your money actually goes. Record rent, labour,
+                transport, utilities, and daily expenses. Know your real profit
+                — not just sales.
               </p>
             </div>
 
@@ -495,7 +525,8 @@ const Home = () => {
                 </h2>
               </div>
               <p className="text-gray-400 mb-6 max-w-sm">
-                Building the operating system for modern retail businesses.
+                Built for growing businesses that want control, clarity, and
+                peace of mind.
               </p>
             </div>
 

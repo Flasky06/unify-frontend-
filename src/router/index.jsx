@@ -53,7 +53,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/register",
-    element: <Navigate to="/login" replace />,
+    element: <Register />,
   },
   {
     path: "/create-business",
