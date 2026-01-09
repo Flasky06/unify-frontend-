@@ -30,9 +30,10 @@ const AddStock = () => {
     setLoading(true);
     try {
       const data = await productService.getAll();
-      setProducts(data);
+      setProducts(data || []);
     } catch (error) {
-      setError("Failed to load products");
+      console.error("Fetch products failed:", error);
+      setError(error.message || "Failed to load products");
     } finally {
       setLoading(false);
     }
@@ -41,8 +42,15 @@ const AddStock = () => {
   const fetchShops = async () => {
     try {
       const data = await shopService.getAll();
-      setShops(data);
-    } catch (error) {}
+      setShops(data || []);
+    } catch (error) {
+      console.error("Fetch shops failed:", error);
+      setError((prev) =>
+        prev
+          ? `${prev} & Failed to load shops: ${error.message}`
+          : `Failed to load shops: ${error.message}`
+      );
+    }
   };
 
   const handleSelectProduct = (product) => {

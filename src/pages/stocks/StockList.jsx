@@ -21,6 +21,7 @@ const StockList = () => {
   const [viewMode, setViewMode] = useState("all"); // all, byShop
   const [selectedShopId, setSelectedShopId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState(null);
 
   // Audit Log State
   const [auditModal, setAuditModal] = useState({
@@ -106,9 +107,10 @@ const StockList = () => {
           data = [];
         }
       }
-      setStocks(data);
+      setStocks(data || []);
     } catch (error) {
       console.error("Failed to fetch stocks:", error);
+      setError(error.message || "Failed to fetch stocks");
     } finally {
       setLoading(false);
     }
@@ -280,6 +282,28 @@ const StockList = () => {
 
   return (
     <div className="flex flex-col h-full max-w-full overflow-hidden">
+      {error && (
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg
+                className="h-5 w-5 text-red-500"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="flex flex-col gap-2 sm:gap-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-end">
           <div className="flex flex-col gap-2 sm:flex-row sm:flex-1 sm:gap-3">
