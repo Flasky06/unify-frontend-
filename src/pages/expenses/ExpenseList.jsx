@@ -449,9 +449,9 @@ export const ExpenseList = () => {
 
   return (
     <div className="flex flex-col h-full max-w-full overflow-hidden">
-      <div className="flex flex-col gap-4 sm:gap-6">
+      <div className="flex flex-col gap-3">
         {/* Filters Input Area */}
-        <div className="flex flex-col gap-2 lg:flex-row lg:justify-between lg:items-end lg:flex-wrap">
+        <div className="flex flex-col gap-1.5 lg:flex-row lg:justify-between lg:items-end lg:flex-wrap">
           <div className="w-full lg:w-48 lg:max-w-xs">
             <Input
               placeholder="Search name or payee..."
@@ -496,7 +496,6 @@ export const ExpenseList = () => {
               ))}
             </select>
           </div>
-          {/* Dates */}
           {/* Dates */}
           <div className="flex flex-row gap-2 items-end">
             <div className="w-full sm:w-auto">
