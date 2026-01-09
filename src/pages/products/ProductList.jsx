@@ -48,18 +48,35 @@ export const ProductList = () => {
   }, []);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
+      // Fetch each independently to allow partial success
       const [productsData, brandsData, categoriesData] = await Promise.all([
-        productService.getAll(),
-        brandService.getAll(),
-        productCategoryService.getAll(),
+        productService.getAll().catch((err) => {
+          console.error("Products fetch failed:", err);
+          setError((prev) =>
+            prev
+              ? `${prev} & Failed to load products`
+              : "Failed to load products"
+          );
+          return [];
+        }),
+        brandService.getAll().catch((err) => {
+          console.error("Brands fetch failed:", err);
+          return [];
+        }),
+        productCategoryService.getAll().catch((err) => {
+          console.error("Categories fetch failed:", err);
+          return [];
+        }),
       ]);
+
       setProducts(productsData || []);
       setBrands(brandsData || []);
       setCategories(categoriesData || []);
     } catch (err) {
-      console.error("Failed to fetch data", err);
+      console.error("Unexpected error in fetchData", err);
+      setError("An unexpected error occurred while loading data.");
     } finally {
       setLoading(false);
     }

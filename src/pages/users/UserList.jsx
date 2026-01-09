@@ -69,9 +69,16 @@ export const UserList = () => {
   const fetchShops = async () => {
     try {
       const data = await shopService.getAll();
-      setShops(data);
+      setShops(data || []);
     } catch (err) {
       console.error("Failed to fetch shops:", err);
+      // Optional: don't block the UI, but maybe show a toast or partial error
+      setToast({
+        isOpen: true,
+        message:
+          "Warning: Failed to load shops list. Linking users to shops may not work.",
+        type: "warning",
+      });
     }
   };
 

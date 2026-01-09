@@ -56,21 +56,33 @@ export const EmployeeList = () => {
   }, []);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const [employeesData, shopsData] = await Promise.all([
-        employeeService.getAll(),
-        shopService.getAll(),
+        employeeService.getAll().catch((err) => {
+          console.error("Employees fetch failed:", err);
+          setToast({
+            isOpen: true,
+            message: `Failed to load employees: ${err.message}`,
+            type: "error",
+          });
+          return [];
+        }),
+        shopService.getAll().catch((err) => {
+          console.error("Shops fetch failed:", err);
+          setToast({
+            isOpen: true,
+            message:
+              "Warning: Failed to load shops. Shop filtering may be unavailable.",
+            type: "warning",
+          });
+          return [];
+        }),
       ]);
       setEmployees(employeesData || []);
       setShops(shopsData || []);
     } catch (err) {
-      console.error("Failed to fetch data", err);
-      setToast({
-        isOpen: true,
-        message: "Failed to load employees",
-        type: "error",
-      });
+      console.error("Unexpected error in fetchData", err);
     } finally {
       setLoading(false);
     }

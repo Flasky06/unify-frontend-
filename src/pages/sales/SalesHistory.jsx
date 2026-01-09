@@ -108,6 +108,11 @@ const SalesHistory = () => {
       setSales(sorted);
     } catch (error) {
       console.error("Failed to fetch sales history", error);
+      setToast({
+        isOpen: true,
+        message: "Failed to load sales history. Please try refreshing.",
+        type: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -123,6 +128,11 @@ const SalesHistory = () => {
       setSales(sorted);
     } catch (error) {
       console.error("Failed to fetch shop sales", error);
+      setToast({
+        isOpen: true,
+        message: "Failed to load sales for this shop.",
+        type: "error",
+      });
     } finally {
       setLoading(false);
     }
