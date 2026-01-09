@@ -123,26 +123,6 @@ const AddStock = () => {
     { header: "Brand", accessor: "brand" },
     { header: "Cost", accessor: "costPrice" },
     { header: "Price", accessor: "sellingPrice" },
-    {
-      header: "Actions",
-      render: (row) => (
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleSelectProduct(row._product);
-          }}
-          className={
-            selectedProduct?.id === row._product?.id
-              ? "bg-blue-600 text-white hover:bg-blue-700"
-              : "text-blue-600 hover:bg-blue-50 font-medium px-3"
-          }
-        >
-          Select
-        </Button>
-      ),
-    },
   ];
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -236,6 +216,7 @@ const AddStock = () => {
             emptyMessage="No products found matching your search."
             showViewAction={false}
             searchable={false}
+            onView={(row) => handleSelectProduct(row._product)}
           />
         </div>
       </div>
