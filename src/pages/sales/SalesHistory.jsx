@@ -423,10 +423,6 @@ const SalesHistory = () => {
                 </h1>
                 <h2 className="text-sm font-semibold text-gray-700">
                   {selectedSale.shopName}
-                  {/* Placeholder for address if available in future */}
-                  <div className="text-xs font-normal text-gray-500 mt-1">
-                    Main Branch, Nairobi
-                  </div>
                 </h2>
 
                 <div className="mt-3 flex flex-col gap-0.5 text-sm text-gray-600">
