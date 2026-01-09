@@ -143,7 +143,14 @@ export const ExpenseList = () => {
         matchesCategory && matchesShop && matchesDateRange && matchesSearch
       );
     });
-  }, [expenses, selectedCategory, selectedShop, startDate, endDate]);
+  }, [
+    expenses,
+    selectedCategory,
+    selectedShop,
+    startDate,
+    endDate,
+    searchTerm,
+  ]);
 
   // Calculate summary statistics
   const summary = useMemo(() => {
