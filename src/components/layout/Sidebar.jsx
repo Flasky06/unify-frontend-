@@ -128,6 +128,11 @@ export const Sidebar = ({ isOpen, onClose }) => {
           permission: "VIEW_REPORTS",
         },
         {
+          name: "Accounts Summary",
+          path: "/reports/accounts-summary",
+          permission: "VIEW_REPORTS",
+        },
+        {
           name: "Sales History",
           path: "/sales",
           permission: "VIEW_SALES",
