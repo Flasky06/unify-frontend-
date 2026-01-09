@@ -121,7 +121,8 @@ const AddStock = () => {
     },
     { header: "Category", accessor: "category" },
     { header: "Brand", accessor: "brand" },
-    { header: "Price (KSH)", accessor: "price" },
+    { header: "Cost", accessor: "costPrice" },
+    { header: "Price", accessor: "sellingPrice" },
     {
       header: "Actions",
       render: (row) => (
@@ -155,7 +156,8 @@ const AddStock = () => {
     name: product.name,
     category: product.categoryName || "N/A",
     brand: product.brandName || "N/A",
-    price: product.sellingPrice?.toLocaleString() || "0",
+    costPrice: product.costPrice?.toLocaleString() || "0",
+    sellingPrice: product.sellingPrice?.toLocaleString() || "0",
     _product: product, // Store full product object for the button
   }));
 
@@ -258,7 +260,11 @@ const AddStock = () => {
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div className="text-gray-600">Name:</div>
                 <div className="font-medium">{selectedProduct.name}</div>
-                <div className="text-gray-600">Price:</div>
+                <div className="text-gray-600">Cost Price:</div>
+                <div className="font-medium">
+                  KSH {selectedProduct.costPrice?.toLocaleString() || "0"}
+                </div>
+                <div className="text-gray-600">Selling Price:</div>
                 <div className="font-medium">
                   KSH {selectedProduct.sellingPrice?.toLocaleString()}
                 </div>
