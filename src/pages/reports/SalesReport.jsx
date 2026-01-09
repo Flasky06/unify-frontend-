@@ -121,8 +121,8 @@ export const SalesReport = () => {
           <DateRangePicker
             startDate={dateRange.startDate}
             endDate={dateRange.endDate}
-            onChange={(start, end) =>
-              setDateRange({ startDate: start, endDate: end })
+            onChange={({ startDate, endDate }) =>
+              setDateRange({ startDate, endDate })
             }
           />
 
