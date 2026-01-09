@@ -245,47 +245,6 @@ export const PurchaseOrderList = () => {
       header: "Status",
       render: (order) => getStatusBadge(order),
     },
-    {
-      header: "Actions",
-      render: (order) => (
-        <div className="flex gap-2">
-          {order.status === "PENDING" && (
-            <>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-orange-600 hover:bg-orange-50 font-medium px-3"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setConfirmDialog({
-                    isOpen: true,
-                    orderId: order.id,
-                    action: "cancel",
-                  });
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-red-600 hover:bg-red-50 font-medium px-3"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setConfirmDialog({
-                    isOpen: true,
-                    orderId: order.id,
-                    action: "delete",
-                  });
-                }}
-              >
-                Delete
-              </Button>
-            </>
-          )}
-        </div>
-      ),
-    },
   ];
 
   return (
@@ -662,6 +621,38 @@ export const PurchaseOrderList = () => {
               >
                 Close
               </Button>
+              {viewModal.order.status === "PENDING" && (
+                <>
+                  <Button
+                    variant="outline"
+                    className="text-orange-600 border-orange-200 hover:bg-orange-50"
+                    onClick={() => {
+                      setConfirmDialog({
+                        isOpen: true,
+                        orderId: viewModal.order.id,
+                        action: "cancel",
+                      });
+                      setViewModal({ isOpen: false, order: null });
+                    }}
+                  >
+                    Cancel Order
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="text-red-600 border-red-200 hover:bg-red-50"
+                    onClick={() => {
+                      setConfirmDialog({
+                        isOpen: true,
+                        orderId: viewModal.order.id,
+                        action: "delete",
+                      });
+                      setViewModal({ isOpen: false, order: null });
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </>
+              )}
               {!viewModal.order.received &&
                 viewModal.order.status !== "CANCELLED" && (
                   <Button
