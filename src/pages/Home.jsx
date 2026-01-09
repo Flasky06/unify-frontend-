@@ -185,12 +185,12 @@ const Home = () => {
                 </li>
               ))}
             </ul>
-            <a
-              href="mailto:bonnienjuguna106@gmail.com?subject=Enquiry about Monthly Plan"
+            <Link
+              to="/register"
               className="block w-full py-3 px-4 bg-white border-2 border-blue-600 text-blue-600 font-bold rounded-xl text-center hover:bg-blue-50 transition"
             >
               Choose Monthly
-            </a>
+            </Link>
           </div>
 
           {/* Quarterly Plan */}
@@ -236,12 +236,12 @@ const Home = () => {
                 </li>
               ))}
             </ul>
-            <a
-              href="mailto:bonnienjuguna106@gmail.com?subject=Enquiry about Quarterly Plan"
+            <Link
+              to="/register"
               className="block w-full py-3 px-4 bg-white text-blue-600 font-bold rounded-xl text-center hover:bg-gray-50 transition shadow-lg"
             >
               Choose Quarterly
-            </a>
+            </Link>
           </div>
 
           {/* Annual Plan */}
@@ -286,12 +286,12 @@ const Home = () => {
                 </li>
               ))}
             </ul>
-            <a
-              href="mailto:bonnienjuguna106@gmail.com?subject=Enquiry about Annual Plan"
+            <Link
+              to="/register"
               className="block w-full py-3 px-4 bg-white border-2 border-blue-600 text-blue-600 font-bold rounded-xl text-center hover:bg-blue-50 transition"
             >
               Choose Annually
-            </a>
+            </Link>
           </div>
         </div>
       </div>
