@@ -155,7 +155,7 @@ const AddStock = () => {
     name: product.name,
     category: product.categoryName || "N/A",
     brand: product.brandName || "N/A",
-    price: product.price?.toLocaleString() || "0",
+    price: product.sellingPrice?.toLocaleString() || "0",
     _product: product, // Store full product object for the button
   }));
 
@@ -260,7 +260,7 @@ const AddStock = () => {
                 <div className="font-medium">{selectedProduct.name}</div>
                 <div className="text-gray-600">Price:</div>
                 <div className="font-medium">
-                  KSH {selectedProduct.price?.toLocaleString()}
+                  KSH {selectedProduct.sellingPrice?.toLocaleString()}
                 </div>
                 <div className="text-gray-600">Category:</div>
                 <div className="font-medium">
