@@ -32,7 +32,9 @@ const MetricCard = ({ title, value, subtitle, type = "default" }) => {
       <div
         className={`flex items-baseline gap-1 ${textColorClasses[type]} mb-1`}
       >
-        <h3 className="text-2xl font-bold tracking-tight">{value}</h3>
+        <h3 className="text-xl font-bold tracking-tight truncate" title={value}>
+          {value}
+        </h3>
       </div>
       {subtitle && <p className="text-xs text-gray-500">{subtitle}</p>}
     </div>
