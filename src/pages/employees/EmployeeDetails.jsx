@@ -62,9 +62,15 @@ export const EmployeeDetails = () => {
       console.error("Failed to fetch employee data", err);
       setToast({
         isOpen: true,
-        message: "Failed to load employee details",
+        message:
+          err.message ||
+          "Failed to load employee details. Employee may not exist or you don't have access.",
         type: "error",
       });
+      // Navigate back to employee list after showing error
+      setTimeout(() => {
+        navigate("/employees");
+      }, 2000);
     } finally {
       setLoading(false);
     }
