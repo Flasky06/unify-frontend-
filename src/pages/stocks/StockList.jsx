@@ -280,105 +280,137 @@ const StockList = () => {
     _stock: stock, // Store full stock object for actions
   }));
 
+  const filteredStocks = tableData.filter(
+    (stock) =>
+      stock.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      stock.shopName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const selectedShopName = selectedShopId
+    ? shops.find((s) => s.id === parseInt(selectedShopId))?.name || "All Shops"
+    : "All Shops";
+
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div className="flex flex-col h-full max-w-full overflow-hidden">
-      {error && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <svg
-                className="h-5 w-5 text-red-500"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                  clipRule="evenodd"
+      <div className="print:hidden">
+        {error && (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg
+                  className="h-5 w-5 text-red-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-red-700">{error}</p>
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="flex flex-col gap-2 sm:gap-4">
+          <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-end">
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-1 sm:gap-3">
+              <div className="w-full sm:w-48">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Filter by Shop
+                </label>
+                <select
+                  value={selectedShopId}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setSelectedShopId(value);
+                    setViewMode(value ? "byShop" : "all");
+                  }}
+                  className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">All Shops</option>
+                  {shops.map((shop) => (
+                    <option key={shop.id} value={shop.id}>
+                      {shop.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex-1 w-full sm:max-w-xs">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Search
+                </label>
+                <Input
+                  placeholder="Search stocks..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="py-1.5"
                 />
-              </svg>
+              </div>
             </div>
-            <div className="ml-3">
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
-          </div>
-        </div>
-      )}
-      <div className="flex flex-col gap-2 sm:gap-4">
-        <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-end">
-          <div className="flex flex-col gap-2 sm:flex-row sm:flex-1 sm:gap-3">
-            <div className="w-full sm:w-48">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Filter by Shop
-              </label>
-              <select
-                value={selectedShopId}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setSelectedShopId(value);
-                  setViewMode(value ? "byShop" : "all");
-                }}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                onClick={handlePrint}
+                className="w-full sm:w-auto whitespace-nowrap py-1.5"
               >
-                <option value="">All Shops</option>
-                {shops.map((shop) => (
-                  <option key={shop.id} value={shop.id}>
-                    {shop.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex-1 w-full sm:max-w-xs">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Search
-              </label>
-              <Input
-                placeholder="Search stocks..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="py-1.5"
-              />
+                <svg
+                  className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                  />
+                </svg>
+                Print
+              </Button>
+              <Button
+                onClick={() => navigate("/stocks/add")}
+                className="w-full sm:w-auto whitespace-nowrap py-1.5"
+              >
+                <svg
+                  className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                Add Stock
+              </Button>
             </div>
           </div>
 
-          <Button
-            onClick={() => navigate("/stocks/add")}
-            className="w-full sm:w-auto whitespace-nowrap py-1.5"
-          >
-            <svg
-              className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            Add Stock
-          </Button>
-        </div>
-
-        {/* Stock Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <Table
-            columns={columns}
-            data={tableData.filter(
-              (stock) =>
-                stock.productName
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase()) ||
-                stock.shopName.toLowerCase().includes(searchTerm.toLowerCase())
-            )}
-            loading={loading}
-            showViewAction={false}
-            searchable={false}
-            onView={(row) => handleViewLogs(row._stock)}
-          />
+          {/* Stock Table */}
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <Table
+              columns={columns}
+              data={filteredStocks}
+              loading={loading}
+              showViewAction={false}
+              searchable={false}
+              onView={(row) => handleViewLogs(row._stock)}
+            />
+          </div>
         </div>
       </div>
 
@@ -511,6 +543,45 @@ const StockList = () => {
             : "Stock History"
         }
       />
+
+      {/* Print-Only Section */}
+      <div className="hidden print:block p-8">
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            {selectedShopName} - Stock List
+          </h1>
+          <p className="text-gray-600">
+            {new Date().toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
+        </div>
+
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="border-b-2 border-gray-900">
+              <th className="text-left py-2 px-4 font-bold">Product</th>
+              <th className="text-right py-2 px-4 font-bold">Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredStocks.map((stock, index) => (
+              <tr key={stock.id} className="border-b border-gray-300">
+                <td className="py-2 px-4">{stock.productName}</td>
+                <td className="text-right py-2 px-4">{stock.quantity}</td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr className="border-t-2 border-gray-900 font-bold">
+              <td className="py-2 px-4">Total Items</td>
+              <td className="text-right py-2 px-4">{filteredStocks.length}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
   );
 };
