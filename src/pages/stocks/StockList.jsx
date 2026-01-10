@@ -552,7 +552,7 @@ const StockList = () => {
         onClose={() => setPrintModalOpen(false)}
         title="Stock List"
       >
-        <div id="printable-stock-list">
+        <div id="printable-stock-list" className="print:p-8">
           {/* Header */}
           <div className="text-center pb-4 border-b-2 border-dashed border-gray-300 mb-4 print:pb-2 print:mb-2">
             <h1 className="text-xl font-bold text-gray-900 uppercase tracking-wide">
