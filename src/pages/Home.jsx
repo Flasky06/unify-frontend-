@@ -156,17 +156,17 @@ const Home = () => {
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {/* Monthly Plan */}
           <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-xl flex flex-col transform hover:-translate-y-1 transition duration-300">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Monthly</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Monthly</h3>
             <div className="flex items-baseline mb-4">
-              <span className="text-3xl font-bold text-gray-900">
+              <span className="text-4xl font-extrabold text-gray-900">
                 KES 1,500
               </span>
-              <span className="text-gray-500 ml-2">/shop</span>
+              <span className="text-gray-500 ml-2 font-medium">/shop</span>
             </div>
-            <p className="text-gray-600 mb-6 text-sm">
+            <p className="text-gray-600 mb-6 text-sm font-medium">
               Flexible pay-as-you-go billing. Cancel anytime.
             </p>
-            <ul className="space-y-3 mb-6 flex-1 text-sm">
+            <ul className="space-y-3 mb-6 flex-1 text-sm font-medium">
               {[
                 "Sales, stock, expenses & staff management",
                 "Inventory Management",
@@ -176,7 +176,7 @@ const Home = () => {
               ].map((feature) => (
                 <li key={feature} className="flex items-center text-gray-600">
                   <svg
-                    className="w-4 h-4 text-green-500 mr-2"
+                    className="w-5 h-5 text-green-500 mr-2 flex-shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -184,7 +184,7 @@ const Home = () => {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
+                      strokeWidth={2.5}
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -194,7 +194,7 @@ const Home = () => {
             </ul>
             <Link
               to="/register?plan=MONTHLY"
-              className="block w-full py-2 px-4 bg-white border-2 border-blue-600 text-blue-600 font-bold rounded-xl text-center hover:bg-blue-50 transition"
+              className="block w-full py-3 px-4 bg-white border-2 border-blue-600 text-blue-600 font-bold rounded-xl text-center hover:bg-blue-50 transition text-lg"
             >
               Choose Monthly
             </Link>
@@ -205,19 +205,21 @@ const Home = () => {
             <div className="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-lg">
               POPULAR
             </div>
-            <h3 className="text-lg font-bold text-white mb-2">Quarterly</h3>
+            <h3 className="text-xl font-bold text-white mb-2">Quarterly</h3>
             <div className="flex items-baseline mb-1">
-              <span className="text-3xl font-bold text-white">KES 4,000</span>
-              <span className="text-blue-100 ml-2">/shop</span>
+              <span className="text-4xl font-extrabold text-white">
+                KES 4,000
+              </span>
+              <span className="text-blue-100 ml-2 font-medium">/shop</span>
             </div>
             <p className="text-yellow-300 text-xs font-bold mb-4">
               Save KES 500 every 3 months
             </p>
-            <p className="text-blue-100 mb-6 text-sm">
+            <p className="text-blue-100 mb-6 text-sm font-medium">
               Perfect for growing businesses. Billed every 3 months. Cancel
               anytime.
             </p>
-            <ul className="space-y-3 mb-6 flex-1 text-sm">
+            <ul className="space-y-3 mb-6 flex-1 text-sm font-medium">
               {[
                 "All Monthly Features",
                 "Priority Support",
@@ -227,7 +229,7 @@ const Home = () => {
               ].map((feature) => (
                 <li key={feature} className="flex items-center text-blue-50">
                   <svg
-                    className="w-4 h-4 text-blue-300 mr-2"
+                    className="w-5 h-5 text-blue-300 mr-2 flex-shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -235,7 +237,7 @@ const Home = () => {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
+                      strokeWidth={2.5}
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
@@ -245,7 +247,7 @@ const Home = () => {
             </ul>
             <Link
               to="/register?plan=QUARTERLY"
-              className="block w-full py-2 px-4 bg-white text-blue-600 font-bold rounded-xl text-center hover:bg-gray-50 transition shadow-lg"
+              className="block w-full py-3 px-4 bg-white text-blue-600 font-bold rounded-xl text-center hover:bg-gray-50 transition shadow-lg text-lg"
             >
               Choose Quarterly
             </Link>
