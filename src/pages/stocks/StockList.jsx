@@ -545,12 +545,43 @@ const StockList = () => {
       />
 
       {/* Print-Only Section */}
-      <div className="hidden print:block p-8">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+      <div
+        id="printable-stock-list"
+        style={{ display: "none" }}
+        className="print:block"
+      >
+        <style>{`
+          @media print {
+            body * {
+              visibility: hidden;
+            }
+            #printable-stock-list,
+            #printable-stock-list * {
+              visibility: visible;
+            }
+            #printable-stock-list {
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 100%;
+              display: block !important;
+              padding: 20px;
+            }
+          }
+        `}</style>
+
+        <div style={{ textAlign: "center", marginBottom: "30px" }}>
+          <h1
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#111",
+              marginBottom: "10px",
+            }}
+          >
             {selectedShopName} - Stock List
           </h1>
-          <p className="text-gray-600">
+          <p style={{ color: "#666", fontSize: "14px" }}>
             {new Date().toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
@@ -559,25 +590,45 @@ const StockList = () => {
           </p>
         </div>
 
-        <table className="w-full border-collapse">
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
-            <tr className="border-b-2 border-gray-900">
-              <th className="text-left py-2 px-4 font-bold">Product</th>
-              <th className="text-right py-2 px-4 font-bold">Quantity</th>
+            <tr style={{ borderBottom: "2px solid #000" }}>
+              <th
+                style={{
+                  textAlign: "left",
+                  padding: "8px 16px",
+                  fontWeight: "bold",
+                }}
+              >
+                Product
+              </th>
+              <th
+                style={{
+                  textAlign: "right",
+                  padding: "8px 16px",
+                  fontWeight: "bold",
+                }}
+              >
+                Quantity
+              </th>
             </tr>
           </thead>
           <tbody>
-            {filteredStocks.map((stock, index) => (
-              <tr key={stock.id} className="border-b border-gray-300">
-                <td className="py-2 px-4">{stock.productName}</td>
-                <td className="text-right py-2 px-4">{stock.quantity}</td>
+            {filteredStocks.map((stock) => (
+              <tr key={stock.id} style={{ borderBottom: "1px solid #ccc" }}>
+                <td style={{ padding: "8px 16px" }}>{stock.productName}</td>
+                <td style={{ textAlign: "right", padding: "8px 16px" }}>
+                  {stock.quantity}
+                </td>
               </tr>
             ))}
           </tbody>
           <tfoot>
-            <tr className="border-t-2 border-gray-900 font-bold">
-              <td className="py-2 px-4">Total Items</td>
-              <td className="text-right py-2 px-4">{filteredStocks.length}</td>
+            <tr style={{ borderTop: "2px solid #000", fontWeight: "bold" }}>
+              <td style={{ padding: "8px 16px" }}>Total Items</td>
+              <td style={{ textAlign: "right", padding: "8px 16px" }}>
+                {filteredStocks.length}
+              </td>
             </tr>
           </tfoot>
         </table>
