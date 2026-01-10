@@ -8,7 +8,7 @@ import { employeeService } from "../../services/employeeService";
 import { expenseService } from "../../services/expenseService";
 import { paymentMethodService } from "../../services/paymentMethodService";
 import { Select } from "../../components/ui/Select";
-import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
+import { Toast } from "../../components/ui/ConfirmDialog";
 import useAuthStore from "../../store/authStore";
 
 export const EmployeeDetails = () => {
@@ -397,16 +397,6 @@ export const EmployeeDetails = () => {
           </div>
         </form>
       </Modal>
-
-      <ConfirmDialog
-        isOpen={confirmDialog.isOpen}
-        onClose={() => setConfirmDialog({ isOpen: false, salaryId: null })}
-        onConfirm={() => {}} // No delete action for now
-        title="Delete Salary Record"
-        message="Are you sure you want to delete this salary record? This action cannot be undone."
-        confirmText="Delete"
-        variant="danger"
-      />
 
       <Toast
         isOpen={toast.isOpen}
