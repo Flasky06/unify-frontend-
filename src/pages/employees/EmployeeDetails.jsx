@@ -23,7 +23,6 @@ export const EmployeeDetails = () => {
 
   const [salaryFormData, setSalaryFormData] = useState({
     amount: "",
-    reason: "",
     notes: "",
   });
 
@@ -88,7 +87,6 @@ export const EmployeeDetails = () => {
       const submitData = {
         employeeId: parseInt(id),
         amount: parseFloat(salaryFormData.amount),
-        reason: salaryFormData.reason || null,
         notes: salaryFormData.notes || null,
       };
 
@@ -198,7 +196,6 @@ export const EmployeeDetails = () => {
     setEditingSalary(null);
     setSalaryFormData({
       amount: "",
-      reason: "",
       notes: "",
     });
     setIsSalaryModalOpen(true);
@@ -208,7 +205,6 @@ export const EmployeeDetails = () => {
     setEditingSalary(salary);
     setSalaryFormData({
       amount: salary.amount?.toString() || "",
-      reason: salary.reason || "",
       notes: salary.notes || "",
     });
     setIsSalaryModalOpen(true);
@@ -219,7 +215,6 @@ export const EmployeeDetails = () => {
     setEditingSalary(null);
     setSalaryFormData({
       amount: "",
-      reason: "",
       notes: "",
     });
   };
@@ -559,15 +554,6 @@ export const EmployeeDetails = () => {
             }
             placeholder="0.00"
             required
-          />
-
-          <Input
-            label="Reason"
-            value={salaryFormData.reason}
-            onChange={(e) =>
-              setSalaryFormData({ ...salaryFormData, reason: e.target.value })
-            }
-            placeholder="e.g., Annual increment, Promotion"
           />
 
           <div>
