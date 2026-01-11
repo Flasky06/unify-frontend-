@@ -28,8 +28,8 @@ export const InvoiceList = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [filters, setFilters] = useState({
-    startDate: new Date().toISOString().split("T")[0],
-    endDate: new Date().toISOString().split("T")[0],
+    startDate: "",
+    endDate: "",
     shopId: null,
   });
 
