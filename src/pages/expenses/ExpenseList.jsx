@@ -425,17 +425,6 @@ export const ExpenseList = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-blue-600 hover:bg-blue-50 font-medium px-3"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openEditModal(expense);
-                  }}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
                   className="text-orange-600 hover:bg-orange-50 hover:text-orange-700 font-medium px-3"
                   onClick={(e) => {
                     e.stopPropagation();
