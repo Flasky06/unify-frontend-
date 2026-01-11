@@ -113,8 +113,9 @@ const Dashboard = () => {
     {
       header: "Product",
       accessor: "productName",
+      triggerView: true,
       render: (row) => (
-        <span className="text-base font-semibold text-gray-900">
+        <span className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
           {row.productName}
         </span>
       ),
@@ -415,8 +416,9 @@ const Dashboard = () => {
     {
       header: "Service",
       accessor: "name",
+      triggerView: true,
       render: (row) => (
-        <span className="text-base font-semibold text-gray-900">
+        <span className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
           {row.name}
         </span>
       ),
