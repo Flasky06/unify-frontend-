@@ -346,559 +346,569 @@ export const PurchaseOrderList = () => {
               onClick={() => navigate("/purchase-orders/create")}
               className="w-full lg:w-auto whitespace-nowrap"
             >
-            <svg
-              className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            New Purchase Order
-          </Button>
-        </div>
-
-        {/* Table */}
-        <div className="bg-white rounded-lg shadow flex-1 flex flex-col min-h-0 overflow-hidden">
-          {loading ? (
-            <div className="p-8 text-center text-gray-500">
-              Loading purchase orders...
-            </div>
-          ) : (
-            <Table
-              columns={columns}
-              data={filteredOrders}
-              emptyMessage="No purchase orders found. Create one to get started."
-              showViewAction={false}
-              searchable={false}
-              onView={(order) => setViewModal({ isOpen: true, order })}
-            />
-          )}
-        </div>
-      </div>
-
-      {/* Payment Modal */}
-      <Modal
-        isOpen={paymentModal.isOpen}
-        onClose={() =>
-          setPaymentModal({
-            isOpen: false,
-            order: null,
-            amount: "",
-            methodId: "",
-            notes: "",
-          })
-        }
-        title="Record Payment"
-      >
-        {paymentModal.order && (
-          <div className="space-y-4">
-            <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Order:</span>
-                <span className="font-semibold">
-                  {paymentModal.order.orderNumber}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Supplier:</span>
-                <span className="font-semibold">
-                  {paymentModal.order.supplierName}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Total:</span>
-                <span className="font-semibold">
-                  KES {paymentModal.order.total.toLocaleString()}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Paid:</span>
-                <span className="font-semibold">
-                  KES {paymentModal.order.paidAmount.toLocaleString()}
-                </span>
-              </div>
-              <div className="flex justify-between border-t pt-2">
-                <span className="text-gray-600 font-semibold">Balance:</span>
-                <span className="font-bold text-red-600">
-                  KES {paymentModal.order.balance.toLocaleString()}
-                </span>
-              </div>
-            </div>
-
-            <Input
-              label="Payment Amount (KES)"
-              type="number"
-              step="0.01"
-              value={paymentModal.amount}
-              onChange={(e) =>
-                setPaymentModal({ ...paymentModal, amount: e.target.value })
-              }
-              placeholder="0.00"
-              required
-            />
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Payment Method
-              </label>
-              <select
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                value={paymentModal.methodId}
-                onChange={(e) =>
-                  setPaymentModal({ ...paymentModal, methodId: e.target.value })
-                }
-                required
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <option value="">Select Method</option>
-                {paymentMethods.map((method) => (
-                  <option key={method.id} value={method.id}>
-                    {method.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Notes
-              </label>
-              <textarea
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                rows="3"
-                value={paymentModal.notes}
-                onChange={(e) =>
-                  setPaymentModal({ ...paymentModal, notes: e.target.value })
-                }
-                placeholder="Add payment notes..."
-              ></textarea>
-            </div>
-
-            <div className="flex justify-end gap-3 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() =>
-                  setPaymentModal({
-                    isOpen: false,
-                    order: null,
-                    amount: "",
-                    methodId: "",
-                    notes: "",
-                  })
-                }
-              >
-                Cancel
-              </Button>
-              <Button onClick={handleRecordPayment} disabled={submitting}>
-                {submitting ? "Recording..." : "Record Payment"}
-              </Button>
-            </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              New Purchase Order
+            </Button>
           </div>
-        )}
-      </Modal>
 
-      {/* Confirm Dialog */}
-      <ConfirmDialog
-        isOpen={confirmDialog.isOpen}
-        onClose={() =>
-          setConfirmDialog({ isOpen: false, orderId: null, action: null })
-        }
-        onConfirm={() => {
-          if (confirmDialog.action === "cancel") {
-            handleCancelOrder(confirmDialog.orderId);
-          } else if (confirmDialog.action === "receive") {
-            handleReceiveOrder(confirmDialog.orderId);
-          }
-          setConfirmDialog({ isOpen: false, orderId: null, action: null });
-        }}
-        title={
-          confirmDialog.action === "cancel"
-            ? "Cancel Purchase Order"
-            : "Receive Stock"
-        }
-        message={
-          confirmDialog.action === "cancel"
-            ? "Are you sure you want to cancel this purchase order?"
-            : "Are you sure you want to mark this order as received? This will automatically update your stock quantities."
-        }
-        confirmText={
-          confirmDialog.action === "cancel" ? "Cancel Order" : "Receive Stock"
-        }
-        variant="danger"
-      />
-
-      {/* View Details Modal */}
-      <Modal
-        isOpen={viewModal.isOpen}
-        onClose={() => setViewModal({ isOpen: false, order: null })}
-        title="Purchase Order Details"
-        size="lg"
-      >
-        {viewModal.order && (
-          <div className="space-y-6">
-            {/* Order Header */}
-            <div className="bg-gray-50 p-4 rounded-lg space-y-3">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {viewModal.order.orderNumber}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    {viewModal.order.supplierName}
-                  </p>
-                </div>
-                {getStatusBadge(viewModal.order)}
+          {/* Table */}
+          <div className="bg-white rounded-lg shadow flex-1 flex flex-col min-h-0 overflow-hidden">
+            {loading ? (
+              <div className="p-8 text-center text-gray-500">
+                Loading purchase orders...
               </div>
-              <div className="grid grid-cols-2 gap-4 pt-3 border-t">
+            ) : (
+              <Table
+                columns={columns}
+                data={filteredOrders}
+                emptyMessage="No purchase orders found. Create one to get started."
+                showViewAction={false}
+                searchable={false}
+                onView={(order) => setViewModal({ isOpen: true, order })}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Payment Modal */}
+        <Modal
+          isOpen={paymentModal.isOpen}
+          onClose={() =>
+            setPaymentModal({
+              isOpen: false,
+              order: null,
+              amount: "",
+              methodId: "",
+              notes: "",
+            })
+          }
+          title="Record Payment"
+        >
+          {paymentModal.order && (
+            <div className="space-y-4">
+              <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Order:</span>
+                  <span className="font-semibold">
+                    {paymentModal.order.orderNumber}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Supplier:</span>
+                  <span className="font-semibold">
+                    {paymentModal.order.supplierName}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Total:</span>
+                  <span className="font-semibold">
+                    KES {paymentModal.order.total.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Paid:</span>
+                  <span className="font-semibold">
+                    KES {paymentModal.order.paidAmount.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between border-t pt-2">
+                  <span className="text-gray-600 font-semibold">Balance:</span>
+                  <span className="font-bold text-red-600">
+                    KES {paymentModal.order.balance.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+
+              <Input
+                label="Payment Amount (KES)"
+                type="number"
+                step="0.01"
+                value={paymentModal.amount}
+                onChange={(e) =>
+                  setPaymentModal({ ...paymentModal, amount: e.target.value })
+                }
+                placeholder="0.00"
+                required
+              />
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Payment Method
+                </label>
+                <select
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  value={paymentModal.methodId}
+                  onChange={(e) =>
+                    setPaymentModal({
+                      ...paymentModal,
+                      methodId: e.target.value,
+                    })
+                  }
+                  required
+                >
+                  <option value="">Select Method</option>
+                  {paymentMethods.map((method) => (
+                    <option key={method.id} value={method.id}>
+                      {method.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Notes
+                </label>
+                <textarea
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  rows="3"
+                  value={paymentModal.notes}
+                  onChange={(e) =>
+                    setPaymentModal({ ...paymentModal, notes: e.target.value })
+                  }
+                  placeholder="Add payment notes..."
+                ></textarea>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() =>
+                    setPaymentModal({
+                      isOpen: false,
+                      order: null,
+                      amount: "",
+                      methodId: "",
+                      notes: "",
+                    })
+                  }
+                >
+                  Cancel
+                </Button>
+                <Button onClick={handleRecordPayment} disabled={submitting}>
+                  {submitting ? "Recording..." : "Record Payment"}
+                </Button>
+              </div>
+            </div>
+          )}
+        </Modal>
+
+        {/* Confirm Dialog */}
+        <ConfirmDialog
+          isOpen={confirmDialog.isOpen}
+          onClose={() =>
+            setConfirmDialog({ isOpen: false, orderId: null, action: null })
+          }
+          onConfirm={() => {
+            if (confirmDialog.action === "cancel") {
+              handleCancelOrder(confirmDialog.orderId);
+            } else if (confirmDialog.action === "receive") {
+              handleReceiveOrder(confirmDialog.orderId);
+            }
+            setConfirmDialog({ isOpen: false, orderId: null, action: null });
+          }}
+          title={
+            confirmDialog.action === "cancel"
+              ? "Cancel Purchase Order"
+              : "Receive Stock"
+          }
+          message={
+            confirmDialog.action === "cancel"
+              ? "Are you sure you want to cancel this purchase order?"
+              : "Are you sure you want to mark this order as received? This will automatically update your stock quantities."
+          }
+          confirmText={
+            confirmDialog.action === "cancel" ? "Cancel Order" : "Receive Stock"
+          }
+          variant="danger"
+        />
+
+        {/* View Details Modal */}
+        <Modal
+          isOpen={viewModal.isOpen}
+          onClose={() => setViewModal({ isOpen: false, order: null })}
+          title="Purchase Order Details"
+          size="lg"
+        >
+          {viewModal.order && (
+            <div className="space-y-6">
+              {/* Order Header */}
+              <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {viewModal.order.orderNumber}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {viewModal.order.supplierName}
+                    </p>
+                  </div>
+                  {getStatusBadge(viewModal.order)}
+                </div>
+                <div className="grid grid-cols-2 gap-4 pt-3 border-t">
+                  <div>
+                    <span className="text-xs text-gray-500">Order Date</span>
+                    <p className="font-medium">
+                      {viewModal.order.orderDate
+                        ? new Date(
+                            viewModal.order.orderDate
+                          ).toLocaleDateString()
+                        : "-"}
+                    </p>
+                  </div>
+                  {viewModal.order.deliveryDate && (
+                    <div>
+                      <span className="text-xs text-gray-500">
+                        Delivery Date
+                      </span>
+                      <p className="font-medium">
+                        {new Date(
+                          viewModal.order.deliveryDate
+                        ).toLocaleDateString()}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Items */}
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-3">Items</h4>
+                <div className="border rounded-lg overflow-hidden">
+                  <table className="w-full">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Item
+                        </th>
+                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">
+                          Qty
+                        </th>
+                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">
+                          Unit Price
+                        </th>
+                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">
+                          Total
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {viewModal.order.items?.map((item, index) => (
+                        <tr key={index}>
+                          <td className="px-4 py-3 text-sm text-gray-900">
+                            {item.itemName || item.productName || "-"}
+                          </td>
+                          <td className="px-4 py-3 text-sm text-gray-900 text-right">
+                            {item.quantity}
+                          </td>
+                          <td className="px-4 py-3 text-sm text-gray-900 text-right">
+                            KES {(item.unitPrice || 0).toLocaleString()}
+                          </td>
+                          <td className="px-4 py-3 text-sm font-medium text-gray-900 text-right">
+                            KES {(item.total || 0).toLocaleString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Payment Summary */}
+              <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Subtotal:</span>
+                  <span className="font-semibold">
+                    KES {(viewModal.order.total || 0).toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Paid Amount:</span>
+                  <span className="font-semibold text-green-600">
+                    KES {(viewModal.order.paidAmount || 0).toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between border-t pt-2">
+                  <span className="text-gray-900 font-semibold">Balance:</span>
+                  <span
+                    className={`font-bold ${
+                      viewModal.order.balance > 0
+                        ? "text-red-600"
+                        : "text-green-600"
+                    }`}
+                  >
+                    KES {(viewModal.order.balance || 0).toLocaleString()}
+                  </span>
+                </div>
+              </div>
+
+              {/* Notes */}
+              {viewModal.order.notes && (
                 <div>
-                  <span className="text-xs text-gray-500">Order Date</span>
-                  <p className="font-medium">
-                    {viewModal.order.orderDate
-                      ? new Date(viewModal.order.orderDate).toLocaleDateString()
-                      : "-"}
+                  <h4 className="font-semibold text-gray-900 mb-2">Notes</h4>
+                  <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+                    {viewModal.order.notes}
                   </p>
                 </div>
-                {viewModal.order.deliveryDate && (
-                  <div>
-                    <span className="text-xs text-gray-500">Delivery Date</span>
-                    <p className="font-medium">
-                      {new Date(
-                        viewModal.order.deliveryDate
-                      ).toLocaleDateString()}
-                    </p>
+              )}
+
+              {/* Actions */}
+              <div className="flex justify-end gap-3 pt-4 border-t">
+                <Button
+                  variant="outline"
+                  onClick={() => setViewModal({ isOpen: false, order: null })}
+                >
+                  Close
+                </Button>
+                {viewModal.order.status === "PENDING" && (
+                  <>
+                    <Button
+                      variant="outline"
+                      className="text-orange-600 border-orange-200 hover:bg-orange-50"
+                      onClick={() => {
+                        setConfirmDialog({
+                          isOpen: true,
+                          orderId: viewModal.order.id,
+                          action: "cancel",
+                        });
+                        setViewModal({ isOpen: false, order: null });
+                      }}
+                    >
+                      Cancel Order
+                    </Button>
+                  </>
+                )}
+                {!viewModal.order.received &&
+                  viewModal.order.status !== "CANCELLED" && (
+                    <Button
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                      onClick={() => {
+                        setConfirmDialog({
+                          isOpen: true,
+                          orderId: viewModal.order.id,
+                          action: "receive",
+                        });
+                        setViewModal({ isOpen: false, order: null });
+                      }}
+                    >
+                      Receive Stock
+                    </Button>
+                  )}
+                {viewModal.order.balance > 0 &&
+                  viewModal.order.status !== "CANCELLED" && (
+                    <Button
+                      onClick={() => {
+                        openPaymentModal(viewModal.order);
+                        setViewModal({ isOpen: false, order: null });
+                      }}
+                    >
+                      Record Payment
+                    </Button>
+                  )}
+              </div>
+            </div>
+          )}
+        </Modal>
+
+        {/* Toast */}
+        <Toast
+          isOpen={toast.isOpen}
+          onClose={() => setToast({ ...toast, isOpen: false })}
+          message={toast.message}
+          type={toast.type}
+        />
+
+        {/* Print Purchase Orders Modal */}
+        <Modal
+          isOpen={printModalOpen}
+          onClose={() => setPrintModalOpen(false)}
+          title="Purchase Orders List"
+        >
+          <div
+            id="printable-purchase-orders-list"
+            className="print:p-8 print:max-w-[210mm] print:mx-auto print:bg-white print:min-h-[297mm]"
+          >
+            {/* Header */}
+            <div className="text-center pb-4 border-b-2 border-dashed border-gray-300 mb-4 print:pb-2 print:mb-2">
+              <h1 className="text-xl font-bold text-gray-900 uppercase tracking-wide">
+                {user?.businessName || user?.business?.name || "Business"}
+              </h1>
+              <h2 className="text-lg font-semibold text-gray-700">
+                Purchase Orders Report
+              </h2>
+              <div className="mt-2 text-sm text-gray-600">
+                <p>
+                  {new Date().toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+                {(selectedSupplier ||
+                  selectedStatus ||
+                  startDate ||
+                  endDate) && (
+                  <div className="text-xs mt-2 space-y-0.5">
+                    {selectedSupplier && (
+                      <p>
+                        Supplier:{" "}
+                        {
+                          suppliers.find(
+                            (s) => s.id.toString() === selectedSupplier
+                          )?.name
+                        }
+                      </p>
+                    )}
+                    {selectedStatus && <p>Status: {selectedStatus}</p>}
+                    {(startDate || endDate) && (
+                      <p>
+                        {startDate &&
+                          `From: ${new Date(startDate).toLocaleDateString()}`}
+                        {startDate && endDate && " | "}
+                        {endDate &&
+                          `To: ${new Date(endDate).toLocaleDateString()}`}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Items */}
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-3">Items</h4>
-              <div className="border rounded-lg overflow-hidden">
-                <table className="w-full">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                        Item
-                      </th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">
-                        Qty
-                      </th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">
-                        Unit Price
-                      </th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">
-                        Total
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {viewModal.order.items?.map((item, index) => (
-                      <tr key={index}>
-                        <td className="px-4 py-3 text-sm text-gray-900">
-                          {item.itemName || item.productName || "-"}
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-900 text-right">
-                          {item.quantity}
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-900 text-right">
-                          KES {(item.unitPrice || 0).toLocaleString()}
-                        </td>
-                        <td className="px-4 py-3 text-sm font-medium text-gray-900 text-right">
-                          KES {(item.total || 0).toLocaleString()}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Payment Summary */}
-            <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Subtotal:</span>
-                <span className="font-semibold">
-                  KES {(viewModal.order.total || 0).toLocaleString()}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Paid Amount:</span>
-                <span className="font-semibold text-green-600">
-                  KES {(viewModal.order.paidAmount || 0).toLocaleString()}
-                </span>
-              </div>
-              <div className="flex justify-between border-t pt-2">
-                <span className="text-gray-900 font-semibold">Balance:</span>
-                <span
-                  className={`font-bold ${
-                    viewModal.order.balance > 0
-                      ? "text-red-600"
-                      : "text-green-600"
-                  }`}
-                >
-                  KES {(viewModal.order.balance || 0).toLocaleString()}
-                </span>
-              </div>
-            </div>
-
-            {/* Notes */}
-            {viewModal.order.notes && (
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Notes</h4>
-                <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-                  {viewModal.order.notes}
-                </p>
-              </div>
-            )}
-
-            {/* Actions */}
-            <div className="flex justify-end gap-3 pt-4 border-t">
-              <Button
-                variant="outline"
-                onClick={() => setViewModal({ isOpen: false, order: null })}
-              >
-                Close
-              </Button>
-              {viewModal.order.status === "PENDING" && (
-                <>
-                  <Button
-                    variant="outline"
-                    className="text-orange-600 border-orange-200 hover:bg-orange-50"
-                    onClick={() => {
-                      setConfirmDialog({
-                        isOpen: true,
-                        orderId: viewModal.order.id,
-                        action: "cancel",
-                      });
-                      setViewModal({ isOpen: false, order: null });
-                    }}
-                  >
-                    Cancel Order
-                  </Button>
-                </>
-              )}
-              {!viewModal.order.received &&
-                viewModal.order.status !== "CANCELLED" && (
-                  <Button
-                    className="bg-green-600 hover:bg-green-700 text-white"
-                    onClick={() => {
-                      setConfirmDialog({
-                        isOpen: true,
-                        orderId: viewModal.order.id,
-                        action: "receive",
-                      });
-                      setViewModal({ isOpen: false, order: null });
-                    }}
-                  >
-                    Receive Stock
-                  </Button>
-                )}
-              {viewModal.order.balance > 0 &&
-                viewModal.order.status !== "CANCELLED" && (
-                  <Button
-                    onClick={() => {
-                      openPaymentModal(viewModal.order);
-                      setViewModal({ isOpen: false, order: null });
-                    }}
-                  >
-                    Record Payment
-                  </Button>
-                )}
-            </div>
-          </div>
-        )}
-      </Modal>
-
-      {/* Confirm Dialog */}
-      <ConfirmDialog
-        isOpen={confirmDialog.isOpen}
-        onClose={() => setConfirmDialog({ isOpen: false, orderId: null, action: null })}
-        onConfirm={() => {
-          if (confirmDialog.action === "cancel") {
-            handleCancelOrder(confirmDialog.orderId);
-          } else if (confirmDialog.action === "receive") {
-            handleReceiveOrder(confirmDialog.orderId);
-          }
-          setConfirmDialog({ isOpen: false, orderId: null, action: null });
-        }}
-        title={confirmDialog.action === "cancel" ? "Cancel Order" : "Receive Stock"}
-        message={
-          confirmDialog.action === "cancel"
-            ? "Are you sure you want to cancel this purchase order? This action cannot be undone."
-            : "Confirm that you have received the stock for this purchase order?"
-        }
-        confirmText={confirmDialog.action === "cancel" ? "Cancel Order" : "Confirm Receipt"}
-        variant={confirmDialog.action === "cancel" ? "danger" : "primary"}
-      />
-
-      {/* Toast */}
-      <Toast
-        isOpen={toast.isOpen}
-        onClose={() => setToast({ ...toast, isOpen: false })}
-        message={toast.message}
-        type={toast.type}
-      />
-
-      {/* Print Purchase Orders Modal */}
-      <Modal
-        isOpen={printModalOpen}
-        onClose={() => setPrintModalOpen(false)}
-        title="Purchase Orders List"
-      >
-        <div
-          id="printable-purchase-orders-list"
-          className="print:p-8 print:max-w-[210mm] print:mx-auto print:bg-white print:min-h-[297mm]"
-        >
-          {/* Header */}
-          <div className="text-center pb-4 border-b-2 border-dashed border-gray-300 mb-4 print:pb-2 print:mb-2">
-            <h1 className="text-xl font-bold text-gray-900 uppercase tracking-wide">
-              {user?.businessName || user?.business?.name || "Business"}
-            </h1>
-            <h2 className="text-lg font-semibold text-gray-700">Purchase Orders Report</h2>
-            <div className="mt-2 text-sm text-gray-600">
-              <p>
-                {new Date().toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </p>
-              {(selectedSupplier || selectedStatus || startDate || endDate) && (
-                <div className="text-xs mt-2 space-y-0.5">
-                  {selectedSupplier && (
-                    <p>
-                      Supplier: {suppliers.find((s) => s.id.toString() === selectedSupplier)?.name}
-                    </p>
-                  )}
-                  {selectedStatus && (
-                    <p>
-                      Status: {selectedStatus}
-                    </p>
-                  )}
-                  {(startDate || endDate) && (
-                    <p>
-                      {startDate && `From: ${new Date(startDate).toLocaleDateString()}`}
-                      {startDate && endDate && " | "}
-                      {endDate && `To: ${new Date(endDate).toLocaleDateString()}`}
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Purchase Orders Table */}
-          <table className="w-full text-sm mb-4">
-            <thead>
-              <tr className="border-b border-gray-900">
-                <th className="py-1 text-left w-[15%]">Order #</th>
-                <th className="py-1 text-left w-[20%]">Supplier</th>
-                <th className="py-1 text-left w-[12%]">Date</th>
-                <th className="py-1 text-right w-[15%]">Total</th>
-                <th className="py-1 text-right w-[15%]">Paid</th>
-                <th className="py-1 text-right w-[15%]">Balance</th>
-                <th className="py-1 text-center w-[8%]">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-dashed divide-gray-200">
-              {filteredOrders.filter(o => o.status !== "CANCELLED").map((order) => (
-                <tr key={order.id} className="print:leading-tight">
-                  <td className="py-2 pr-1 align-top font-medium text-gray-900">
-                    {order.orderNumber}
-                  </td>
-                  <td className="py-2 pr-1 align-top text-gray-700">
-                    {order.supplierName}
-                  </td>
-                  <td className="py-2 pr-1 align-top text-gray-700">
-                    {order.orderDate ? new Date(order.orderDate).toLocaleDateString() : "-"}
-                  </td>
-                  <td className="py-2 text-right align-top font-medium">
-                    KES {(order.total || 0).toLocaleString()}
-                  </td>
-                  <td className="py-2 text-right align-top text-gray-700">
-                    KES {(order.paidAmount || 0).toLocaleString()}
-                  </td>
-                  <td className="py-2 text-right align-top font-medium">
-                    KES {(order.balance || 0).toLocaleString()}
-                  </td>
-                  <td className="py-2 text-center align-top text-xs">
-                    {order.status}
-                  </td>
+            {/* Purchase Orders Table */}
+            <table className="w-full text-sm mb-4">
+              <thead>
+                <tr className="border-b border-gray-900">
+                  <th className="py-1 text-left w-[15%]">Order #</th>
+                  <th className="py-1 text-left w-[20%]">Supplier</th>
+                  <th className="py-1 text-left w-[12%]">Date</th>
+                  <th className="py-1 text-right w-[15%]">Total</th>
+                  <th className="py-1 text-right w-[15%]">Paid</th>
+                  <th className="py-1 text-right w-[15%]">Balance</th>
+                  <th className="py-1 text-center w-[8%]">Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-dashed divide-gray-200">
+                {filteredOrders
+                  .filter((o) => o.status !== "CANCELLED")
+                  .map((order) => (
+                    <tr key={order.id} className="print:leading-tight">
+                      <td className="py-2 pr-1 align-top font-medium text-gray-900">
+                        {order.orderNumber}
+                      </td>
+                      <td className="py-2 pr-1 align-top text-gray-700">
+                        {order.supplierName}
+                      </td>
+                      <td className="py-2 pr-1 align-top text-gray-700">
+                        {order.orderDate
+                          ? new Date(order.orderDate).toLocaleDateString()
+                          : "-"}
+                      </td>
+                      <td className="py-2 text-right align-top font-medium">
+                        KES {(order.total || 0).toLocaleString()}
+                      </td>
+                      <td className="py-2 text-right align-top text-gray-700">
+                        KES {(order.paidAmount || 0).toLocaleString()}
+                      </td>
+                      <td className="py-2 text-right align-top font-medium">
+                        KES {(order.balance || 0).toLocaleString()}
+                      </td>
+                      <td className="py-2 text-center align-top text-xs">
+                        {order.status}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
 
-          {/* Totals */}
-          <div className="border-t-2 border-gray-900 pt-3 border-dashed space-y-2">
-            <div className="flex justify-between items-center text-sm font-semibold text-gray-900">
-              <span>Total Amount:</span>
-              <span>
-                KES {filteredOrders.filter(o => o.status !== "CANCELLED").reduce((sum, o) => sum + (o.total || 0), 0).toLocaleString()}
-              </span>
+            {/* Totals */}
+            <div className="border-t-2 border-gray-900 pt-3 border-dashed space-y-2">
+              <div className="flex justify-between items-center text-sm font-semibold text-gray-900">
+                <span>Total Amount:</span>
+                <span>
+                  KES{" "}
+                  {filteredOrders
+                    .filter((o) => o.status !== "CANCELLED")
+                    .reduce((sum, o) => sum + (o.total || 0), 0)
+                    .toLocaleString()}
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-sm font-semibold text-green-700">
+                <span>Total Paid:</span>
+                <span>
+                  KES{" "}
+                  {filteredOrders
+                    .filter((o) => o.status !== "CANCELLED")
+                    .reduce((sum, o) => sum + (o.paidAmount || 0), 0)
+                    .toLocaleString()}
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-base font-bold text-red-700 border-t border-gray-300 pt-2">
+                <span className="uppercase">Total Outstanding:</span>
+                <span>
+                  KES{" "}
+                  {filteredOrders
+                    .filter((o) => o.status !== "CANCELLED")
+                    .reduce((sum, o) => sum + (o.balance || 0), 0)
+                    .toLocaleString()}
+                </span>
+              </div>
             </div>
-            <div className="flex justify-between items-center text-sm font-semibold text-green-700">
-              <span>Total Paid:</span>
-              <span>
-                KES {filteredOrders.filter(o => o.status !== "CANCELLED").reduce((sum, o) => sum + (o.paidAmount || 0), 0).toLocaleString()}
-              </span>
-            </div>
-            <div className="flex justify-between items-center text-base font-bold text-red-700 border-t border-gray-300 pt-2">
-              <span className="uppercase">Total Outstanding:</span>
-              <span>
-                KES {filteredOrders.filter(o => o.status !== "CANCELLED").reduce((sum, o) => sum + (o.balance || 0), 0).toLocaleString()}
-              </span>
+
+            {/* Footer */}
+            <div className="text-center pt-6 border-t-2 border-dashed border-gray-200 mt-4 print:mt-2 print:pt-2">
+              <p className="text-xs text-gray-500">
+                Generated on {new Date().toLocaleString()}
+              </p>
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="text-center pt-6 border-t-2 border-dashed border-gray-200 mt-4 print:mt-2 print:pt-2">
-            <p className="text-xs text-gray-500">
-              Generated on {new Date().toLocaleString()}
-            </p>
-          </div>
-        </div>
-
-        {/* Actions - HIDDEN ON PRINT */}
-        <div className="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-4 print:hidden">
-          <Button variant="outline" onClick={() => setPrintModalOpen(false)}>
-            Close
-          </Button>
-          <Button
-            onClick={() => {
-              const originalTitle = document.title;
-              document.title = "Purchase_Orders_Report";
-              window.print();
-              setTimeout(() => {
-                document.title = originalTitle;
-              }, 100);
-            }}
-            className="gap-2"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          {/* Actions - HIDDEN ON PRINT */}
+          <div className="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-4 print:hidden">
+            <Button variant="outline" onClick={() => setPrintModalOpen(false)}>
+              Close
+            </Button>
+            <Button
+              onClick={() => {
+                const originalTitle = document.title;
+                document.title = "Purchase_Orders_Report";
+                window.print();
+                setTimeout(() => {
+                  document.title = originalTitle;
+                }, 100);
+              }}
+              className="gap-2"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-              />
-            </svg>
-            Print
-          </Button>
-        </div>
-      </Modal>
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                />
+              </svg>
+              Print
+            </Button>
+          </div>
+        </Modal>
+      </div>
     </div>
   );
 };
