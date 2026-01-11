@@ -517,7 +517,10 @@ export const ProductList = () => {
         onClose={() => setPrintModalOpen(false)}
         title="Products List"
       >
-        <div id="printable-products-list" className="print:p-8">
+        <div
+          id="printable-products-list"
+          className="print:p-8 print:max-w-[210mm] print:mx-auto print:bg-white print:min-h-[297mm]"
+        >
           {/* Header */}
           <div className="text-center pb-4 border-b-2 border-dashed border-gray-300 mb-4 print:pb-2 print:mb-2">
             <h1 className="text-xl font-bold text-gray-900 uppercase tracking-wide">
@@ -557,8 +560,7 @@ export const ProductList = () => {
                 <th className="py-1 text-left w-[35%]">Product Name</th>
                 <th className="py-1 text-left w-[15%]">Category</th>
                 <th className="py-1 text-left w-[15%]">Brand</th>
-                <th className="py-1 text-right w-[17.5%]">Cost Price</th>
-                <th className="py-1 text-right w-[17.5%]">Selling Price</th>
+                <th className="py-1 text-right w-[35%]">Selling Price</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-dashed divide-gray-200">
@@ -576,9 +578,6 @@ export const ProductList = () => {
                     {product.brandName || "N/A"}
                   </td>
                   <td className="py-2 text-right align-top font-medium">
-                    KSH {product.costPrice?.toFixed(2) || "0.00"}
-                  </td>
-                  <td className="py-2 text-right align-top font-medium">
                     KSH {product.sellingPrice?.toFixed(2) || "0.00"}
                   </td>
                 </tr>
@@ -587,18 +586,19 @@ export const ProductList = () => {
           </table>
 
           {/* Total */}
-          <div className="border-t-2 border-gray-900 pt-3 border-dashed">
-            <div className="flex justify-between items-center text-base font-bold text-gray-900">
-              <span className="uppercase">Total Products</span>
-              <span>{filteredProducts.length}</span>
-            </div>
-          </div>
 
           {/* Footer */}
           <div className="text-center pt-6 border-t-2 border-dashed border-gray-200 mt-4 print:mt-2 print:pt-2">
             <p className="text-xs text-gray-500">
               Generated on {new Date().toLocaleString()}
             </p>
+          </div>
+
+          <div className="flex justify-end gap-3 mt-6 print:hidden">
+            <Button variant="outline" onClick={() => setPrintModalOpen(false)}>
+              Close
+            </Button>
+            <Button onClick={() => window.print()}>Print</Button>
           </div>
         </div>
 
