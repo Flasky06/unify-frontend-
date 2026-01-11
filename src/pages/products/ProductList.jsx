@@ -593,13 +593,6 @@ export const ProductList = () => {
               Generated on {new Date().toLocaleString()}
             </p>
           </div>
-
-          <div className="flex justify-end gap-3 mt-6 print:hidden">
-            <Button variant="outline" onClick={() => setPrintModalOpen(false)}>
-              Close
-            </Button>
-            <Button onClick={() => window.print()}>Print</Button>
-          </div>
         </div>
 
         {/* Actions - HIDDEN ON PRINT */}
@@ -607,7 +600,17 @@ export const ProductList = () => {
           <Button variant="outline" onClick={() => setPrintModalOpen(false)}>
             Close
           </Button>
-          <Button onClick={() => window.print()} className="gap-2">
+          <Button
+            onClick={() => {
+              const originalTitle = document.title;
+              document.title = "Products_Catalog";
+              window.print();
+              setTimeout(() => {
+                document.title = originalTitle;
+              }, 100);
+            }}
+            className="gap-2"
+          >
             <svg
               className="w-4 h-4"
               fill="none"
