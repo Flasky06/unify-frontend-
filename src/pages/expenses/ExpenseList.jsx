@@ -798,21 +798,36 @@ export const ExpenseList = () => {
                 })}
               </p>
               {(selectedCategory || selectedShop || startDate || endDate) && (
-                <p className="text-xs mt-1">
-                  {selectedCategory &&
-                    `Category: ${
-                      categories.find(
-                        (c) => c.id.toString() === selectedCategory
-                      )?.name
-                    } `}
-                  {selectedShop &&
-                    `Shop: ${
-                      shops.find((s) => s.id.toString() === selectedShop)?.name
-                    } `}
-                  {startDate &&
-                    `From: ${new Date(startDate).toLocaleDateString()} `}
-                  {endDate && `To: ${new Date(endDate).toLocaleDateString()}`}
-                </p>
+                <div className="text-xs mt-2 space-y-0.5">
+                  {selectedCategory && (
+                    <p>
+                      Category:{" "}
+                      {
+                        categories.find(
+                          (c) => c.id.toString() === selectedCategory
+                        )?.name
+                      }
+                    </p>
+                  )}
+                  {selectedShop && (
+                    <p>
+                      Shop:{" "}
+                      {
+                        shops.find((s) => s.id.toString() === selectedShop)
+                          ?.name
+                      }
+                    </p>
+                  )}
+                  {(startDate || endDate) && (
+                    <p>
+                      {startDate &&
+                        `From: ${new Date(startDate).toLocaleDateString()}`}
+                      {startDate && endDate && " | "}
+                      {endDate &&
+                        `To: ${new Date(endDate).toLocaleDateString()}`}
+                    </p>
+                  )}
+                </div>
               )}
             </div>
           </div>
