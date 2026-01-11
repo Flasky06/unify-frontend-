@@ -530,7 +530,10 @@ const StockList = () => {
         onClose={() => setPrintModalOpen(false)}
         title="Stock List"
       >
-        <div id="printable-stock-list" className="print:p-8">
+        <div
+          id="printable-stock-list"
+          className="print:p-8 print:max-w-[210mm] print:mx-auto print:bg-white print:min-h-[297mm]"
+        >
           {/* Header */}
           <div className="text-center pb-4 border-b-2 border-dashed border-gray-300 mb-4 print:pb-2 print:mb-2">
             <h1 className="text-xl font-bold text-gray-900 uppercase tracking-wide">
@@ -593,7 +596,17 @@ const StockList = () => {
           <Button variant="outline" onClick={() => setPrintModalOpen(false)}>
             Close
           </Button>
-          <Button onClick={() => window.print()} className="gap-2">
+          <Button
+            onClick={() => {
+              const originalTitle = document.title;
+              document.title = "Stock_List";
+              window.print();
+              setTimeout(() => {
+                document.title = originalTitle;
+              }, 100);
+            }}
+            className="gap-2"
+          >
             <svg
               className="w-4 h-4"
               fill="none"
