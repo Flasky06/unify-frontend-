@@ -122,27 +122,33 @@ export const ExpenseList = () => {
   };
 
   const filteredExpenses = useMemo(() => {
-    return expenses.filter((expense) => {
-      const matchesCategory = selectedCategory
-        ? expense.categoryId.toString() === selectedCategory
-        : true;
+    return expenses
+      .filter((expense) => {
+        const matchesCategory = selectedCategory
+          ? expense.categoryId.toString() === selectedCategory
+          : true;
 
-      const matchesShop = selectedShop
-        ? expense.shopId?.toString() === selectedShop
-        : true;
+        const matchesShop = selectedShop
+          ? expense.shopId?.toString() === selectedShop
+          : true;
 
-      const matchesDateRange =
-        (!startDate || expense.date >= startDate) && // expenseDate -> date (DTO)
-        (!endDate || expense.date <= endDate);
+        const matchesDateRange =
+          (!startDate || expense.date >= startDate) && // expenseDate -> date (DTO)
+          (!endDate || expense.date <= endDate);
 
-      const matchesSearch =
-        expense.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        expense.payee?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearch =
+          expense.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          expense.payee?.toLowerCase().includes(searchTerm.toLowerCase());
 
-      return (
-        matchesCategory && matchesShop && matchesDateRange && matchesSearch
-      );
-    });
+        return (
+          matchesCategory && matchesShop && matchesDateRange && matchesSearch
+        );
+      })
+      .sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB - dateA || b.id - a.id;
+      });
   }, [
     expenses,
     selectedCategory,
