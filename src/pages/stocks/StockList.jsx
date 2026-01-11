@@ -9,9 +9,11 @@ import AdjustStockModal from "./AdjustStockModal";
 import { stockService } from "../../services/stockService";
 import { productService } from "../../services/productService";
 import { shopService } from "../../services/shopService";
+import useAuthStore from "../../store/authStore";
 
 const StockList = () => {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const [stocks, setStocks] = useState([]);
   const [products, setProducts] = useState([]);
   const [shops, setShops] = useState([]);
@@ -546,9 +548,12 @@ const StockList = () => {
           {/* Header */}
           <div className="text-center pb-4 border-b-2 border-dashed border-gray-300 mb-4 print:pb-2 print:mb-2">
             <h1 className="text-xl font-bold text-gray-900 uppercase tracking-wide">
-              {selectedShopName}
+              {user?.businessName || user?.business?.name || "Business"}
             </h1>
-            <h2 className="text-sm font-semibold text-gray-700">Stock List</h2>
+            <h2 className="text-lg font-semibold text-gray-700">
+              {selectedShopName}
+            </h2>
+            <h3 className="text-sm font-semibold text-gray-600">Stock List</h3>
             <div className="mt-2 text-sm text-gray-600">
               <p>
                 {new Date().toLocaleDateString("en-US", {
