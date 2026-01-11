@@ -583,7 +583,11 @@ export const Sidebar = ({ isOpen, onClose }) => {
               mflow
             </h1>
             <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">
-              {isSuperAdmin() ? "Admin Panel" : "Business Management"}
+              {isSuperAdmin()
+                ? "Admin Panel"
+                : user?.businessName ||
+                  user?.business?.name ||
+                  "Business Management"}
             </p>
           </div>
           {/* Close button - only visible on mobile */}
