@@ -136,7 +136,7 @@ const Dashboard = () => {
           className={`px-3 py-1 rounded text-sm font-medium transition ${
             row.quantity < 1
               ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-              : "bg-blue-50 text-blue-600 hover:bg-blue-100"
+              : "bg-green-50 text-green-600 hover:bg-green-100"
           }`}
         >
           {row.quantity < 1 ? "Out of Stock" : "Add"}
