@@ -110,7 +110,15 @@ const Dashboard = () => {
   // ... [fetch logic]
 
   const columns = [
-    { header: "Product", accessor: "productName" },
+    {
+      header: "Product",
+      accessor: "productName",
+      render: (row) => (
+        <span className="text-base font-semibold text-gray-900">
+          {row.productName}
+        </span>
+      ),
+    },
     {
       header: "Stock",
       accessor: "quantity",
@@ -404,7 +412,15 @@ const Dashboard = () => {
   );
 
   const serviceColumns = [
-    { header: "Service", accessor: "name" },
+    {
+      header: "Service",
+      accessor: "name",
+      render: (row) => (
+        <span className="text-base font-semibold text-gray-900">
+          {row.name}
+        </span>
+      ),
+    },
     {
       header: "Category",
       accessor: "categoryName",
