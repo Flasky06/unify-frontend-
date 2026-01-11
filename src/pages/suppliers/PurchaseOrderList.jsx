@@ -224,8 +224,9 @@ export const PurchaseOrderList = () => {
       );
     })
     .sort((a, b) => {
-      const dateA = new Date(a.orderDate);
-      const dateB = new Date(b.orderDate);
+      // Handle null dates by treating them as oldest
+      const dateA = a.orderDate ? new Date(a.orderDate) : new Date(0);
+      const dateB = b.orderDate ? new Date(b.orderDate) : new Date(0);
       return dateB - dateA || b.id - a.id;
     });
 
