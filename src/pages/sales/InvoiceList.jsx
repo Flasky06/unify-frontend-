@@ -69,9 +69,12 @@ export const InvoiceList = () => {
       setLoading(true);
       const data = await saleService.getSales(filters);
       // Filter PENDING and PARTIALLY_PAID invoices (those with outstanding balance)
-      const invoices = (data || []).filter(
-        (sale) => sale.status === "PENDING" || sale.status === "PARTIALLY_PAID"
-      );
+      const invoices = (data || [])
+        .filter(
+          (sale) =>
+            sale.status === "PENDING" || sale.status === "PARTIALLY_PAID"
+        )
+        .sort((a, b) => new Date(b.saleDate) - new Date(a.saleDate));
       setSales(invoices);
     } catch (err) {
       console.error("Failed to fetch invoices", err);
