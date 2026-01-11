@@ -8,9 +8,11 @@ import { purchaseOrderService } from "../../services/purchaseOrderService";
 import { supplierService } from "../../services/supplierService";
 import { paymentMethodService } from "../../services/paymentMethodService";
 import { ConfirmDialog, Toast } from "../../components/ui/ConfirmDialog";
+import useAuthStore from "../../store/authStore";
 
 export const PurchaseOrderList = () => {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const [orders, setOrders] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [paymentMethods, setPaymentMethods] = useState([]);
@@ -18,6 +20,9 @@ export const PurchaseOrderList = () => {
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [printModalOpen, setPrintModalOpen] = useState(false);
   const [viewModal, setViewModal] = useState({
     isOpen: false,
     order: null,
@@ -193,7 +198,26 @@ export const PurchaseOrderList = () => {
       const matchesSearch = order.orderNumber
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
-      return matchesSupplier && matchesStatus && matchesSearch;
+
+      // Date filtering
+      let matchesDateRange = true;
+      if (startDate || endDate) {
+        const orderDate = new Date(order.orderDate);
+        if (startDate) {
+          const start = new Date(startDate);
+          start.setHours(0, 0, 0, 0);
+          if (orderDate < start) matchesDateRange = false;
+        }
+        if (endDate) {
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999);
+          if (orderDate > end) matchesDateRange = false;
+        }
+      }
+
+      return (
+        matchesSupplier && matchesStatus && matchesSearch && matchesDateRange
+      );
     })
     .sort((a, b) => {
       const dateA = new Date(a.orderDate);
@@ -275,10 +299,53 @@ export const PurchaseOrderList = () => {
               <option value="CANCELLED">Cancelled</option>
             </select>
           </div>
-          <Button
-            onClick={() => navigate("/purchase-orders/create")}
-            className="w-full lg:w-auto whitespace-nowrap"
-          >
+          <div className="w-full sm:w-auto">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              Start Date
+            </label>
+            <Input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full sm:w-auto py-1.5 text-sm"
+            />
+          </div>
+          <div className="w-full sm:w-auto">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              End Date
+            </label>
+            <Input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full sm:w-auto py-1.5 text-sm"
+            />
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setPrintModalOpen(true)}
+              className="w-full lg:w-auto whitespace-nowrap"
+            >
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                />
+              </svg>
+              Print
+            </Button>
+            <Button
+              onClick={() => navigate("/purchase-orders/create")}
+              className="w-full lg:w-auto whitespace-nowrap"
+            >
             <svg
               className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
               fill="none"
@@ -649,6 +716,28 @@ export const PurchaseOrderList = () => {
         )}
       </Modal>
 
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog({ isOpen: false, orderId: null, action: null })}
+        onConfirm={() => {
+          if (confirmDialog.action === "cancel") {
+            handleCancelOrder(confirmDialog.orderId);
+          } else if (confirmDialog.action === "receive") {
+            handleReceiveOrder(confirmDialog.orderId);
+          }
+          setConfirmDialog({ isOpen: false, orderId: null, action: null });
+        }}
+        title={confirmDialog.action === "cancel" ? "Cancel Order" : "Receive Stock"}
+        message={
+          confirmDialog.action === "cancel"
+            ? "Are you sure you want to cancel this purchase order? This action cannot be undone."
+            : "Confirm that you have received the stock for this purchase order?"
+        }
+        confirmText={confirmDialog.action === "cancel" ? "Cancel Order" : "Confirm Receipt"}
+        variant={confirmDialog.action === "cancel" ? "danger" : "primary"}
+      />
+
       {/* Toast */}
       <Toast
         isOpen={toast.isOpen}
@@ -656,6 +745,160 @@ export const PurchaseOrderList = () => {
         message={toast.message}
         type={toast.type}
       />
+
+      {/* Print Purchase Orders Modal */}
+      <Modal
+        isOpen={printModalOpen}
+        onClose={() => setPrintModalOpen(false)}
+        title="Purchase Orders List"
+      >
+        <div
+          id="printable-purchase-orders-list"
+          className="print:p-8 print:max-w-[210mm] print:mx-auto print:bg-white print:min-h-[297mm]"
+        >
+          {/* Header */}
+          <div className="text-center pb-4 border-b-2 border-dashed border-gray-300 mb-4 print:pb-2 print:mb-2">
+            <h1 className="text-xl font-bold text-gray-900 uppercase tracking-wide">
+              {user?.businessName || user?.business?.name || "Business"}
+            </h1>
+            <h2 className="text-lg font-semibold text-gray-700">Purchase Orders Report</h2>
+            <div className="mt-2 text-sm text-gray-600">
+              <p>
+                {new Date().toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </p>
+              {(selectedSupplier || selectedStatus || startDate || endDate) && (
+                <div className="text-xs mt-2 space-y-0.5">
+                  {selectedSupplier && (
+                    <p>
+                      Supplier: {suppliers.find((s) => s.id.toString() === selectedSupplier)?.name}
+                    </p>
+                  )}
+                  {selectedStatus && (
+                    <p>
+                      Status: {selectedStatus}
+                    </p>
+                  )}
+                  {(startDate || endDate) && (
+                    <p>
+                      {startDate && `From: ${new Date(startDate).toLocaleDateString()}`}
+                      {startDate && endDate && " | "}
+                      {endDate && `To: ${new Date(endDate).toLocaleDateString()}`}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Purchase Orders Table */}
+          <table className="w-full text-sm mb-4">
+            <thead>
+              <tr className="border-b border-gray-900">
+                <th className="py-1 text-left w-[15%]">Order #</th>
+                <th className="py-1 text-left w-[20%]">Supplier</th>
+                <th className="py-1 text-left w-[12%]">Date</th>
+                <th className="py-1 text-right w-[15%]">Total</th>
+                <th className="py-1 text-right w-[15%]">Paid</th>
+                <th className="py-1 text-right w-[15%]">Balance</th>
+                <th className="py-1 text-center w-[8%]">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-dashed divide-gray-200">
+              {filteredOrders.filter(o => o.status !== "CANCELLED").map((order) => (
+                <tr key={order.id} className="print:leading-tight">
+                  <td className="py-2 pr-1 align-top font-medium text-gray-900">
+                    {order.orderNumber}
+                  </td>
+                  <td className="py-2 pr-1 align-top text-gray-700">
+                    {order.supplierName}
+                  </td>
+                  <td className="py-2 pr-1 align-top text-gray-700">
+                    {order.orderDate ? new Date(order.orderDate).toLocaleDateString() : "-"}
+                  </td>
+                  <td className="py-2 text-right align-top font-medium">
+                    KES {(order.total || 0).toLocaleString()}
+                  </td>
+                  <td className="py-2 text-right align-top text-gray-700">
+                    KES {(order.paidAmount || 0).toLocaleString()}
+                  </td>
+                  <td className="py-2 text-right align-top font-medium">
+                    KES {(order.balance || 0).toLocaleString()}
+                  </td>
+                  <td className="py-2 text-center align-top text-xs">
+                    {order.status}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* Totals */}
+          <div className="border-t-2 border-gray-900 pt-3 border-dashed space-y-2">
+            <div className="flex justify-between items-center text-sm font-semibold text-gray-900">
+              <span>Total Amount:</span>
+              <span>
+                KES {filteredOrders.filter(o => o.status !== "CANCELLED").reduce((sum, o) => sum + (o.total || 0), 0).toLocaleString()}
+              </span>
+            </div>
+            <div className="flex justify-between items-center text-sm font-semibold text-green-700">
+              <span>Total Paid:</span>
+              <span>
+                KES {filteredOrders.filter(o => o.status !== "CANCELLED").reduce((sum, o) => sum + (o.paidAmount || 0), 0).toLocaleString()}
+              </span>
+            </div>
+            <div className="flex justify-between items-center text-base font-bold text-red-700 border-t border-gray-300 pt-2">
+              <span className="uppercase">Total Outstanding:</span>
+              <span>
+                KES {filteredOrders.filter(o => o.status !== "CANCELLED").reduce((sum, o) => sum + (o.balance || 0), 0).toLocaleString()}
+              </span>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="text-center pt-6 border-t-2 border-dashed border-gray-200 mt-4 print:mt-2 print:pt-2">
+            <p className="text-xs text-gray-500">
+              Generated on {new Date().toLocaleString()}
+            </p>
+          </div>
+        </div>
+
+        {/* Actions - HIDDEN ON PRINT */}
+        <div className="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-4 print:hidden">
+          <Button variant="outline" onClick={() => setPrintModalOpen(false)}>
+            Close
+          </Button>
+          <Button
+            onClick={() => {
+              const originalTitle = document.title;
+              document.title = "Purchase_Orders_Report";
+              window.print();
+              setTimeout(() => {
+                document.title = originalTitle;
+              }, 100);
+            }}
+            className="gap-2"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+              />
+            </svg>
+            Print
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };
