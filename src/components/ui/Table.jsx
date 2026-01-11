@@ -13,7 +13,7 @@ const Table = ({
   searchable = true,
   searchPlaceholder = "Search...",
   pageSize = 20,
-  pageSizeOptions = [20, 50, 100],
+  pageSizeOptions = [10, 20, 50, 100],
   getRowClassName,
 }) => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
