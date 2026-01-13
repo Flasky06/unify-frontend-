@@ -279,14 +279,21 @@ const StockTransfers = () => {
   ];
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-lg shadow-sm">
-      <div className="p-2 md:p-6 border-b border-gray-200 space-y-4">
+    <div className="flex flex-col h-full max-w-full overflow-hidden bg-gray-50 p-2 md:p-4">
+      <div className="flex flex-col gap-4 sm:gap-6 flex-1 min-h-0">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-          <h1 className="text-2xl font-bold text-blue-600">Stock Transfers</h1>
-          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 sm:items-center w-full sm:w-auto">
-            {user?.role === "BUSINESS_OWNER" && (
+          <h1 className="text-2xl font-bold text-gray-900">Stock Transfers</h1>
+        </div>
+
+        {/* Filters */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+          {user?.role === "BUSINESS_OWNER" && (
+            <div className="w-full">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Shop
+              </label>
               <select
-                className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                 value={selectedShopId}
                 onChange={(e) => setSelectedShopId(e.target.value)}
               >
@@ -297,70 +304,79 @@ const StockTransfers = () => {
                   </option>
                 ))}
               </select>
-            )}
-            <Button
-              onClick={openCreateModal}
-              className="w-full sm:w-auto whitespace-nowrap"
-            >
-              Move Stock (Inter-Branch)
-            </Button>
+            </div>
+          )}
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Search
+            </label>
+            <Input
+              placeholder="Search transfers..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full"
+            />
           </div>
         </div>
 
-        <div className="w-full sm:max-w-md">
-          <Input
-            placeholder="Search transfers..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full"
+        <div className="flex justify-end">
+          <Button
+            onClick={openCreateModal}
+            className="w-full sm:w-auto whitespace-nowrap"
+          >
+            Move Stock (Inter-Branch)
+          </Button>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 flex-1 flex flex-col min-h-0 overflow-hidden">
+          <div className="flex gap-4 border-b border-gray-200 px-4 pt-2">
+            <button
+              className={`py-2 px-4 font-medium border-b-2 transition ${
+                activeTab === "incoming"
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+              onClick={() => setActiveTab("incoming")}
+            >
+              Incoming
+            </button>
+            <button
+              className={`py-2 px-4 font-medium border-b-2 transition ${
+                activeTab === "outgoing"
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+              onClick={() => setActiveTab("outgoing")}
+            >
+              Outgoing
+            </button>
+          </div>
+
+          <Table
+            columns={columns}
+            data={(transfers || []).filter(
+              (t) =>
+                t.productName
+                  ?.toLowerCase()
+                  .includes(searchTerm.toLowerCase()) ||
+                t.sourceShopName
+                  ?.toLowerCase()
+                  .includes(searchTerm.toLowerCase()) ||
+                t.destinationShopName
+                  ?.toLowerCase()
+                  .includes(searchTerm.toLowerCase())
+            )}
+            loading={loading}
+            emptyMessage={`No ${activeTab} transfers found`}
+            showViewAction={false}
+            searchable={false}
+            onView={(row) => {
+              setViewTransfer(row);
+              setViewModalOpen(true);
+            }}
           />
         </div>
       </div>
-
-      <div className="flex gap-4 border-b border-gray-200">
-        <button
-          className={`py-2 px-4 font-medium border-b-2 transition ${
-            activeTab === "incoming"
-              ? "border-blue-600 text-blue-600"
-              : "border-transparent text-gray-500 hover:text-gray-700"
-          }`}
-          onClick={() => setActiveTab("incoming")}
-        >
-          Incoming
-        </button>
-        <button
-          className={`py-2 px-4 font-medium border-b-2 transition ${
-            activeTab === "outgoing"
-              ? "border-blue-600 text-blue-600"
-              : "border-transparent text-gray-500 hover:text-gray-700"
-          }`}
-          onClick={() => setActiveTab("outgoing")}
-        >
-          Outgoing
-        </button>
-      </div>
-
-      <Table
-        columns={columns}
-        data={(transfers || []).filter(
-          (t) =>
-            t.productName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            t.sourceShopName
-              ?.toLowerCase()
-              .includes(searchTerm.toLowerCase()) ||
-            t.destinationShopName
-              ?.toLowerCase()
-              .includes(searchTerm.toLowerCase())
-        )}
-        loading={loading}
-        emptyMessage={`No ${activeTab} transfers found`}
-        showViewAction={false}
-        searchable={false}
-        onView={(row) => {
-          setViewTransfer(row);
-          setViewModalOpen(true);
-        }}
-      />
 
       {/* View Details Modal */}
       <Modal

@@ -103,7 +103,7 @@ export const SalesReport = () => {
   }
 
   return (
-    <div className="p-3 md:p-6 space-y-6">
+    <div className="space-y-4">
       {/* Header & Filters */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         <div>

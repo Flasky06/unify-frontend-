@@ -204,30 +204,17 @@ const RoleManagement = () => {
   }
 
   return (
-    <div className="p-2 md:p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div></div>
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-        >
-          <SaveIcon className="w-4 h-4" />
-          {saving ? "Saving..." : "Save Changes"}
-        </button>
-      </div>
-
-      <div className="flex flex-col gap-6">
-        {/* Role Selector Top Section */}
-        <div className="w-full bg-white rounded-lg shadow-sm border p-4">
-          <h2 className="font-semibold text-gray-700 border-b pb-2 mb-4">
+    <div className="space-y-4">
+      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between md:items-end gap-4">
+        <div className="w-full md:max-w-md relative">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             Select Role
-          </h2>
+          </label>
           <div className="relative">
             <select
               value={selectedRole || ""}
               onChange={(e) => setSelectedRole(e.target.value)}
-              className="w-full appearance-none bg-white border border-gray-300 hover:border-blue-400 text-gray-700 py-3 px-4 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer font-medium"
+              className="w-full appearance-none bg-white border border-gray-300 hover:border-blue-400 text-gray-700 py-2.5 px-4 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer font-medium"
             >
               <option value="" disabled>
                 Select a role...
@@ -238,7 +225,7 @@ const RoleManagement = () => {
                 </option>
               ))}
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
               <svg
                 className="fill-current h-4 w-4"
                 xmlns="http://www.w3.org/2000/svg"
@@ -248,10 +235,20 @@ const RoleManagement = () => {
               </svg>
             </div>
           </div>
-          <p className="text-xs text-gray-500 mt-3 px-1">
-            Select a role from the dropdown to view and edit its permissions.
-          </p>
         </div>
+
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium whitespace-nowrap"
+        >
+          <SaveIcon className="w-4 h-4" />
+          {saving ? "Saving..." : "Save Changes"}
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-6">
+        {/* Permissions Grid */}
 
         {/* Permissions Grid */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 h-full flex flex-col">

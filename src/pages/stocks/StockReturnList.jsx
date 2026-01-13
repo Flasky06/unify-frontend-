@@ -117,11 +117,17 @@ const StockReturnList = () => {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Stock Returns</h1>
         </div>
-        <div className="flex gap-2">
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+        <div className="w-full">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Filter by Shop
+          </label>
           <select
             value={selectedShop}
             onChange={(e) => setSelectedShop(e.target.value)}
-            className="rounded-lg border-gray-300 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
           >
             {shops.map((shop) => (
               <option key={shop.id} value={shop.id}>
@@ -129,40 +135,43 @@ const StockReturnList = () => {
               </option>
             ))}
           </select>
-          <Button
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            Process Return
-          </Button>
+        </div>
+        <div className="w-full">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Search Returns
+          </label>
+          <Input
+            placeholder="Search returns..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full"
+          />
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="p-4 border-b border-gray-200 flex flex-col sm:flex-row gap-4">
-          <div className="relative flex-1">
-            <Input
-              placeholder="Search returns..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full"
+      <div className="flex justify-end">
+        <Button
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center gap-2"
+        >
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4v16m8-8H4"
             />
-          </div>
-        </div>
+          </svg>
+          Process Return
+        </Button>
+      </div>
 
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <Table
           columns={[
             {
