@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { subscriptionService } from "../../services/subscriptionService";
 import { Toast } from "../../components/ui/ConfirmDialog";
 import { RecordPaymentModal } from "../../components/modals/RecordPaymentModal";
-import StatCard from "../../components/ui/StatCard";
+
 import StatusBadge from "../../components/ui/StatusBadge";
 import Table from "../../components/ui/Table";
 import Input from "../../components/ui/Input";
 
 const SubscriptionsManagement = () => {
   const [subscriptions, setSubscriptions] = useState([]);
-  const [plans, setPlans] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSubscription, setSelectedSubscription] = useState(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -35,14 +35,11 @@ const SubscriptionsManagement = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const [subsData, plansData] = await Promise.all([
+      const subsData =
         filterStatus === "ALL"
-          ? subscriptionService.getAllSubscriptions()
-          : subscriptionService.getSubscriptionsByStatus(filterStatus),
-        subscriptionService.getActivePlans(),
-      ]);
+          ? await subscriptionService.getAllSubscriptions()
+          : await subscriptionService.getSubscriptionsByStatus(filterStatus);
       setSubscriptions(subsData);
-      setPlans(plansData);
     } catch (error) {
       showToast("Failed to fetch data", "error");
       console.error(error);
@@ -63,7 +60,7 @@ const SubscriptionsManagement = () => {
       await subscriptionService.suspendSubscription(subscriptionId);
       showToast("Subscription suspended", "success");
       fetchData();
-    } catch (error) {
+    } catch {
       showToast("Failed to suspend subscription", "error");
     }
   };
@@ -73,7 +70,7 @@ const SubscriptionsManagement = () => {
       await subscriptionService.reactivateSubscription(subscriptionId);
       showToast("Subscription reactivated", "success");
       fetchData();
-    } catch (error) {
+    } catch {
       showToast("Failed to reactivate subscription", "error");
     }
   };
@@ -183,16 +180,8 @@ const SubscriptionsManagement = () => {
   }
 
   return (
-    <div className="flex flex-col h-full p-4">
+    <div className="flex flex-col h-full p-4 overflow-auto">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">
-          Subscription Management
-        </h1>
-        <p className="text-gray-600 mt-1">
-          Manage business subscriptions and payments
-        </p>
-      </div>
 
       {/* Stats Cards - 2 columns on mobile, 4 on desktop */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -245,7 +234,7 @@ const SubscriptionsManagement = () => {
       </div>
 
       {/* Subscriptions Table */}
-      <div className="flex-1 bg-white rounded-lg shadow overflow-hidden">
+      <div className="flex-1 bg-white rounded-lg shadow">
         <Table
           columns={columns}
           data={filteredSubscriptions}
@@ -253,6 +242,7 @@ const SubscriptionsManagement = () => {
           emptyMessage="No subscriptions found"
           searchable={false}
           showViewAction={false}
+          maxHeight="calc(100vh - 200px)"
         />
       </div>
 
@@ -276,6 +266,27 @@ const SubscriptionsManagement = () => {
         type={toastState.type}
         onClose={() => setToastState({ ...toastState, isOpen: false })}
       />
+    </div>
+  );
+};
+
+const StatCard = ({ title, value, color }) => {
+  const colors = {
+    blue: "text-blue-600",
+    green: "text-green-600",
+    yellow: "text-yellow-600",
+    red: "text-red-600",
+  };
+  return (
+    <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-100">
+      <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+        {title}
+      </p>
+      <p
+        className={`mt-1 text-xl font-bold ${colors[color] || "text-gray-900"}`}
+      >
+        {value}
+      </p>
     </div>
   );
 };

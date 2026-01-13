@@ -304,7 +304,7 @@ const AdminUsers = () => {
   }
 
   return (
-    <div className="flex flex-col h-full max-w-full overflow-hidden p-2 md:p-6">
+    <div className="flex flex-col h-full max-w-full overflow-auto p-2 md:p-6">
       <div className="flex flex-col gap-2 sm:gap-4">
         {/* Statistics Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -318,13 +318,7 @@ const AdminUsers = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mt-4">
-          <div>
-            <h3 className="text-lg font-medium text-gray-900">System Users</h3>
-            <p className="text-sm text-gray-500">
-              Manage all users across the platform.
-            </p>
-          </div>
+        <div className="flex flex-col gap-2 sm:flex-row sm:justify-end sm:items-center mt-4">
           <div className="flex gap-2">
             <Input
               placeholder="Search users..."
@@ -354,7 +348,7 @@ const AdminUsers = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-lg shadow">
           {isLoading ? (
             <div className="p-8 text-center text-gray-500">
               Loading users...
