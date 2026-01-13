@@ -279,7 +279,7 @@ const StockTransfers = () => {
   ];
 
   return (
-    <div className="flex flex-col h-full max-w-full overflow-hidden space-y-2">
+    <div className="flex flex-col h-full max-w-full overflow-hidden space-y-2 -mt-2">
       <div className="flex flex-col gap-2 sm:gap-4 flex-1 min-h-0">
         {/* Toolbar: Filters & Actions */}
         <div className="flex flex-col lg:flex-row gap-4 items-end justify-between">

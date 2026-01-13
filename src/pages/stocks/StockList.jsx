@@ -342,7 +342,7 @@ const StockList = () => {
   };
 
   return (
-    <div className="flex flex-col h-full max-w-full overflow-hidden">
+    <div className="flex flex-col h-full max-w-full overflow-hidden -mt-2">
       <div className="print:hidden flex flex-col h-full">
         {error && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
@@ -366,7 +366,7 @@ const StockList = () => {
             </div>
           </div>
         )}
-        <div className="flex flex-col gap-2 sm:gap-4 flex-1 min-h-0">
+        <div className="flex flex-col gap-2 flex-1 min-h-0">
           {/* Toolbar: Filters & Actions */}
           <div className="flex flex-col lg:flex-row gap-4 items-end justify-between">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:w-auto flex-1 max-w-2xl">
