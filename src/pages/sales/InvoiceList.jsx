@@ -192,69 +192,71 @@ export const InvoiceList = () => {
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-4 sm:gap-6 flex-1 min-h-0">
         {/* Filters */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="md:col-span-4 lg:col-span-1">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Search
-              </label>
-              <Input
-                placeholder="Invoice # or Customer..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Start Date
-              </label>
-              <Input
-                type="date"
-                value={filters.startDate}
-                onChange={(e) =>
-                  setFilters({ ...filters, startDate: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                End Date
-              </label>
-              <Input
-                type="date"
-                value={filters.endDate}
-                onChange={(e) =>
-                  setFilters({ ...filters, endDate: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Shop
-              </label>
-              <select
-                value={filters.shopId || ""}
-                onChange={(e) =>
-                  setFilters({
-                    ...filters,
-                    shopId: e.target.value ? parseInt(e.target.value) : null,
-                  })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">All Shops</option>
-                {shops.map((shop) => (
-                  <option key={shop.id} value={shop.id}>
-                    {shop.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+        {/* Filters */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Search
+            </label>
+            <Input
+              placeholder="Invoice # or Customer..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full"
+            />
+          </div>
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Start Date
+            </label>
+            <Input
+              type="date"
+              value={filters.startDate}
+              onChange={(e) =>
+                setFilters({ ...filters, startDate: e.target.value })
+              }
+              className="w-full"
+            />
+          </div>
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              End Date
+            </label>
+            <Input
+              type="date"
+              value={filters.endDate}
+              onChange={(e) =>
+                setFilters({ ...filters, endDate: e.target.value })
+              }
+              className="w-full"
+            />
+          </div>
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Shop
+            </label>
+            <select
+              value={filters.shopId || ""}
+              onChange={(e) =>
+                setFilters({
+                  ...filters,
+                  shopId: e.target.value ? parseInt(e.target.value) : null,
+                })
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">All Shops</option>
+              {shops.map((shop) => (
+                <option key={shop.id} value={shop.id}>
+                  {shop.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-lg shadow flex-1 flex flex-col min-h-0 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 flex-1 flex flex-col min-h-0 overflow-hidden">
           <Table
             columns={columns}
             data={sales.filter(

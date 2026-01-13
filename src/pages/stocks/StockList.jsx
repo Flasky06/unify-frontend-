@@ -367,92 +367,91 @@ const StockList = () => {
           </div>
         )}
         <div className="flex flex-col gap-2 sm:gap-4 flex-1 min-h-0">
-          <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-end">
-            <div className="flex flex-col gap-2 sm:flex-row sm:flex-1 sm:gap-3">
-              <div className="w-full sm:w-48">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Filter by Shop
-                </label>
-                <select
-                  value={selectedShopId}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setSelectedShopId(value);
-                    setViewMode(value ? "byShop" : "all");
-                  }}
-                  className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">All Shops</option>
-                  {shops.map((shop) => (
-                    <option key={shop.id} value={shop.id}>
-                      {shop.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex-1 w-full sm:max-w-xs">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Search
-                </label>
-                <Input
-                  placeholder="Search stocks..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="py-1.5"
-                />
-              </div>
+          {/* Filters */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+            <div className="w-full">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Filter by Shop
+              </label>
+              <select
+                value={selectedShopId}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSelectedShopId(value);
+                  setViewMode(value ? "byShop" : "all");
+                }}
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">All Shops</option>
+                {shops.map((shop) => (
+                  <option key={shop.id} value={shop.id}>
+                    {shop.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                onClick={handlePrint}
-                className="w-full sm:w-auto whitespace-nowrap py-1.5"
-              >
-                <svg
-                  className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-                  />
-                </svg>
-                Print
-              </Button>
-              <Button
-                onClick={() => {
-                  resetForm();
-                  setEditingStock(null);
-                  setShowProductPicker(true);
-                }}
-                className="w-full sm:w-auto whitespace-nowrap py-1.5"
-              >
-                <svg
-                  className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                Add Stock
-              </Button>
+            <div className="w-full">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Search
+              </label>
+              <Input
+                placeholder="Search stocks..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="py-1.5 w-full"
+              />
             </div>
           </div>
 
+          <div className="flex gap-2 justify-end">
+            <Button
+              variant="outline"
+              onClick={handlePrint}
+              className="w-full sm:w-auto whitespace-nowrap py-1.5"
+            >
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                />
+              </svg>
+              Print
+            </Button>
+            <Button
+              onClick={() => {
+                resetForm();
+                setEditingStock(null);
+                setShowProductPicker(true);
+              }}
+              className="w-full sm:w-auto whitespace-nowrap py-1.5"
+            >
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Add Stock
+            </Button>
+          </div>
+
           {/* Stock Table */}
-          <div className="bg-white rounded-lg shadow flex-1 flex flex-col min-h-0 overflow-hidden">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 flex-1 flex flex-col min-h-0 overflow-hidden">
             <Table
               columns={columns}
               data={filteredStocks}
