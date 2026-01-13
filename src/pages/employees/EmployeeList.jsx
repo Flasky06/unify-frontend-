@@ -668,99 +668,127 @@ export const EmployeeList = () => {
         isOpen={printModalOpen}
         onClose={() => setPrintModalOpen(false)}
         title="Print Employee List"
-        maxWidth="max-w-[210mm]"
       >
-        <div className="space-y-4 print:p-0">
-          <div className="flex justify-between items-center print:hidden">
-            <p className="text-gray-500 text-sm">
-              This will print a list of all <strong>active</strong> employees.
-            </p>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                onClick={() => setPrintModalOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={() => window.print()}
-                className="flex items-center gap-2"
-              >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-                  />
-                </svg>
-                Print
-              </Button>
-            </div>
-          </div>
-
-          <div id="printable-employee-list" className="bg-white p-4">
-            {/* Header */}
-            <div className="text-center mb-6 hidden print:block">
-              <h1 className="text-xl font-bold text-gray-900 uppercase tracking-wide">
-                Employee List
-              </h1>
-              <p className="text-sm text-gray-500 mt-1">
-                Generated on {new Date().toLocaleDateString()}
+        <div
+          id="printable-employee-list"
+          className="print:p-8 print:max-w-[210mm] print:mx-auto print:bg-white print:min-h-[297mm]"
+        >
+          {/* Header */}
+          <div className="text-center pb-4 border-b-2 border-dashed border-gray-300 mb-4 print:pb-2 print:mb-2">
+            <h1 className="text-xl font-bold text-gray-900 uppercase tracking-wide">
+              {user?.businessName || user?.business?.name || "The Ladder"}
+            </h1>
+            <h2 className="text-lg font-semibold text-gray-700">
+              Employee List
+            </h2>
+            <div className="mt-2 text-sm text-gray-600">
+              <p>
+                {new Date().toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
               </p>
-            </div>
-
-            {/* Table */}
-            <table className="w-full text-sm mb-4 border-collapse">
-              <thead>
-                <tr className="border-b-2 border-gray-800">
-                  <th className="py-2 text-left w-[30%]">Name</th>
-                  <th className="py-2 text-left w-[20%]">ID Number</th>
-                  <th className="py-2 text-left w-[20%]">Phone</th>
-                  <th className="py-2 text-left w-[30%]">Position</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {employees
-                  .filter((emp) => emp.active)
-                  .map((employee) => (
-                    <tr key={employee.id} className="print:leading-tight">
-                      <td className="py-2 pr-2 align-top font-medium text-gray-900">
-                        {employee.fullName}
-                      </td>
-                      <td className="py-2 pr-2 align-top text-gray-700">
-                        {employee.idNumber || "-"}
-                      </td>
-                      <td className="py-2 pr-2 align-top text-gray-700">
-                        {employee.phoneNumber || "-"}
-                      </td>
-                      <td className="py-2 text-left align-top text-gray-700">
-                        {employee.position || "Staff"}
-                      </td>
-                    </tr>
-                  ))}
-                {employees.filter((emp) => emp.active).length === 0 && (
-                  <tr>
-                    <td
-                      colSpan="4"
-                      className="py-4 text-center text-gray-500 italic"
-                    >
-                      No active employees found.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-
-            <div className="hidden print:block text-xs text-gray-400 mt-4 text-center border-t border-gray-200 pt-2">
-              Page 1 of 1
+              {(selectedShop || selectedStatus !== "all" || searchTerm) && (
+                <div className="text-xs mt-2 space-y-0.5">
+                  {selectedShop && (
+                    <p>
+                      Shop:{" "}
+                      {shops.find((s) => s.id.toString() === selectedShop)
+                        ?.name || selectedShop}
+                    </p>
+                  )}
+                  {selectedStatus !== "all" && (
+                    <p className="capitalize">Status: {selectedStatus}</p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
+
+          {/* Table */}
+          <table className="w-full text-sm mb-4">
+            <thead>
+              <tr className="border-b border-gray-900">
+                <th className="py-1 text-left w-[30%]">Name</th>
+                <th className="py-1 text-left w-[20%]">ID Number</th>
+                <th className="py-1 text-left w-[20%]">Phone</th>
+                <th className="py-1 text-left w-[20%]">Position</th>
+                <th className="py-1 text-center w-[10%]">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-dashed divide-gray-200">
+              {filteredEmployees.map((employee) => (
+                <tr key={employee.id} className="print:leading-tight">
+                  <td className="py-2 pr-1 align-top font-medium text-gray-900">
+                    {employee.fullName}
+                  </td>
+                  <td className="py-2 pr-1 align-top text-gray-700">
+                    {employee.idNumber || "-"}
+                  </td>
+                  <td className="py-2 pr-1 align-top text-gray-700">
+                    {employee.phoneNumber || "-"}
+                  </td>
+                  <td className="py-2 pr-1 align-top text-gray-700">
+                    {employee.position || "-"}
+                  </td>
+                  <td className="py-2 text-center align-top text-xs">
+                    {employee.active ? "Active" : "Inactive"}
+                  </td>
+                </tr>
+              ))}
+              {filteredEmployees.length === 0 && (
+                <tr>
+                  <td
+                    colSpan="5"
+                    className="py-4 text-center text-gray-500 italic"
+                  >
+                    No employees found matching criteria.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+
+          {/* Footer */}
+          <div className="text-center pt-6 border-t-2 border-dashed border-gray-200 mt-4 print:mt-2 print:pt-2">
+            <p className="text-xs text-gray-500">
+              Generated on {new Date().toLocaleString()}
+            </p>
+          </div>
+        </div>
+
+        {/* Actions - HIDDEN ON PRINT */}
+        <div className="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-4 print:hidden">
+          <Button variant="outline" onClick={() => setPrintModalOpen(false)}>
+            Close
+          </Button>
+          <Button
+            onClick={() => {
+              const originalTitle = document.title;
+              document.title = "Employee_List_Report";
+              window.print();
+              setTimeout(() => {
+                document.title = originalTitle;
+              }, 100);
+            }}
+            className="flex items-center gap-2"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+              />
+            </svg>
+            Print
+          </Button>
         </div>
       </Modal>
     </div>
