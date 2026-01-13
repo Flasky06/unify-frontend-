@@ -193,7 +193,7 @@ export const BusinessDetails = () => {
   }
 
   return (
-    <div className="flex flex-col h-full max-w-full overflow-hidden p-2 md:p-6 overflow-y-auto">
+    <div className="flex flex-col w-full">
       <div className="flex flex-col gap-4 sm:gap-6 pb-20">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">

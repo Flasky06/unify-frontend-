@@ -478,7 +478,7 @@ export const ExpenseList = () => {
     searchTerm || selectedCategory || selectedShop || startDate || endDate;
 
   return (
-    <div className="flex flex-col h-full max-w-full overflow-hidden">
+    <div className="flex flex-col w-full">
       <div className="flex flex-col gap-3">
         {/* Filters Input Area */}
         {/* Filters Input Area */}

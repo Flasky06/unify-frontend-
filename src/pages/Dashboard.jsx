@@ -454,7 +454,7 @@ const Dashboard = () => {
   if (!user) return null;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-100px)]">
+    <div className="flex flex-col w-full h-full overflow-hidden">
       {/* Header & Controls */}
       <div className="bg-white p-4 rounded-lg shadow mb-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center">

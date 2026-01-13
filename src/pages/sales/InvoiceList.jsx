@@ -189,7 +189,7 @@ export const InvoiceList = () => {
   ];
 
   return (
-    <div className="flex flex-col h-full max-w-full overflow-hidden">
+    <div className="flex flex-col w-full">
       <div className="flex flex-col gap-4 sm:gap-6 flex-1 min-h-0">
         {/* Filters */}
         {/* Filters */}

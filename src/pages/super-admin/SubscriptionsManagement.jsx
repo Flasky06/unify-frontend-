@@ -131,7 +131,7 @@ const SubscriptionsManagement = () => {
   };
 
   return (
-    <div className="flex flex-col h-full p-4 overflow-auto">
+    <div className="flex flex-col w-full">
       {/* Header */}
 
       {/* Stats Cards - 2 columns on mobile, 4 on desktop */}

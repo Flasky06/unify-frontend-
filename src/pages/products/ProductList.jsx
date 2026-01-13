@@ -335,7 +335,7 @@ export const ProductList = () => {
   ];
 
   return (
-    <div className="flex flex-col h-full max-w-full overflow-hidden">
+    <div className="flex flex-col w-full">
       <div className="flex flex-col gap-2 sm:gap-4">
         <div className="flex flex-col gap-2 lg:flex-row lg:justify-between lg:items-center">
           <div className="flex flex-col gap-2 lg:flex-row lg:flex-1 lg:gap-3">

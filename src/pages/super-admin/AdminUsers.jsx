@@ -260,7 +260,7 @@ const AdminUsers = () => {
   }
 
   return (
-    <div className="flex flex-col h-full max-w-full overflow-auto p-2 md:p-6">
+    <div className="flex flex-col w-full">
       <div className="flex flex-col gap-2 sm:gap-4">
         {/* Statistics Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">

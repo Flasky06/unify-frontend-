@@ -333,7 +333,7 @@ export const EmployeeList = () => {
   ];
 
   return (
-    <div className="flex flex-col h-full max-w-full overflow-hidden">
+    <div className="flex flex-col w-full">
       <div className="flex flex-col gap-4 sm:gap-6">
         {/* Filters */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">

@@ -342,7 +342,7 @@ const StockList = () => {
   };
 
   return (
-    <div className="flex flex-col h-full max-w-full overflow-hidden -mt-2">
+    <div className="flex flex-col w-full -mt-2">
       <div className="print:hidden flex flex-col h-full">
         {error && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
