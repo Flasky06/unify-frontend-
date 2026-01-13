@@ -279,53 +279,53 @@ const StockTransfers = () => {
   ];
 
   return (
-    <div className="flex flex-col h-full max-w-full overflow-hidden bg-gray-50 p-2 md:p-4">
-      <div className="flex flex-col gap-4 sm:gap-6 flex-1 min-h-0">
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-          <h1 className="text-2xl font-bold text-gray-900">Stock Transfers</h1>
-        </div>
-
-        {/* Filters */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-          {user?.role === "BUSINESS_OWNER" && (
+    <div className="flex flex-col h-full max-w-full overflow-hidden space-y-2">
+      <div className="flex flex-col gap-2 sm:gap-4 flex-1 min-h-0">
+        {/* Toolbar: Filters & Actions */}
+        <div className="flex flex-col lg:flex-row gap-4 items-end justify-between">
+          {/* Filters */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:w-auto flex-1 max-w-2xl">
+            {user?.role === "BUSINESS_OWNER" && (
+              <div className="w-full">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Shop
+                </label>
+                <select
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                  value={selectedShopId}
+                  onChange={(e) => setSelectedShopId(e.target.value)}
+                >
+                  <option value="">Select Shop</option>
+                  {shops.map((shop) => (
+                    <option key={shop.id} value={shop.id}>
+                      {shop.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div className="w-full">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Shop
+                Search
               </label>
-              <select
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
-                value={selectedShopId}
-                onChange={(e) => setSelectedShopId(e.target.value)}
-              >
-                <option value="">Select Shop</option>
-                {shops.map((shop) => (
-                  <option key={shop.id} value={shop.id}>
-                    {shop.name}
-                  </option>
-                ))}
-              </select>
+              <Input
+                placeholder="Search transfers..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full"
+              />
             </div>
-          )}
-          <div className="w-full">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Search
-            </label>
-            <Input
-              placeholder="Search transfers..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full"
-            />
           </div>
-        </div>
 
-        <div className="flex justify-end">
-          <Button
-            onClick={openCreateModal}
-            className="w-full sm:w-auto whitespace-nowrap"
-          >
-            Move Stock (Inter-Branch)
-          </Button>
+          {/* Actions */}
+          <div className="flex gap-2 w-full lg:w-auto justify-end">
+            <Button
+              onClick={openCreateModal}
+              className="w-full sm:w-auto whitespace-nowrap"
+            >
+              Move Stock (Inter-Branch)
+            </Button>
+          </div>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 flex-1 flex flex-col min-h-0 overflow-hidden">
