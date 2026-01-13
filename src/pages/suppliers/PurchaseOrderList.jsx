@@ -268,7 +268,7 @@ export const PurchaseOrderList = () => {
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       <div className="flex flex-col gap-4 sm:gap-6 flex-1 min-h-0">
         {/* Filters */}
-        <div className="flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-end">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-end flex-wrap">
           <div className="w-full lg:w-48">
             <Input
               placeholder="Search orders..."
@@ -326,47 +326,47 @@ export const PurchaseOrderList = () => {
               className="w-full sm:w-auto py-1.5 text-sm"
             />
           </div>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setPrintModalOpen(true)}
-              className="w-full lg:w-auto whitespace-nowrap"
+        </div>
+        <div className="flex gap-2 justify-end">
+          <Button
+            variant="outline"
+            onClick={() => setPrintModalOpen(true)}
+            className="w-full lg:w-auto whitespace-nowrap"
+          >
+            <svg
+              className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              <svg
-                className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-                />
-              </svg>
-              Print
-            </Button>
-            <Button
-              onClick={() => navigate("/purchase-orders/create")}
-              className="w-full lg:w-auto whitespace-nowrap"
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+              />
+            </svg>
+            Print
+          </Button>
+          <Button
+            onClick={() => navigate("/purchase-orders/create")}
+            className="w-full lg:w-auto whitespace-nowrap"
+          >
+            <svg
+              className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              <svg
-                className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              New Purchase Order
-            </Button>
-          </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            New Purchase Order
+          </Button>
         </div>
 
         {/* Table */}
