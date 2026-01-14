@@ -1,5 +1,5 @@
 import React from "react";
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
 
 export const DateRangePicker = ({ startDate, endDate, onChange }) => {
   const handleStartDateChange = (e) => {

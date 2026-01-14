@@ -199,7 +199,7 @@ const Dashboard = () => {
       }
     };
     init();
-  }, []);
+  }, [user?.businessId]);
 
   // Clear cart when shop changes
   useEffect(() => {
@@ -209,34 +209,34 @@ const Dashboard = () => {
 
   // Fetch Stock when shop or products change
   useEffect(() => {
+    const fetchStock = async (shopId) => {
+      setLoading(true);
+      try {
+        const stocks = await stockService.getStocksByShop(shopId);
+
+        // Map ALL products to show availability, even if no stock record exists yet
+        const productAvailability = products.map((product) => {
+          const stockEntry = stocks.find((s) => s.productId === product.id);
+          return {
+            id: stockEntry?.id || `temp-${product.id}`,
+            productId: product.id,
+            productName: product.name,
+            price: product.sellingPrice || 0,
+            quantity: stockEntry?.quantity || 0,
+          };
+        });
+        setStock(productAvailability);
+      } catch (err) {
+        console.error("Failed to fetch stock", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (selectedShopId) {
       fetchStock(selectedShopId);
     }
   }, [selectedShopId, products]);
-
-  const fetchStock = async (shopId) => {
-    setLoading(true);
-    try {
-      const stocks = await stockService.getStocksByShop(shopId);
-
-      // Map ALL products to show availability, even if no stock record exists yet
-      const productAvailability = products.map((product) => {
-        const stockEntry = stocks.find((s) => s.productId === product.id);
-        return {
-          id: stockEntry?.id || `temp-${product.id}`,
-          productId: product.id,
-          productName: product.name,
-          price: product.sellingPrice || 0,
-          quantity: stockEntry?.quantity || 0,
-        };
-      });
-      setStock(productAvailability);
-    } catch (err) {
-      console.error("Failed to fetch stock", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const addToCart = (item, type = "PRODUCT") => {
     setCart((prev) => {
@@ -299,7 +299,7 @@ const Dashboard = () => {
     });
   };
 
-  const removeFromCart = (id, type) => {
+  const removeFromCart = (id) => {
     setCart((prev) =>
       prev.filter((item) => {
         if (item.type === "SERVICE") return item.serviceId !== id;
@@ -374,12 +374,7 @@ const Dashboard = () => {
     );
   };
 
-  const calculateTotal = () => {
-    return cart.reduce(
-      (sum, item) => sum + (item.price - (item.discount || 0)) * item.quantity,
-      0
-    );
-  };
+
 
   const calculateSubTotal = () => {
     return cart.reduce(

@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { api } from "../../lib/api";
-import { authService } from "../../services/authService";
-import useAuthStore from "../../store/authStore";
+// import { authService } from "../../services/authService"; // Removed unused
+// import useAuthStore from "../../store/authStore"; // Removed unused
 
 const VerifyEmail = () => {
   const navigate = useNavigate();
-  const { setAuth } = useAuthStore();
   const [code, setCode] = useState("");
   const [status, setStatus] = useState("input"); // input, verifying, success, error
   const [message, setMessage] = useState("");

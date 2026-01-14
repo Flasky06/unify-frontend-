@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { analyticsService } from "../../services/analyticsService";
 import { shopService } from "../../services/shopService";
 import Button from "../../components/ui/Button";
@@ -23,39 +23,39 @@ export const ExpenseAnalytics = () => {
     const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
     setStartDate(firstDay.toISOString().split("T")[0]);
     setEndDate(today.toISOString().split("T")[0]);
-  }, []);
+  }, [fetchShops]);
 
   useEffect(() => {
+    const fetchAnalytics = async () => {
+      setLoading(true);
+      try {
+        const shopId = selectedShop ? parseInt(selectedShop) : null;
+        const expenses = await analyticsService.getExpenseAnalytics(
+          startDate,
+          endDate,
+          shopId
+        );
+        setExpenseAnalytics(expenses);
+      } catch (error) {
+        console.error("Failed to fetch expense analytics:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (startDate && endDate) {
       fetchAnalytics();
     }
   }, [startDate, endDate, selectedShop]);
 
-  const fetchShops = async () => {
+  const fetchShops = useCallback(async () => {
     try {
       const data = await shopService.getAll();
       setShops(data || []);
     } catch (error) {
       console.error("Failed to fetch shops:", error);
     }
-  };
-
-  const fetchAnalytics = async () => {
-    setLoading(true);
-    try {
-      const shopId = selectedShop ? parseInt(selectedShop) : null;
-      const expenses = await analyticsService.getExpenseAnalytics(
-        startDate,
-        endDate,
-        shopId
-      );
-      setExpenseAnalytics(expenses);
-    } catch (error) {
-      console.error("Failed to fetch expense analytics:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, []);
 
   const setQuickFilter = (filter) => {
     const today = new Date();
@@ -65,12 +65,13 @@ export const ExpenseAnalytics = () => {
       case "today":
         start = end = today.toISOString().split("T")[0];
         break;
-      case "week":
+      case "week": {
         const weekStart = new Date(today);
         weekStart.setDate(today.getDate() - today.getDay());
         start = weekStart.toISOString().split("T")[0];
         end = today.toISOString().split("T")[0];
         break;
+      }
       case "month":
         start = new Date(today.getFullYear(), today.getMonth(), 1)
           .toISOString()

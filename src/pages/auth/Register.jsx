@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { registerSchema } from "../../schemas/authSchemas";
@@ -7,8 +7,6 @@ import { registerSchema } from "../../schemas/authSchemas";
 const Register = () => {
   const { register, isLoading, error } = useAuth();
   const location = useLocation();
-  const [registrationSuccess, setRegistrationSuccess] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
 
   /* Capture Plan Preference */
   useEffect(() => {
@@ -41,7 +39,7 @@ const Register = () => {
     onSubmit: async (values) => {
       if (isLoading) return;
       try {
-        const { confirmPassword, ...data } = values;
+        const { confirmPassword: _confirmPassword, ...data } = values;
         const registerData = {
           ...data,
           role: "BUSINESS_OWNER",
@@ -60,49 +58,8 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
-        {registrationSuccess ? (
-          // Success Message
-          <div className="text-center">
-            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
-              <svg
-                className="h-10 w-10 text-green-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Registration Successful!
-            </h1>
-            <p className="text-gray-600 mb-6">
-              We've sent a 6-digit verification code to{" "}
-              <strong>{userEmail}</strong>. Please check your inbox and enter
-              the code to activate your account.
-            </p>
-            <div className="space-y-3">
-              <Link
-                to="/verify-email"
-                className="inline-block w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition"
-              >
-                Enter Verification Code
-              </Link>
-              <p className="text-sm text-gray-500">
-                Didn't receive the code? Check your spam folder or try again in
-                a few minutes.
-              </p>
-            </div>
-          </div>
-        ) : (
-          // Registration Form
-          <>
-            <div className="text-center mb-8">
+          {/* Registration Form */}
+          <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-blue-600 mb-2">
                 Create Account
               </h1>
@@ -255,8 +212,6 @@ const Register = () => {
                 ← Back to Home
               </Link>
             </div>
-          </>
-        )}
       </div>
     </div>
   );

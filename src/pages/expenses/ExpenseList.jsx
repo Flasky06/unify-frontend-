@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
-import AuditLogModal from "../../components/ui/AuditLogModal";
+
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import { expenseService } from "../../services/expenseService";
@@ -20,12 +20,7 @@ export const ExpenseList = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
-  const [auditModal, setAuditModal] = useState({
-    isOpen: false,
-    logs: [],
-    loading: false,
-    expense: null,
-  });
+
 
   // Updated Form Data Structure
   const [formData, setFormData] = useState({
@@ -91,42 +86,9 @@ export const ExpenseList = () => {
   };
 
   // Quick date filter functions (unchanged)
-  const setQuickFilter = (filter) => {
-    const today = new Date();
-    let start, end;
 
-    switch (filter) {
-      case "today":
-        start = end = today.toISOString().split("T")[0];
-        break;
-      case "week":
-        const weekStart = new Date(today);
-        weekStart.setDate(today.getDate() - today.getDay());
-        start = weekStart.toISOString().split("T")[0];
-        end = today.toISOString().split("T")[0];
-        break;
-      case "month":
-        start = new Date(today.getFullYear(), today.getMonth(), 1)
-          .toISOString()
-          .split("T")[0];
-        end = today.toISOString().split("T")[0];
-        break;
-      default:
-        start = end = "";
-    }
 
-    setStartDate(start);
-    setEndDate(end);
-    setCurrentPage(1);
-  };
 
-  const clearFilters = () => {
-    setSelectedCategory("");
-    setSelectedShop("");
-    setStartDate("");
-    setEndDate("");
-    setCurrentPage(1);
-  };
 
   const filteredExpenses = useMemo(() => {
     return expenses
@@ -166,23 +128,7 @@ export const ExpenseList = () => {
   ]);
 
   // Calculate summary statistics
-  const summary = useMemo(() => {
-    const total = filteredExpenses.reduce(
-      (sum, exp) => sum + (exp.amount || 0),
-      0
-    );
-    const count = filteredExpenses.length;
-    const byCategory = {};
 
-    filteredExpenses.forEach((exp) => {
-      if (!byCategory[exp.categoryName]) {
-        byCategory[exp.categoryName] = 0;
-      }
-      byCategory[exp.categoryName] += exp.amount || 0;
-    });
-
-    return { total, count, byCategory };
-  }, [filteredExpenses]);
 
   // Extract unique expense names for autocomplete
   const uniqueExpenseNames = useMemo(() => {
@@ -290,36 +236,9 @@ export const ExpenseList = () => {
     }
   };
 
-  const handleViewLogs = async (expense) => {
-    setAuditModal({ isOpen: true, logs: [], loading: true, expense });
-    try {
-      const logs = await expenseService.getLogs(expense.id);
-      setAuditModal((prev) => ({ ...prev, logs, loading: false }));
-    } catch (error) {
-      console.error("Failed to fetch logs", error);
-      setAuditModal((prev) => ({ ...prev, loading: false }));
-    }
-  };
 
-  const handleDuplicate = (expense) => {
-    setEditingExpense(null);
-    setFormData({
-      name: expense.name || "",
-      amount: expense.amount.toString(),
-      expenseDate: new Date().toISOString().split("T")[0],
-      categoryId: expense.categoryId?.toString() || "",
-      shopId: expense.shopId?.toString() || "",
-      payee: expense.payee || "",
-      paymentMethodId: expense.paymentMethodId?.toString() || "",
-    });
-    setIsModalOpen(true);
-    setError(null);
-    setToast({
-      isOpen: true,
-      message: "Expense duplicated. Please review and save.",
-      type: "success", // Using success or info
-    });
-  };
+
+
 
   const handleNameChange = (e) => {
     const newName = e.target.value;
@@ -474,8 +393,7 @@ export const ExpenseList = () => {
         ]),
   ];
 
-  const hasActiveFilters =
-    searchTerm || selectedCategory || selectedShop || startDate || endDate;
+
 
   return (
     <div className="flex flex-col w-full">
@@ -833,17 +751,7 @@ export const ExpenseList = () => {
         variant="warning"
       />
 
-      <AuditLogModal
-        isOpen={auditModal.isOpen}
-        onClose={() => setAuditModal({ ...auditModal, isOpen: false })}
-        title={
-          auditModal.expense
-            ? `Expense History - ${auditModal.expense.name}`
-            : "Expense History"
-        }
-        logs={auditModal.logs}
-        loading={auditModal.loading}
-      />
+
 
       <Toast
         isOpen={toast.isOpen}

@@ -12,45 +12,44 @@ const UserPermissionsModal = ({ isOpen, onClose, userId, userName }) => {
   const [revoked, setRevoked] = useState(new Set());
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
-  const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // Fetch user details to get their role
+        const user = await userService
+          .getEmployees()
+          .then((employees) => employees.find((emp) => emp.id === userId));
+
+        if (!user) {
+          throw new Error("User not found");
+        }
+
+        // setUserRole(user.role); // Removed unused
+
+        const [enums, userPerms, rolePerms] = await Promise.all([
+          permissionService.getAllPermissionEnums(),
+          permissionService.getUserPermissions(userId),
+          permissionService.getRolePermissions(user.role),
+        ]);
+
+        setAllPermissions(enums);
+        setRolePermissions(new Set(rolePerms || []));
+        setGranted(new Set(userPerms.grantedPermissions || []));
+        setRevoked(new Set(userPerms.revokedPermissions || []));
+      } catch (error) {
+        console.error("Failed to fetch permissions", error);
+        showToast("Failed to load permissions", "error");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (isOpen && userId) {
       fetchData();
     }
   }, [isOpen, userId]);
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      // Fetch user details to get their role
-      const user = await userService
-        .getEmployees()
-        .then((employees) => employees.find((emp) => emp.id === userId));
-
-      if (!user) {
-        throw new Error("User not found");
-      }
-
-      setUserRole(user.role);
-
-      const [enums, userPerms, rolePerms] = await Promise.all([
-        permissionService.getAllPermissionEnums(),
-        permissionService.getUserPermissions(userId),
-        permissionService.getRolePermissions(user.role),
-      ]);
-
-      setAllPermissions(enums);
-      setRolePermissions(new Set(rolePerms || []));
-      setGranted(new Set(userPerms.grantedPermissions || []));
-      setRevoked(new Set(userPerms.revokedPermissions || []));
-    } catch (error) {
-      console.error("Failed to fetch permissions", error);
-      showToast("Failed to load permissions", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleToggle = (permission, type) => {
     if (type === "grant") {
@@ -95,7 +94,7 @@ const UserPermissionsModal = ({ isOpen, onClose, userId, userName }) => {
       setTimeout(() => {
         onClose();
       }, 2000);
-    } catch (error) {
+    } catch {
       showToast("Failed to update permissions", "error");
     }
   };

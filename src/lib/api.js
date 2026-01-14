@@ -1,4 +1,5 @@
 import { getGlobalAuthState } from "./authState";
+import useAuthStore from "../store/authStore";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||

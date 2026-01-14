@@ -37,37 +37,37 @@ export const EmployeeDetails = () => {
   });
 
   useEffect(() => {
-    fetchData();
-  }, [id]);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [employeeData, paymentsData, methodsData] = await Promise.all([
+          employeeService.getById(id),
+          expenseService.getByEmployee(id),
+          paymentMethodService.getAll(),
+        ]);
+        setEmployee(employeeData);
+        setPaymentHistory(paymentsData || []);
+        setPaymentMethods(methodsData || []);
+      } catch (err) {
+        console.error("Failed to fetch employee data", err);
+        setToast({
+          isOpen: true,
+          message:
+            err.message ||
+            "Failed to load employee details. Employee may not exist or you don't have access.",
+          type: "error",
+        });
+        // Navigate back to employee list after showing error
+        setTimeout(() => {
+          navigate("/employees");
+        }, 2000);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const [employeeData, paymentsData, methodsData] = await Promise.all([
-        employeeService.getById(id),
-        expenseService.getByEmployee(id),
-        paymentMethodService.getAll(),
-      ]);
-      setEmployee(employeeData);
-      setPaymentHistory(paymentsData || []);
-      setPaymentMethods(methodsData || []);
-    } catch (err) {
-      console.error("Failed to fetch employee data", err);
-      setToast({
-        isOpen: true,
-        message:
-          err.message ||
-          "Failed to load employee details. Employee may not exist or you don't have access.",
-        type: "error",
-      });
-      // Navigate back to employee list after showing error
-      setTimeout(() => {
-        navigate("/employees");
-      }, 2000);
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchData();
+  }, [id, navigate]);
 
   // Removed Salary History handlers as per requirement
 

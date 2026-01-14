@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+
 import Button from "./Button";
 
 export const ConfirmDialog = ({

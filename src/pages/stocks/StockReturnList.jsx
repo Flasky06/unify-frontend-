@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import useAuthStore from "../../store/authStore";
+import { useState, useEffect, useCallback } from "react";
 import Input from "../../components/ui/Input";
 import { Select } from "../../components/ui/Select";
 import { stockReturnService } from "../../services/stockReturnService";
@@ -27,40 +26,33 @@ const StockReturnList = () => {
   });
   const [toast, setToast] = useState(null);
 
-  useEffect(() => {
-    fetchShops();
-  }, []);
-
-  useEffect(() => {
-    if (selectedShop) {
-      fetchReturns();
-      fetchProducts();
-    }
-  }, [selectedShop]);
-
-  const fetchShops = async () => {
+  const fetchShops = useCallback(async () => {
     try {
       const data = await shopService.getAll();
       setShops(data);
       if (data.length > 0) setSelectedShop(data[0].id);
-    } catch (error) {
+    } catch {
       showToast("Failed to load shops", "error");
     }
-  };
+  }, []);
 
-  const fetchReturns = async () => {
+  useEffect(() => {
+    fetchShops();
+  }, [fetchShops]);
+
+  const fetchReturns = useCallback(async () => {
     setLoading(true);
     try {
       const data = await stockReturnService.getAll(selectedShop);
       setReturns(data);
-    } catch (error) {
+    } catch {
       showToast("Failed to load returns", "error");
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedShop]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       const data = await productService.getAll(selectedShop); // Assuming productService supports getting by shop or all
       // If productService.getAll takes no args or different, we might need adjustments.
@@ -69,9 +61,16 @@ const StockReturnList = () => {
       // or just all products if they are global to business.
       setProducts(data);
     } catch (error) {
-      console.error("Failed to load products");
+      console.error("Failed to load products", error);
     }
-  };
+  }, [selectedShop]);
+
+  useEffect(() => {
+    if (selectedShop) {
+      fetchReturns();
+      fetchProducts();
+    }
+  }, [selectedShop, fetchReturns, fetchProducts]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -181,7 +180,7 @@ const StockReturnList = () => {
                   return item.date
                     ? new Date(item.date).toLocaleDateString()
                     : "-";
-                } catch (e) {
+                } catch {
                   return "-";
                 }
               },

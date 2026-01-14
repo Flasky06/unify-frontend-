@@ -7,23 +7,22 @@ const SuperAdminDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchPlatformStats();
-  }, []);
-
   const fetchPlatformStats = async () => {
     try {
-      setIsLoading(true);
       setError(null);
       const data = await platformService.getPlatformStats();
       setStats(data);
-      setIsLoading(false);
     } catch (err) {
       console.error("Error fetching platform stats:", err);
       setError(err.message || "Failed to fetch platform statistics");
+    } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchPlatformStats();
+  }, []);
 
   if (isLoading) {
     return (
@@ -72,7 +71,10 @@ const SuperAdminDashboard = () => {
           </p>
         </div>
         <button
-          onClick={fetchPlatformStats}
+          onClick={() => {
+            setIsLoading(true);
+            fetchPlatformStats();
+          }}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
         >
           Retry

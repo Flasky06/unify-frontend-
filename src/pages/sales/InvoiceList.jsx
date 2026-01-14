@@ -1,16 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import { saleService } from "../../services/saleService";
 import { Toast } from "../../components/ui/ConfirmDialog";
-import useAuthStore from "../../store/authStore";
 import { shopService } from "../../services/shopService";
 import { paymentMethodService } from "../../services/paymentMethodService";
 
 export const InvoiceList = () => {
-  const { user } = useAuthStore();
   const [sales, setSales] = useState([]);
   const [shops, setShops] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,7 +38,7 @@ export const InvoiceList = () => {
 
   useEffect(() => {
     fetchSales();
-  }, [filters]);
+  }, [fetchSales]);
 
   const fetchShops = async () => {
     try {
@@ -64,7 +62,7 @@ export const InvoiceList = () => {
     }
   };
 
-  const fetchSales = async () => {
+  const fetchSales = useCallback(async () => {
     try {
       setLoading(true);
       const data = await saleService.getSales(filters);
@@ -86,7 +84,7 @@ export const InvoiceList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
 
   const handlePayInvoice = (sale) => {
     setSelectedSale(sale);

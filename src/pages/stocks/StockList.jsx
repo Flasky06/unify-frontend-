@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+
 import Modal from "../../components/ui/Modal";
 import Table from "../../components/ui/Table";
 import Button from "../../components/ui/Button";
@@ -12,7 +12,7 @@ import { shopService } from "../../services/shopService";
 import useAuthStore from "../../store/authStore";
 
 const StockList = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { user } = useAuthStore();
   const [stocks, setStocks] = useState([]);
   const [products, setProducts] = useState([]);
@@ -25,18 +25,7 @@ const StockList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState(null);
 
-  // Audit Log State
-  const [auditModal, setAuditModal] = useState({
-    isOpen: false,
-    logs: [],
-    loading: false,
-    stock: null,
-  });
-  // Adjust Stock State
-  const [adjustModal, setAdjustModal] = useState({
-    isOpen: false,
-    stock: null,
-  });
+
 
   const [formData, setFormData] = useState({
     shopId: "",
@@ -53,50 +42,25 @@ const StockList = () => {
   // ... (Effect hooks unchanged) ...
 
   // Handlers for New Features
-  const handleViewLogs = async (stock) => {
-    setAuditModal({ isOpen: true, logs: [], loading: true, stock });
-    try {
-      const logs = await stockService.getLogs(stock.id);
-      setAuditModal((prev) => ({ ...prev, logs, loading: false }));
-    } catch (error) {
-      console.error("Failed to fetch logs", error);
-      setAuditModal((prev) => ({ ...prev, loading: false })); // Keep open to show error or empty
-    }
-  };
 
-  const handleAdjustStock = (stock) => {
-    setAdjustModal({ isOpen: true, stock });
-  };
 
-  const confirmAdjustment = async (quantityChange, reason) => {
-    if (!adjustModal.stock) return;
-    try {
-      await stockService.adjustStock(
-        adjustModal.stock.id,
-        quantityChange,
-        reason
-      );
-      fetchStocks(); // Refresh list
-    } catch (error) {
-      throw error; // Let modal handle alert
-    }
-  };
+
 
   // Fetch initial data
   useEffect(() => {
     fetchProducts();
     fetchShops();
     fetchStocks();
-  }, []);
+  }, [fetchProducts, fetchShops, fetchStocks]);
 
   // Fetch stocks based on view mode
   useEffect(() => {
     if (shops.length > 0) {
       fetchStocks();
     }
-  }, [viewMode, selectedShopId, shops.length]);
+  }, [fetchStocks, shops.length]);
 
-  const fetchStocks = async () => {
+  const fetchStocks = useCallback(async () => {
     setLoading(true);
     try {
       let data;
@@ -121,25 +85,25 @@ const StockList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [viewMode, selectedShopId, shops]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       const data = await productService.getAll();
       setProducts(data);
     } catch (error) {
       console.error("Failed to fetch products:", error);
     }
-  };
+  }, []);
 
-  const fetchShops = async () => {
+  const fetchShops = useCallback(async () => {
     try {
       const data = await shopService.getAll();
       setShops(data);
     } catch (error) {
       console.error("Failed to fetch shops:", error);
     }
-  };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -221,10 +185,7 @@ const StockList = () => {
     setProductSearchTerm("");
   };
 
-  const getProductName = (productId) => {
-    const product = products.find((p) => p.id === productId);
-    return product ? product.name : "Unknown";
-  };
+
 
   const getShopName = (shopId) => {
     const shop = shops.find((s) => s.id === shopId);

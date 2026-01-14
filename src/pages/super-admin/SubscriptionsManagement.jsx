@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { subscriptionService } from "../../services/subscriptionService";
 import { Toast } from "../../components/ui/ConfirmDialog";
@@ -20,17 +20,17 @@ const SubscriptionsManagement = () => {
     type: "success",
   });
 
-  const showToast = (message, type = "success") => {
+  const showToast = useCallback((message, type = "success") => {
     setToastState({ isOpen: true, message, type });
-  };
+  }, []);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
-  }, [filterStatus]);
+  }, [fetchData]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
       const subsData =
@@ -44,7 +44,7 @@ const SubscriptionsManagement = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [filterStatus, showToast]);
 
   const filteredSubscriptions = subscriptions.filter((sub) =>
     sub.businessName?.toLowerCase().includes(searchTerm.toLowerCase())

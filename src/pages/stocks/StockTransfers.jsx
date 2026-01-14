@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Button from "../../components/ui/Button";
 import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
@@ -46,15 +46,15 @@ const StockTransfers = () => {
       const shopId = user?.shopId || user?.shop?.id;
       if (shopId) setSelectedShopId(shopId);
     }
-  }, [user]);
+  }, [user, loadShops]);
 
   useEffect(() => {
     if (selectedShopId) {
       fetchTransfers();
     }
-  }, [activeTab, selectedShopId]);
+  }, [fetchTransfers, selectedShopId]);
 
-  const loadShops = async () => {
+  const loadShops = useCallback(async () => {
     try {
       const data = await shopService.getAll();
       setShops(data);
@@ -70,9 +70,9 @@ const StockTransfers = () => {
         type: "error",
       });
     }
-  };
+  }, [selectedShopId]);
 
-  const fetchTransfers = async () => {
+  const fetchTransfers = useCallback(async () => {
     if (!selectedShopId) return;
 
     setLoading(true);
@@ -94,7 +94,7 @@ const StockTransfers = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedShopId, activeTab]);
 
   const handleInitFetch = async () => {
     try {
@@ -178,7 +178,7 @@ const StockTransfers = () => {
       await stockTransferService.acknowledgeTransfer(id);
       setToast({ isOpen: true, message: "Transfer accepted", type: "success" });
       fetchTransfers();
-    } catch (err) {
+    } catch {
       setToast({ isOpen: true, message: "Failed to accept", type: "error" });
     } finally {
       setSubmitting(false);
@@ -196,7 +196,7 @@ const StockTransfers = () => {
         type: "success",
       });
       fetchTransfers();
-    } catch (err) {
+    } catch {
       setToast({
         isOpen: true,
         message: "Failed to void transfer",

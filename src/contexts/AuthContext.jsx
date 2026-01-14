@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, useCallback } from "react";
 import { authService } from "../services/authService";
 import { setGlobalAuthState } from "../lib/authState";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {

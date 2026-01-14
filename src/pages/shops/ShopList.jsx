@@ -127,46 +127,6 @@ export const ShopList = () => {
     });
   };
 
-  const columns = [
-    { header: "Shop Name", accessor: "name", triggerView: true },
-    { header: "Location", accessor: "location" },
-    // Hide Actions for SHOP_MANAGER and SALES_REP
-    // Assuming SHOP_MANAGER shouldn't manage the shop LIST, only their own shop.
-    ...(user?.role === "SHOP_MANAGER" || user?.role === "SALES_REP"
-      ? []
-      : [
-          {
-            header: "Actions",
-            render: (shop) => (
-              <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-blue-600 hover:bg-blue-50 font-medium px-3"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openEditModal(shop);
-                  }}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setConfirmDialog({ isOpen: true, shopId: shop.id });
-                  }}
-                >
-                  Delete
-                </Button>
-              </div>
-            ),
-          },
-        ]),
-  ];
-
   return (
     <div className="flex flex-col w-full">
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">

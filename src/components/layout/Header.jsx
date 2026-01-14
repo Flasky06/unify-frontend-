@@ -1,7 +1,4 @@
-import useAuthStore from "../../store/authStore";
-
 export const Header = ({ onMenuClick }) => {
-  const { user } = useAuthStore();
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 relative">

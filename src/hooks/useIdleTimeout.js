@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import useAuthStore from "../store/authStore";
 
 /**
@@ -9,7 +9,7 @@ export const useIdleTimeout = (timeout = 5 * 60 * 1000) => {
   const { logout, isAuthenticated } = useAuthStore();
   const timeoutRef = useRef(null);
 
-  const resetTimer = () => {
+  const resetTimer = useCallback(() => {
     // Clear existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -21,7 +21,7 @@ export const useIdleTimeout = (timeout = 5 * 60 * 1000) => {
         logout();
       }
     }, timeout);
-  };
+  }, [isAuthenticated, logout, timeout]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -48,5 +48,5 @@ export const useIdleTimeout = (timeout = 5 * 60 * 1000) => {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [isAuthenticated, timeout]);
+  }, [isAuthenticated, resetTimer]);
 };

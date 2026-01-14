@@ -2,6 +2,27 @@ import { useState, useEffect } from "react";
 import Button from "../../components/ui/Button";
 import { subscriptionService } from "../../services/subscriptionService";
 
+const calculateEndDate = (period, startDate) => {
+  const start = new Date(startDate);
+  const end = new Date(start);
+
+  switch (period) {
+    case "MONTHLY":
+      end.setMonth(end.getMonth() + 1);
+      break;
+    case "QUARTERLY":
+      end.setMonth(end.getMonth() + 3);
+      break;
+    case "ANNUALLY":
+      end.setFullYear(end.getFullYear() + 1);
+      break;
+    default:
+      end.setMonth(end.getMonth() + 1);
+  }
+
+  return end.toISOString().split("T")[0];
+};
+
 export const AddSubscriptionModal = ({
   isOpen,
   onClose,
@@ -23,7 +44,11 @@ export const AddSubscriptionModal = ({
   useEffect(() => {
     fetchPlans();
     // Calculate initial end date
-    calculateAndSetEndDate("MONTHLY", new Date().toISOString().split("T")[0]);
+    const initialEndDate = calculateEndDate(
+      "MONTHLY",
+      new Date().toISOString().split("T")[0]
+    );
+    setFormData((prev) => ({ ...prev, endDate: initialEndDate }));
   }, []);
 
   const fetchPlans = async () => {
@@ -35,31 +60,9 @@ export const AddSubscriptionModal = ({
     }
   };
 
-  const calculateEndDate = (period, startDate) => {
-    const start = new Date(startDate);
-    const end = new Date(start);
 
-    switch (period) {
-      case "MONTHLY":
-        end.setMonth(end.getMonth() + 1);
-        break;
-      case "QUARTERLY":
-        end.setMonth(end.getMonth() + 3);
-        break;
-      case "ANNUALLY":
-        end.setFullYear(end.getFullYear() + 1);
-        break;
-      default:
-        end.setMonth(end.getMonth() + 1);
-    }
 
-    return end.toISOString().split("T")[0];
-  };
 
-  const calculateAndSetEndDate = (period, startDate) => {
-    const endDate = calculateEndDate(period, startDate);
-    setFormData((prev) => ({ ...prev, endDate }));
-  };
 
   const calculatePrice = (period, shops) => {
     const rates = {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { permissionService } from "../../services/permissionService";
 import { Toast } from "../../components/ui/ConfirmDialog";
 
@@ -65,21 +65,21 @@ const RoleManagement = () => {
     type: "success",
   });
 
-  const showToast = (message, type = "success") => {
+  const showToast = useCallback((message, type = "success") => {
     setToastState({ isOpen: true, message, type });
-  };
+  }, []);
 
   useEffect(() => {
     loadInitialData();
-  }, []);
+  }, [loadInitialData]);
 
   useEffect(() => {
     if (selectedRole) {
       loadRolePermissions(selectedRole);
     }
-  }, [selectedRole]);
+  }, [selectedRole, loadRolePermissions]);
 
-  const loadInitialData = async () => {
+  const loadInitialData = useCallback(async () => {
     try {
       const [rolesData, permissionsData] = await Promise.all([
         permissionService.getAllRoleEnums(),
@@ -105,9 +105,9 @@ const RoleManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showToast]);
 
-  const loadRolePermissions = async (role) => {
+  const loadRolePermissions = useCallback(async (role) => {
     try {
       setLoading(true);
       const permissions = await permissionService.getRolePermissions(role);
@@ -118,7 +118,7 @@ const RoleManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showToast]);
 
   const handlePermissionToggle = (permission) => {
     const newPermissions = new Set(rolePermissions);

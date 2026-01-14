@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import Input from "../../components/ui/Input";
 import Table from "../../components/ui/Table";
@@ -16,35 +16,58 @@ const SalesByItem = () => {
   const [loading, setLoading] = useState(false);
   const [aggregatedData, setAggregatedData] = useState([]);
 
-  useEffect(() => {
-    fetchShops();
-  }, []);
-
-  useEffect(() => {
-    if (selectedShopId) {
-      fetchSalesByShop(selectedShopId);
-    } else {
-      fetchSales();
-    }
-  }, [selectedShopId]);
-
-  // Re-aggregate data when salesType changes
-  useEffect(() => {
-    if (sales.length > 0) {
-      aggregateData(sales);
-    }
-  }, [salesType]);
-
-  const fetchShops = async () => {
+  const fetchShops = useCallback(async () => {
     try {
       const data = await shopService.getAll();
       setShops(data);
     } catch (error) {
       console.error("Failed to fetch shops", error);
     }
-  };
+  }, []);
 
-  const fetchSales = async () => {
+  useEffect(() => {
+    fetchShops();
+  }, [fetchShops]);
+
+  const aggregateData = useCallback(
+    (salesData) => {
+      const productStats = {};
+
+      salesData.forEach((sale) => {
+        // Skip cancelled sales if desired, assuming we only want completed sales stats
+        if (sale.status === "CANCELLED") return;
+
+        if (sale.items) {
+          sale.items.forEach((item) => {
+            // Filter by sales type
+            if (salesType === "product" && item.type !== "PRODUCT") return;
+            if (salesType === "service" && item.type !== "SERVICE") return;
+
+            const itemKey =
+              item.productId || item.serviceId || item.productName;
+            if (!productStats[itemKey]) {
+              productStats[itemKey] = {
+                productId: item.productId,
+                serviceId: item.serviceId,
+                productName: item.productName || "Unknown",
+                type: item.type,
+                quantitySold: 0,
+              };
+            }
+            productStats[itemKey].quantitySold += item.quantity;
+          });
+        }
+      });
+
+      const result = Object.values(productStats).sort(
+        (a, b) => b.quantitySold - a.quantitySold
+      );
+      setAggregatedData(result);
+    },
+    [salesType]
+  );
+
+  const fetchSales = useCallback(async () => {
     setLoading(true);
     try {
       const data = await saleService.getSalesHistory();
@@ -55,54 +78,38 @@ const SalesByItem = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [aggregateData]);
 
-  const fetchSalesByShop = async (shopId) => {
-    setLoading(true);
-    try {
-      const data = await saleService.getSalesByShop(shopId);
-      setSales(data);
-      aggregateData(data);
-    } catch (error) {
-      console.error("Failed to fetch shop sales", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const aggregateData = (salesData) => {
-    const productStats = {};
-
-    salesData.forEach((sale) => {
-      // Skip cancelled sales if desired, assuming we only want completed sales stats
-      if (sale.status === "CANCELLED") return;
-
-      if (sale.items) {
-        sale.items.forEach((item) => {
-          // Filter by sales type
-          if (salesType === "product" && item.type !== "PRODUCT") return;
-          if (salesType === "service" && item.type !== "SERVICE") return;
-
-          const itemKey = item.productId || item.serviceId || item.productName;
-          if (!productStats[itemKey]) {
-            productStats[itemKey] = {
-              productId: item.productId,
-              serviceId: item.serviceId,
-              productName: item.productName || "Unknown",
-              type: item.type,
-              quantitySold: 0,
-            };
-          }
-          productStats[itemKey].quantitySold += item.quantity;
-        });
+  const fetchSalesByShop = useCallback(
+    async (shopId) => {
+      setLoading(true);
+      try {
+        const data = await saleService.getSalesByShop(shopId);
+        setSales(data);
+        aggregateData(data);
+      } catch (error) {
+        console.error("Failed to fetch shop sales", error);
+      } finally {
+        setLoading(false);
       }
-    });
+    },
+    [aggregateData]
+  );
 
-    const result = Object.values(productStats).sort(
-      (a, b) => b.quantitySold - a.quantitySold
-    );
-    setAggregatedData(result);
-  };
+  useEffect(() => {
+    if (selectedShopId) {
+      fetchSalesByShop(selectedShopId);
+    } else {
+      fetchSales();
+    }
+  }, [selectedShopId, fetchSales, fetchSalesByShop]);
+
+  // Re-aggregate data when salesType changes (and sales exist)
+  useEffect(() => {
+    if (sales.length > 0) {
+      aggregateData(sales);
+    }
+  }, [salesType, sales, aggregateData]);
 
   const columns = [
     { header: "Product Name", accessor: "productName" },

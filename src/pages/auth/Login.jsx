@@ -1,16 +1,16 @@
 import { useFormik } from "formik";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { loginSchema } from "../../schemas/authSchemas";
 
 const Login = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation(); // Unused
   const { login, isLoading, error } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
-  const from = location.state?.from?.pathname || "/dashboard";
+  // const from = location.state?.from?.pathname || "/dashboard"; // Unused
 
   const formik = useFormik({
     initialValues: {

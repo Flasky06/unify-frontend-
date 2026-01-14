@@ -29,6 +29,27 @@ const StockMovementReport = () => {
   }, [user]);
 
   useEffect(() => {
+    const fetchReport = async () => {
+      setLoading(true);
+      try {
+        const data = await reportService.getStockMovementReport(
+          startDate,
+          endDate,
+          selectedShopId || null
+        );
+        setReportData(data);
+      } catch (err) {
+        console.error("Failed to load report", err);
+        setToast({
+          isOpen: true,
+          message: "Failed to load stock movement report",
+          type: "error",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchReport();
   }, [startDate, endDate, selectedShopId]);
 
@@ -38,27 +59,6 @@ const StockMovementReport = () => {
       setShops(data);
     } catch (err) {
       console.error("Failed to load shops", err);
-    }
-  };
-
-  const fetchReport = async () => {
-    setLoading(true);
-    try {
-      const data = await reportService.getStockMovementReport(
-        startDate,
-        endDate,
-        selectedShopId || null
-      );
-      setReportData(data);
-    } catch (err) {
-      console.error("Failed to load report", err);
-      setToast({
-        isOpen: true,
-        message: "Failed to load stock movement report",
-        type: "error",
-      });
-    } finally {
-      setLoading(false);
     }
   };
 

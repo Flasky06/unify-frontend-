@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
 import Table from "../../components/ui/Table";
@@ -36,9 +36,9 @@ export const BusinessDetails = () => {
 
   useEffect(() => {
     loadData();
-  }, [id]);
+  }, [loadData]);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -51,7 +51,7 @@ export const BusinessDetails = () => {
       try {
         subData = await subscriptionService.getSubscriptionByBusinessId(id);
         setSubscription(subData);
-      } catch (subErr) {
+      } catch {
         setSubscription(null);
       }
 
@@ -75,7 +75,7 @@ export const BusinessDetails = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [id]);
 
   const handleToggleStatus = async () => {
     try {

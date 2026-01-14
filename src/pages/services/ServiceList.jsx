@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
@@ -47,9 +47,9 @@ export const ServiceList = () => {
 
   useEffect(() => {
     fetchData();
-  }, [selectedCategory]);
+  }, [fetchData]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const businessId = user?.businessId;
@@ -74,7 +74,7 @@ export const ServiceList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, selectedCategory]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

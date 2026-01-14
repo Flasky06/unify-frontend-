@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Table from "../../components/ui/Table";
 import Modal from "../../components/ui/Modal";
@@ -41,23 +41,23 @@ const AdminUsers = () => {
 
   const { isSuperAdmin } = useAuthStore();
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
       const data = await userService.getAllUsers();
       setUsers(data);
-      setIsLoading(false);
     } catch (err) {
       console.error("Error fetching users:", err);
       setError(err.message || "Failed to fetch users");
+    } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;

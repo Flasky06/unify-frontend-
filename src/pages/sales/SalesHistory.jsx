@@ -92,7 +92,7 @@ const SalesHistory = () => {
     try {
       const data = await paymentMethodService.getAll();
       setPaymentMethods(data?.filter((pm) => pm.isActive) || []);
-    } catch (error) {
+    } catch {
       console.error("Failed to fetch payment methods");
     }
   };
@@ -138,7 +138,7 @@ const SalesHistory = () => {
     }
   };
 
-  const formatNumber = (val) => new Intl.NumberFormat("en-KE").format(val || 0);
+
 
   const handleVoidSale = async (saleId) => {
     try {
@@ -196,7 +196,7 @@ const SalesHistory = () => {
       // Refresh
       if (selectedShopId) fetchSalesByShop(selectedShopId);
       else fetchSales();
-    } catch (error) {
+    } catch {
       setToast({
         isOpen: true,
         message: "Failed to process payment",
@@ -212,16 +212,7 @@ const SalesHistory = () => {
     setIsDetailsModalOpen(true);
   };
 
-  const handleViewLogs = async (sale) => {
-    setAuditModal({ isOpen: true, logs: [], loading: true, sale });
-    try {
-      const logs = await saleService.getLogs(sale.id);
-      setAuditModal((prev) => ({ ...prev, logs, loading: false }));
-    } catch (error) {
-      console.error("Failed to fetch logs", error);
-      setAuditModal((prev) => ({ ...prev, loading: false }));
-    }
-  };
+
 
   const filteredSales = sales.filter((sale) => {
     // Text search

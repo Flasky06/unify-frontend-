@@ -7,7 +7,6 @@ export const MySubscription = () => {
   const [subscription, setSubscription] = useState(null);
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -24,7 +23,6 @@ export const MySubscription = () => {
       setPayments(paymentsData);
     } catch (err) {
       console.error(err);
-      setError("Failed to load subscription details");
     } finally {
       setLoading(false);
     }

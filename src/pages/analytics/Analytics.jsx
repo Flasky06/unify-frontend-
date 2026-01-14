@@ -1,12 +1,10 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { analyticsService } from "../../services/analyticsService";
 import { shopService } from "../../services/shopService";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
-import useAuthStore from "../../store/authStore";
 
 export const Analytics = () => {
-  const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [shops, setShops] = useState([]);
   const [selectedShop, setSelectedShop] = useState("");
@@ -16,8 +14,8 @@ export const Analytics = () => {
   const [endDate, setEndDate] = useState("");
 
   // Analytics data
-  const [salesAnalytics, setSalesAnalytics] = useState(null);
-  const [expenseAnalytics, setExpenseAnalytics] = useState(null);
+  const [analyticsData, setAnalyticsData] = useState(null);
+  const { salesAnalytics, expenseAnalytics } = analyticsData || {};
 
   useEffect(() => {
     fetchShops();
@@ -28,11 +26,27 @@ export const Analytics = () => {
     setEndDate(today.toISOString().split("T")[0]);
   }, []);
 
+  const fetchAnalytics = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await analyticsService.getAnalyticsForPeriod(
+        startDate,
+        endDate,
+        selectedShop ? parseInt(selectedShop) : null
+      );
+      setAnalyticsData(data);
+    } catch (error) {
+      console.error("Failed to fetch analytics:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [startDate, endDate, selectedShop]);
+
   useEffect(() => {
     if (startDate && endDate) {
       fetchAnalytics();
     }
-  }, [startDate, endDate, selectedShop]);
+  }, [fetchAnalytics, startDate, endDate]); // Added startDate, endDate to ensure initial fetch if fetchAnalytics is stable but dates change
 
   const fetchShops = async () => {
     try {
@@ -40,23 +54,6 @@ export const Analytics = () => {
       setShops(data || []);
     } catch (error) {
       console.error("Failed to fetch shops:", error);
-    }
-  };
-
-  const fetchAnalytics = async () => {
-    setLoading(true);
-    try {
-      const shopId = selectedShop ? parseInt(selectedShop) : null;
-      const [sales, expenses] = await Promise.all([
-        analyticsService.getSalesAnalytics(startDate, endDate, shopId),
-        analyticsService.getExpenseAnalytics(startDate, endDate, shopId),
-      ]);
-      setSalesAnalytics(sales);
-      setExpenseAnalytics(expenses);
-    } catch (error) {
-      console.error("Failed to fetch analytics:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -68,12 +65,13 @@ export const Analytics = () => {
       case "today":
         start = end = today.toISOString().split("T")[0];
         break;
-      case "week":
+      case "week": {
         const weekStart = new Date(today);
         weekStart.setDate(today.getDate() - today.getDay());
         start = weekStart.toISOString().split("T")[0];
         end = today.toISOString().split("T")[0];
         break;
+      }
       case "month":
         start = new Date(today.getFullYear(), today.getMonth(), 1)
           .toISOString()
