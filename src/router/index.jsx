@@ -40,8 +40,7 @@ import SalesAnalytics from "../pages/sales/SalesAnalytics";
 import ReportsDashboard from "../pages/reports/ReportsDashboard";
 import { SalesReport } from "../pages/reports/SalesReport";
 import StockMovementReport from "../pages/reports/StockMovementReport";
-import { EmployeeList } from "../pages/employees/EmployeeList";
-import { EmployeeDetails } from "../pages/employees/EmployeeDetails";
+
 import { AccountsSummaryReport } from "../pages/reports/AccountsSummaryReport";
 import NotFound from "../pages/NotFound";
 
@@ -98,27 +97,7 @@ export const router = createBrowserRouter([
           </PermissionRoute>
         ),
       },
-      {
-        path: "employees",
-        children: [
-          {
-            index: true,
-            element: (
-              <PermissionRoute requiredPermission="MANAGE_EMPLOYEES">
-                <EmployeeList />
-              </PermissionRoute>
-            ),
-          },
-          {
-            path: ":id",
-            element: (
-              <PermissionRoute requiredPermission="MANAGE_EMPLOYEES">
-                <EmployeeDetails />
-              </PermissionRoute>
-            ),
-          },
-        ],
-      },
+
       {
         path: "users/roles",
         element: (

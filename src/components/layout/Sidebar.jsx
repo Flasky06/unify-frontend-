@@ -346,11 +346,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
       ),
       children: [
         { name: "Shops", path: "/shops", permission: "MANAGE_SHOPS" },
-        {
-          name: "Employees",
-          path: "/employees",
-          permission: "MANAGE_EMPLOYEES",
-        },
+
         {
           name: "Users",
           path: "/users",
@@ -408,8 +404,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
         // Special case: Admin block check - if it has children that are allowed, we might want to show it?
         // But for now, strict parent permission check.
         // Wait, "Admin" usually requires general admin access.
-        // If I grant "MANAGE_EMPLOYEES" to a Manager but not "MANAGE_BUSINESS_SETTINGS",
-        // and Admin parent requires "MANAGE_BUSINESS_SETTINGS", they won't see Employees.
+
         // FIX: If item has children, check if ANY child is visible.
 
         if (!item.children) return acc; // No permission and no children -> hide
@@ -478,10 +473,10 @@ export const Sidebar = ({ isOpen, onClose }) => {
               toggleMenu(item.name);
             }}
             className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200 ${item.disabled
-                ? "opacity-50 cursor-not-allowed text-gray-400"
-                : isChildActive || isExpanded
-                  ? "text-white bg-gray-800"
-                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
+              ? "opacity-50 cursor-not-allowed text-gray-400"
+              : isChildActive || isExpanded
+                ? "text-white bg-gray-800"
+                : "text-gray-300 hover:bg-gray-700 hover:text-white"
               }`}
           >
             <div className="flex items-center gap-3 truncate">
@@ -518,10 +513,10 @@ export const Sidebar = ({ isOpen, onClose }) => {
                     onClose();
                   }}
                   className={`block px-3 py-2 text-sm rounded-lg transition-colors truncate ${child.disabled
-                      ? "opacity-50 cursor-not-allowed text-gray-500 hover:text-gray-500 hover:bg-transparent"
-                      : isActive(child.path)
-                        ? "text-blue-400 bg-gray-800"
-                        : "text-gray-400 hover:text-white hover:bg-gray-700"
+                    ? "opacity-50 cursor-not-allowed text-gray-500 hover:text-gray-500 hover:bg-transparent"
+                    : isActive(child.path)
+                      ? "text-blue-400 bg-gray-800"
+                      : "text-gray-400 hover:text-white hover:bg-gray-700"
                     }`}
                 >
                   {child.name}
@@ -545,10 +540,10 @@ export const Sidebar = ({ isOpen, onClose }) => {
           onClose();
         }}
         className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 mb-1 ${item.disabled
-            ? "opacity-50 cursor-not-allowed text-gray-500 hover:text-gray-500 hover:bg-transparent"
-            : isActive(item.path)
-              ? "bg-blue-600 text-white shadow-lg shadow-blue-600/50"
-              : "text-gray-300 hover:bg-gray-700 hover:text-white"
+          ? "opacity-50 cursor-not-allowed text-gray-500 hover:text-gray-500 hover:bg-transparent"
+          : isActive(item.path)
+            ? "bg-blue-600 text-white shadow-lg shadow-blue-600/50"
+            : "text-gray-300 hover:bg-gray-700 hover:text-white"
           }`}
       >
         {item.icon}

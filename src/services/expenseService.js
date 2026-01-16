@@ -23,9 +23,7 @@ export const expenseService = {
     return await apiFetch(`/expenses/shop/${shopId}`);
   },
 
-  async getByEmployee(employeeId) {
-    return await apiFetch(`/expenses/employee/${employeeId}`);
-  },
+
 
   async create(data) {
     return await apiFetch("/expenses", {
