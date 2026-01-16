@@ -131,7 +131,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
         },
         {
           name: "Invoices",
-          path: "/invoices",
+          path: "/sales/invoices",
           permission: "VIEW_SALES",
         },
       ],
@@ -165,7 +165,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
         },
         {
           name: "Transfer Stock",
-          path: "/transfers",
+          path: "/stocks/transfers",
           permission: "MANAGE_STOCK",
         },
       ],
@@ -477,22 +477,20 @@ export const Sidebar = ({ isOpen, onClose }) => {
               if (item.disabled) return;
               toggleMenu(item.name);
             }}
-            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200 ${
-              item.disabled
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200 ${item.disabled
                 ? "opacity-50 cursor-not-allowed text-gray-400"
                 : isChildActive || isExpanded
-                ? "text-white bg-gray-800"
-                : "text-gray-300 hover:bg-gray-700 hover:text-white"
-            }`}
+                  ? "text-white bg-gray-800"
+                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
+              }`}
           >
             <div className="flex items-center gap-3 truncate">
               {item.icon}
               <span className="font-medium text-sm truncate">{item.name}</span>
             </div>
             <svg
-              className={`w-4 h-4 flex-shrink-0 transition-transform ${
-                isExpanded ? "transform rotate-180" : ""
-              }`}
+              className={`w-4 h-4 flex-shrink-0 transition-transform ${isExpanded ? "transform rotate-180" : ""
+                }`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -519,13 +517,12 @@ export const Sidebar = ({ isOpen, onClose }) => {
                     }
                     onClose();
                   }}
-                  className={`block px-3 py-2 text-sm rounded-lg transition-colors truncate ${
-                    child.disabled
+                  className={`block px-3 py-2 text-sm rounded-lg transition-colors truncate ${child.disabled
                       ? "opacity-50 cursor-not-allowed text-gray-500 hover:text-gray-500 hover:bg-transparent"
                       : isActive(child.path)
-                      ? "text-blue-400 bg-gray-800"
-                      : "text-gray-400 hover:text-white hover:bg-gray-700"
-                  }`}
+                        ? "text-blue-400 bg-gray-800"
+                        : "text-gray-400 hover:text-white hover:bg-gray-700"
+                    }`}
                 >
                   {child.name}
                 </Link>
@@ -547,13 +544,12 @@ export const Sidebar = ({ isOpen, onClose }) => {
           }
           onClose();
         }}
-        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 mb-1 ${
-          item.disabled
+        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 mb-1 ${item.disabled
             ? "opacity-50 cursor-not-allowed text-gray-500 hover:text-gray-500 hover:bg-transparent"
             : isActive(item.path)
-            ? "bg-blue-600 text-white shadow-lg shadow-blue-600/50"
-            : "text-gray-300 hover:bg-gray-700 hover:text-white"
-        }`}
+              ? "bg-blue-600 text-white shadow-lg shadow-blue-600/50"
+              : "text-gray-300 hover:bg-gray-700 hover:text-white"
+          }`}
       >
         {item.icon}
         <span className="font-medium text-sm truncate">{item.name}</span>
@@ -565,9 +561,8 @@ export const Sidebar = ({ isOpen, onClose }) => {
     <>
       {/* Mobile Overlay - Only show on small mobile screens */}
       <div
-        className={`fixed inset-0 bg-black/50 z-40 transition-opacity lg:hidden ${
-          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 bg-black/50 z-40 transition-opacity lg:hidden ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
         onClick={onClose}
       />
 
@@ -587,8 +582,8 @@ export const Sidebar = ({ isOpen, onClose }) => {
               {isSuperAdmin()
                 ? "Admin Panel"
                 : user?.businessName ||
-                  user?.business?.businessName ||
-                  "Business Management"}
+                user?.business?.businessName ||
+                "Business Management"}
             </p>
           </div>
           {/* Close button - only visible on mobile */}

@@ -176,7 +176,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: "return",
+            path: "returns",
             element: (
               <PermissionRoute requiredPermission="PROCESS_RETURNS">
                 <StockReturnList />
@@ -184,7 +184,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: "transfer",
+            path: "transfers",
             element: (
               <PermissionRoute requiredPermission="VIEW_STOCK_TRANSFERS">
                 <StockTransfers />
