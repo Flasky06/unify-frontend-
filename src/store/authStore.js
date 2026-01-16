@@ -105,7 +105,7 @@ const useAuthStore = create(
           user?.role === "SHOP_MANAGER" &&
           [
             "VIEW_PRODUCTS",
-            "MANAGE_EMPLOYEES",
+
             "MANAGE_SHOPS",
             "VIEW_SALES",
             "VIEW_STOCK",
