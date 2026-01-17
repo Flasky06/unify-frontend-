@@ -312,17 +312,11 @@ export const AccountsSummaryReport = () => {
               </svg>
               Payables (Money You Owe)
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <MetricCard
                 title="Pending Purchase Orders (KSH)"
                 value={formatAmount(data?.totalPendingPurchaseOrders)}
                 subtitle="Unpaid supplier bills"
-                type="payable"
-              />
-              <MetricCard
-                title="Unpaid Salaries (KSH)"
-                value={formatAmount(data?.totalPendingSalaries)}
-                subtitle="Projected payroll liability"
                 type="payable"
               />
             </div>
