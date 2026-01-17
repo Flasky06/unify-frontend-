@@ -42,9 +42,7 @@ const Dashboard = () => {
     type: "success",
   });
 
-  // ... [fetch logic] ... (omitted for brevity, assume existing)
 
-  // ... [calculations] ...
 
   const processSale = async (status = "COMPLETED") => {
     if (!selectedShopId || cart.length === 0) return;
@@ -107,7 +105,7 @@ const Dashboard = () => {
     }
   };
 
-  // ... [fetch logic]
+
 
   const columns = [
     {
@@ -142,11 +140,10 @@ const Dashboard = () => {
         <button
           onClick={() => addToCart(row)}
           disabled={row.quantity < 1}
-          className={`px-3 py-1 rounded text-sm font-medium transition ${
-            row.quantity < 1
+          className={`px-3 py-1 rounded text-sm font-medium transition ${row.quantity < 1
               ? "bg-gray-100 text-gray-400 cursor-not-allowed"
               : "bg-green-50 text-green-600 hover:bg-green-100"
-          }`}
+            }`}
         >
           {row.quantity < 1 ? "Out of Stock" : "Add"}
         </button>
@@ -470,21 +467,19 @@ const Dashboard = () => {
           <div className="flex bg-gray-100 rounded-lg p-1">
             <button
               onClick={() => setActiveTab("products")}
-              className={`px-4 py-2 text-sm font-medium rounded-md transition ${
-                activeTab === "products"
+              className={`px-4 py-2 text-sm font-medium rounded-md transition ${activeTab === "products"
                   ? "bg-white text-gray-900 shadow-sm"
                   : "text-gray-500 hover:text-gray-900"
-              }`}
+                }`}
             >
               Products
             </button>
             <button
               onClick={() => setActiveTab("services")}
-              className={`px-4 py-2 text-sm font-medium rounded-md transition ${
-                activeTab === "services"
+              className={`px-4 py-2 text-sm font-medium rounded-md transition ${activeTab === "services"
                   ? "bg-white text-gray-900 shadow-sm"
                   : "text-gray-500 hover:text-gray-900"
-              }`}
+                }`}
             >
               Services
             </button>
@@ -816,11 +811,10 @@ const Dashboard = () => {
                   <button
                     key={method.id}
                     onClick={() => setPaymentMethod(method.id)}
-                    className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition ${
-                      paymentMethod === method.id
+                    className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition ${paymentMethod === method.id
                         ? "border-blue-600 bg-blue-50 text-blue-700"
                         : "border-gray-200 hover:border-gray-300 text-gray-600"
-                    }`}
+                      }`}
                   >
                     <span className="font-medium text-sm text-center">
                       {method.name}
