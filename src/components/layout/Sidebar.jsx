@@ -309,7 +309,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
         {
           name: "Accounts Summary",
           path: "/reports/accounts-summary",
-          permission: "VIEW_REPORTS",
+          permission: "VIEW_FINANCIAL_REPORTS",
         },
         {
           name: "Stock Movement",

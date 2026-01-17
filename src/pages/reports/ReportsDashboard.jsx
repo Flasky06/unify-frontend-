@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { reportService } from "../../services/reportService";
 import Button from "../../components/ui/Button";
+import useAuthStore from "../../store/authStore";
 
 const ReportsDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { hasPermission } = useAuthStore();
 
   useEffect(() => {
     fetchDashboardReport();
@@ -111,15 +113,17 @@ const ReportsDashboard = () => {
           </div>
         </Link>
 
-        {/* Accounts Summary */}
-        <Link to="/reports/accounts-summary" className="block">
-          <div className="bg-white p-6 rounded-lg shadow border-l-4 border-indigo-500 hover:shadow-lg transition-shadow cursor-pointer">
-            <p className="text-sm text-gray-500 mb-1">Accounts Summary</p>
-            <h2 className="text-lg font-bold text-gray-800">
-              View Financial Report
-            </h2>
-          </div>
-        </Link>
+        {/* Accounts Summary - Only show to users with VIEW_FINANCIAL_REPORTS permission */}
+        {hasPermission("VIEW_FINANCIAL_REPORTS") && (
+          <Link to="/reports/accounts-summary" className="block">
+            <div className="bg-white p-6 rounded-lg shadow border-l-4 border-indigo-500 hover:shadow-lg transition-shadow cursor-pointer">
+              <p className="text-sm text-gray-500 mb-1">Accounts Summary</p>
+              <h2 className="text-lg font-bold text-gray-800">
+                View Financial Report
+              </h2>
+            </div>
+          </Link>
+        )}
 
         {/* Stock Movement */}
         <Link to="/reports/stock-movement" className="block">
