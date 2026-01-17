@@ -166,7 +166,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
         {
           name: "Transfer Stock",
           path: "/stocks/transfers",
-          permission: "MANAGE_STOCK",
+          permission: "VIEW_STOCK_TRANSFERS",
         },
       ],
     },
@@ -222,7 +222,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
     // 5. SUPPLIERS
     {
       name: "Suppliers",
-      permission: "VIEW_STOCK",
+      permission: "VIEW_SUPPLIERS",
       icon: (
         <svg
           className="w-5 h-5"
@@ -239,11 +239,11 @@ export const Sidebar = ({ isOpen, onClose }) => {
         </svg>
       ),
       children: [
-        { name: "All Suppliers", path: "/suppliers", permission: "VIEW_STOCK" },
+        { name: "All Suppliers", path: "/suppliers", permission: "VIEW_SUPPLIERS" },
         {
           name: "Purchase Orders",
           path: "/purchase-orders",
-          permission: "VIEW_STOCK",
+          permission: "VIEW_PURCHASES",
         },
       ],
     },
