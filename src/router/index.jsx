@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
+import { lazy } from "react";
 import ProtectedRoute from "../components/ProtectedRoute";
 import PermissionRoute from "../components/PermissionRoute";
 import { DashboardLayout } from "../components/layout/DashboardLayout";
@@ -9,12 +10,15 @@ import CreateBusiness from "../pages/auth/CreateBusiness";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 import Dashboard from "../pages/Dashboard";
-import AdminDashboard from "../pages/super-admin/SuperAdminDashboard";
-import AdminUsers from "../pages/super-admin/AdminUsers";
+const AdminDashboard = lazy(() => import("../pages/super-admin/SuperAdminDashboard"));
+const AdminUsers = lazy(() => import("../pages/super-admin/AdminUsers"));
 import Profile from "../pages/Profile";
 import { UserList } from "../pages/users/UserList";
-import { BusinessDetails } from "../pages/super-admin/BusinessDetails";
-import SubscriptionsManagement from "../pages/super-admin/SubscriptionsManagement";
+// Lazy load BusinessDetails to prevent circular dependency issues
+const BusinessDetails = lazy(() =>
+  import("../pages/super-admin/BusinessDetails").then(module => ({ default: module.BusinessDetails }))
+);
+const SubscriptionsManagement = lazy(() => import("../pages/super-admin/SubscriptionsManagement"));
 import RoleManagement from "../pages/users/RoleManagement";
 import { ProductList } from "../pages/products/ProductList";
 import { ProductCategoryList } from "../pages/products/ProductCategoryList";
@@ -43,6 +47,7 @@ import StockMovementReport from "../pages/reports/StockMovementReport";
 
 import { AccountsSummaryReport } from "../pages/reports/AccountsSummaryReport";
 import NotFound from "../pages/NotFound";
+import ErrorPage from "../pages/ErrorPage";
 
 export const router = createBrowserRouter([
   {
@@ -80,6 +85,7 @@ export const router = createBrowserRouter([
         <DashboardLayout />
       </ProtectedRoute>
     ),
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "profile",
@@ -92,7 +98,7 @@ export const router = createBrowserRouter([
       {
         path: "users",
         element: (
-          <PermissionRoute requiredRole="BUSINESS_OWNER">
+          <PermissionRoute requiredPermission="MANAGE_BUSINESS_SETTINGS">
             <UserList />
           </PermissionRoute>
         ),
@@ -101,7 +107,7 @@ export const router = createBrowserRouter([
       {
         path: "users/roles",
         element: (
-          <PermissionRoute requiredRole="BUSINESS_OWNER">
+          <PermissionRoute requiredPermission="MANAGE_BUSINESS_SETTINGS">
             <RoleManagement />
           </PermissionRoute>
         ),
@@ -307,6 +313,7 @@ export const router = createBrowserRouter([
         <DashboardLayout />
       </ProtectedRoute>
     ),
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "super-admin",
