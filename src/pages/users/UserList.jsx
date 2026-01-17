@@ -47,7 +47,7 @@ export const UserList = () => {
     userId: null,
   });
 
-  const { isBusinessOwner } = useAuthStore();
+  const { canManage } = useAuthStore();
 
   useEffect(() => {
     fetchUsers();
@@ -180,11 +180,10 @@ export const UserList = () => {
         const isActive = user.isActive || user.active;
         return (
           <span
-            className={`px-2 py-1 text-xs rounded-full font-medium ${
-              isActive
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
-            }`}
+            className={`px-2 py-1 text-xs rounded-full font-medium ${isActive
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
+              }`}
           >
             {isActive ? "Active" : "Deactivated"}
           </span>
@@ -224,7 +223,7 @@ export const UserList = () => {
           >
             Edit
           </Button>
-          {isBusinessOwner() && (
+          {canManage() && (
             <Button
               variant="ghost"
               size="sm"
@@ -248,11 +247,10 @@ export const UserList = () => {
               e.stopPropagation();
               handleToggleStatus(user);
             }}
-            className={`font-medium px-3 ${
-              user.isActive || user.active
-                ? "text-red-600 hover:bg-red-50 hover:text-red-700"
-                : "text-green-600 hover:bg-green-50 hover:text-green-800"
-            }`}
+            className={`font-medium px-3 ${user.isActive || user.active
+              ? "text-red-600 hover:bg-red-50 hover:text-red-700"
+              : "text-green-600 hover:bg-green-50 hover:text-green-800"
+              }`}
           >
             {user.isActive || user.active ? "Deactivate" : "Activate"}
           </Button>
@@ -424,31 +422,31 @@ export const UserList = () => {
           {(formData.role === "SHOP_MANAGER" ||
             formData.role === "SALES_REP" ||
             formData.role === "CASHIER") && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Assigned Shop <span className="text-red-500">*</span>
-              </label>
-              <select
-                name="shopId"
-                value={formData.shopId || ""}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    shopId: e.target.value ? Number(e.target.value) : null,
-                  }))
-                }
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              >
-                <option value="">Select a shop...</option>
-                {shops.map((shop) => (
-                  <option key={shop.id} value={shop.id}>
-                    {shop.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Assigned Shop <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="shopId"
+                  value={formData.shopId || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      shopId: e.target.value ? Number(e.target.value) : null,
+                    }))
+                  }
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                >
+                  <option value="">Select a shop...</option>
+                  {shops.map((shop) => (
+                    <option key={shop.id} value={shop.id}>
+                      {shop.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
           <div className="flex justify-end gap-3 pt-4">
             <Button type="button" variant="outline" onClick={closeModal}>
@@ -480,7 +478,7 @@ export const UserList = () => {
       <ConfirmDialog
         isOpen={confirmDialog.isOpen}
         onClose={() => setConfirmDialog({ isOpen: false, userId: null })}
-        onConfirm={() => {}}
+        onConfirm={() => { }}
         title="Delete User"
         message="Are you sure you want to delete this user? This action cannot be undone."
         confirmText="Delete"
