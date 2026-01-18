@@ -308,16 +308,16 @@ const Table = ({
           title="Row Details"
         >
           {selectedRow && (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {columns.map((column, index) => (
                 <div
                   key={index}
-                  className="border-b border-gray-200 pb-3 last:border-0"
+                  className="border-b border-gray-200 pb-4 last:border-0"
                 >
-                  <div className="text-sm font-medium text-gray-500 mb-1">
+                  <div className="text-sm font-semibold text-gray-500 mb-1 uppercase tracking-wider">
                     {column.header}
                   </div>
-                  <div className="text-sm text-gray-900 break-words">
+                  <div className="text-base text-gray-900 break-words font-medium">
                     {column.render
                       ? column.render(selectedRow)
                       : selectedRow[column.accessor] || "N/A"}
