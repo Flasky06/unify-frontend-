@@ -167,30 +167,30 @@ const Profile = () => {
         )}
       </div>
 
-      <div className="max-w-4xl">
+      <div className="max-w-3xl">
         {activeTab === "overview" && (
           <>
             {error && (
-              <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-sm text-red-600">{error}</p>
               </div>
             )}
 
             {success && (
-              <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
                 <p className="text-sm text-green-600">{success}</p>
               </div>
             )}
 
             <div className="bg-white rounded-lg shadow">
-              <div className="p-4 md:p-6 border-b border-gray-200">
+              <div className="p-3 md:p-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900">
                   Personal Information
                 </h2>
               </div>
 
-              <form onSubmit={handleSubmit} className="p-4 md:p-6 space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <form onSubmit={handleSubmit} className="p-3 md:p-4 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Input
                     label="Phone Number"
                     value={formData.phoneNo}
@@ -204,7 +204,7 @@ const Profile = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Email Address
                     </label>
-                    <p className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-600">
+                    <p className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-sm">
                       {user?.email}
                     </p>
                   </div>
@@ -212,18 +212,18 @@ const Profile = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Role
                     </label>
-                    <p className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-600">
+                    <p className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-sm">
                       {user?.role?.replace("_", " ")}
                     </p>
                   </div>
                 </div>
 
                 {isBusinessUser && (user?.business || user?.businessId) && (
-                  <div className="pt-6 border-t border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  <div className="pt-4 border-t border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">
                       Business Information
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <Input
                         label="Business Name"
                         value={businessData.businessName}
@@ -265,16 +265,17 @@ const Profile = () => {
                 )}
 
                 {isEditing && (
-                  <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                  <div className="flex justify-end gap-3 pt-3 border-t border-gray-200">
                     <Button
                       type="button"
                       variant="outline"
                       onClick={handleCancel}
                       disabled={loading}
+                      size="sm"
                     >
                       Cancel
                     </Button>
-                    <Button type="submit" disabled={loading}>
+                    <Button type="submit" disabled={loading} size="sm">
                       {loading ? "Saving..." : "Save Changes"}
                     </Button>
                   </div>
