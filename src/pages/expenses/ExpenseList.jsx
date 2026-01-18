@@ -397,7 +397,7 @@ export const ExpenseList = () => {
 
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full px-1 md:px-0">
       <div className="flex flex-col gap-3">
         {/* Filters Input Area */}
         {/* Filters Input Area */}

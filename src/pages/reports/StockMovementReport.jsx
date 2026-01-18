@@ -81,7 +81,7 @@ const StockMovementReport = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="p-1 md:p-6 space-y-4">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold text-blue-600">
@@ -200,10 +200,10 @@ const StockMovementReport = () => {
 
                         <td
                           className={`px-3 md:px-6 py-4 text-right font-bold ${item.netMovement > 0
-                              ? "text-emerald-600"
-                              : item.netMovement < 0
-                                ? "text-red-600"
-                                : "text-gray-400"
+                            ? "text-emerald-600"
+                            : item.netMovement < 0
+                              ? "text-red-600"
+                              : "text-gray-400"
                             }`}
                         >
                           {item.netMovement > 0 ? "+" : ""}

@@ -250,7 +250,7 @@ export const InvoiceList = () => {
   });
 
   return (
-    <div className="p-6">
+    <div className="p-1 md:p-6">
       {/* Filters */}
       <div className="mb-6 grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="col-span-2 md:col-span-1">
