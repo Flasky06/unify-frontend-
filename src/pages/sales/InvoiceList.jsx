@@ -252,8 +252,8 @@ export const InvoiceList = () => {
   return (
     <div className="p-6">
       {/* Filters */}
-      <div className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div>
+      <div className="mb-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="col-span-2 md:col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Search
           </label>
@@ -266,7 +266,7 @@ export const InvoiceList = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Start Date
           </label>
@@ -280,7 +280,7 @@ export const InvoiceList = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             End Date
           </label>
@@ -294,7 +294,7 @@ export const InvoiceList = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-2 md:col-span-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Shop
           </label>

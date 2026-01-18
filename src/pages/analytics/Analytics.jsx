@@ -136,8 +136,8 @@ export const Analytics = () => {
 
         {/* Filters */}
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:gap-4">
-          <div className="flex gap-4 items-end">
-            <div>
+          <div className="flex gap-2 w-full sm:w-auto items-end">
+            <div className="flex-1 sm:w-auto">
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Start Date
               </label>
@@ -145,9 +145,10 @@ export const Analytics = () => {
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
+                className="w-full"
               />
             </div>
-            <div>
+            <div className="flex-1 sm:w-auto">
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 End Date
               </label>
@@ -155,6 +156,7 @@ export const Analytics = () => {
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
+                className="w-full"
               />
             </div>
           </div>
@@ -187,9 +189,8 @@ export const Analytics = () => {
             <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
               <p className="text-sm text-purple-600 font-medium">Net Profit</p>
               <p
-                className={`text-3xl font-bold ${
-                  netProfit >= 0 ? "text-green-900" : "text-red-900"
-                }`}
+                className={`text-3xl font-bold ${netProfit >= 0 ? "text-green-900" : "text-red-900"
+                  }`}
               >
                 KSH {netProfit.toFixed(2)}
               </p>
@@ -312,9 +313,9 @@ export const Analytics = () => {
                     KSH{" "}
                     {expenseAnalytics?.totalTransactions > 0
                       ? (
-                          expenseAnalytics.totalExpenses /
-                          expenseAnalytics.totalTransactions
-                        ).toFixed(2)
+                        expenseAnalytics.totalExpenses /
+                        expenseAnalytics.totalTransactions
+                      ).toFixed(2)
                       : "0.00"}
                   </p>
                 </div>

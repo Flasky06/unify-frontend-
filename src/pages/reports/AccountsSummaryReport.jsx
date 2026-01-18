@@ -132,7 +132,7 @@ export const AccountsSummaryReport = () => {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
           {/* Date Range Picker */}
           <DateRangePicker
             startDate={dateRange.startDate}
@@ -146,7 +146,7 @@ export const AccountsSummaryReport = () => {
           <select
             value={selectedShopId}
             onChange={(e) => setSelectedShopId(e.target.value)}
-            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full sm:w-auto"
           >
             <option value="">All Shops</option>
             {shops.map((shop) => (

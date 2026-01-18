@@ -373,25 +373,25 @@ export const ExpenseList = () => {
     ...(user?.role === "SALES_REP"
       ? []
       : [
-          {
-            header: "Actions",
-            render: (expense) => (
-              <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-orange-600 hover:bg-orange-50 hover:text-orange-700 font-medium px-3"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setConfirmDialog({ isOpen: true, expenseId: expense.id });
-                  }}
-                >
-                  Void
-                </Button>
-              </div>
-            ),
-          },
-        ]),
+        {
+          header: "Actions",
+          render: (expense) => (
+            <div className="flex gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-orange-600 hover:bg-orange-50 hover:text-orange-700 font-medium px-3"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setConfirmDialog({ isOpen: true, expenseId: expense.id });
+                }}
+              >
+                Void
+              </Button>
+            </div>
+          ),
+        },
+      ]),
   ];
 
 
@@ -401,8 +401,8 @@ export const ExpenseList = () => {
       <div className="flex flex-col gap-3">
         {/* Filters Input Area */}
         {/* Filters Input Area */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
-          <div className="w-full">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+          <div className="w-full col-span-2 sm:col-span-1">
             <label className="block text-xs font-medium text-gray-700 mb-1">
               Search
             </label>
@@ -414,7 +414,7 @@ export const ExpenseList = () => {
             />
           </div>
           {/* Category Select */}
-          <div className="w-full">
+          <div className="w-full col-span-2 sm:col-span-1">
             <label className="block text-xs font-medium text-gray-700 mb-1">
               Category
             </label>
@@ -435,7 +435,7 @@ export const ExpenseList = () => {
             </select>
           </div>
           {/* Shop Select */}
-          <div className="w-full">
+          <div className="w-full col-span-2 lg:col-span-1">
             <label className="block text-xs font-medium text-gray-700 mb-1">
               Shop
             </label>
@@ -456,7 +456,7 @@ export const ExpenseList = () => {
             </select>
           </div>
           {/* Dates */}
-          <div className="w-full">
+          <div className="w-full col-span-1">
             <label className="block text-xs font-medium text-gray-700 mb-1">
               Start Date
             </label>
@@ -467,7 +467,7 @@ export const ExpenseList = () => {
               className="w-full py-1.5 text-sm"
             />
           </div>
-          <div className="w-full">
+          <div className="w-full col-span-1">
             <label className="block text-xs font-medium text-gray-700 mb-1">
               End Date
             </label>
@@ -705,8 +705,8 @@ export const ExpenseList = () => {
               {submitting
                 ? "Saving..."
                 : editingExpense
-                ? "Update Expense"
-                : "Create Expense"}
+                  ? "Update Expense"
+                  : "Create Expense"}
             </Button>
           </div>
         </form>

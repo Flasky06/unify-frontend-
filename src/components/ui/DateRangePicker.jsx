@@ -21,19 +21,19 @@ export const DateRangePicker = ({ startDate, endDate, onChange }) => {
   };
 
   return (
-    <div className="flex items-center gap-2 bg-white p-1 rounded-lg border border-gray-300">
+    <div className="flex items-center gap-2 bg-white p-1 rounded-lg border border-gray-300 w-full sm:w-auto">
       <input
         type="date"
         value={startDate ? format(startDate, "yyyy-MM-dd") : ""}
         onChange={handleStartDateChange}
-        className="bg-white text-gray-900 text-sm px-2 py-1 outline-none focus:bg-gray-50 rounded border-0"
+        className="bg-white text-gray-900 text-base px-2 py-2 outline-none focus:bg-gray-50 rounded border-0 flex-1 w-full sm:w-auto"
       />
       <span className="text-gray-400 font-medium">-</span>
       <input
         type="date"
         value={endDate ? format(endDate, "yyyy-MM-dd") : ""}
         onChange={handleEndDateChange}
-        className="bg-white text-gray-900 text-sm px-2 py-1 outline-none focus:bg-gray-50 rounded border-0"
+        className="bg-white text-gray-900 text-base px-2 py-2 outline-none focus:bg-gray-50 rounded border-0 flex-1 w-full sm:w-auto"
       />
     </div>
   );

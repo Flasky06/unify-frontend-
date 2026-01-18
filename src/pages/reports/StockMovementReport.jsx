@@ -95,8 +95,8 @@ const StockMovementReport = () => {
       {/* Filters */}
       <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 space-y-4">
         {/* Date Range */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div>
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="col-span-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Start Date
             </label>
@@ -110,7 +110,7 @@ const StockMovementReport = () => {
             />
           </div>
 
-          <div>
+          <div className="col-span-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               End Date
             </label>
@@ -126,24 +126,24 @@ const StockMovementReport = () => {
 
           {(user?.role === "BUSINESS_OWNER" ||
             user?.role === "BUSINESS_MANAGER") && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Shop
-              </label>
-              <select
-                value={selectedShopId}
-                onChange={(e) => setSelectedShopId(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">All Shops</option>
-                {shops.map((shop) => (
-                  <option key={shop.id} value={shop.id}>
-                    {shop.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+              <div className="col-span-2 lg:col-span-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Shop
+                </label>
+                <select
+                  value={selectedShopId}
+                  onChange={(e) => setSelectedShopId(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">All Shops</option>
+                  {shops.map((shop) => (
+                    <option key={shop.id} value={shop.id}>
+                      {shop.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
         </div>
       </div>
 
@@ -199,13 +199,12 @@ const StockMovementReport = () => {
                         </td>
 
                         <td
-                          className={`px-3 md:px-6 py-4 text-right font-bold ${
-                            item.netMovement > 0
+                          className={`px-3 md:px-6 py-4 text-right font-bold ${item.netMovement > 0
                               ? "text-emerald-600"
                               : item.netMovement < 0
-                              ? "text-red-600"
-                              : "text-gray-400"
-                          }`}
+                                ? "text-red-600"
+                                : "text-gray-400"
+                            }`}
                         >
                           {item.netMovement > 0 ? "+" : ""}
                           {item.netMovement}

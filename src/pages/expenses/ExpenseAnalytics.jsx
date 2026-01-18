@@ -146,8 +146,8 @@ export const ExpenseAnalytics = () => {
 
         {/* Filters */}
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:gap-4">
-          <div className="flex gap-4 items-end">
-            <div>
+          <div className="flex gap-2 w-full sm:w-auto items-end">
+            <div className="flex-1 sm:w-auto">
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Start Date
               </label>
@@ -155,9 +155,10 @@ export const ExpenseAnalytics = () => {
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
+                className="w-full"
               />
             </div>
-            <div>
+            <div className="flex-1 sm:w-auto">
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 End Date
               </label>
@@ -165,6 +166,7 @@ export const ExpenseAnalytics = () => {
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
+                className="w-full"
               />
             </div>
           </div>

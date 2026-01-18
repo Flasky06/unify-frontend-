@@ -312,27 +312,29 @@ export const PurchaseOrderList = () => {
               <option value="CANCELLED">Cancelled</option>
             </select>
           </div>
-          <div className="w-full">
-            <label className="block text-xs font-medium text-gray-700 mb-1">
-              Start Date
-            </label>
-            <Input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="w-full py-1.5 text-sm"
-            />
-          </div>
-          <div className="w-full">
-            <label className="block text-xs font-medium text-gray-700 mb-1">
-              End Date
-            </label>
-            <Input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="w-full py-1.5 text-sm"
-            />
+          <div className="flex gap-2 w-full">
+            <div className="w-1/2">
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                Start Date
+              </label>
+              <Input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="w-full py-1.5 text-sm"
+              />
+            </div>
+            <div className="w-1/2">
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                End Date
+              </label>
+              <Input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="w-full py-1.5 text-sm"
+              />
+            </div>
           </div>
         </div>
         <div className="flex gap-2 justify-end">
