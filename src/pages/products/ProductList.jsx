@@ -289,11 +289,10 @@ export const ProductList = () => {
       header: "Status",
       render: (product) => (
         <span
-          className={`px-2 py-1 text-xs rounded-full ${
-            product.active
+          className={`px-2 py-1 text-xs rounded-full ${product.active
               ? "bg-green-100 text-green-800"
               : "bg-gray-100 text-gray-800"
-          }`}
+            }`}
         >
           {product.active ? "Active" : "Inactive"}
         </span>
@@ -303,36 +302,36 @@ export const ProductList = () => {
     ...(user?.role === "SALES_REP"
       ? []
       : [
-          {
-            header: "Actions",
-            render: (product) => (
-              <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-blue-600 hover:bg-blue-50 font-medium px-3"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openEditModal(product);
-                  }}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setConfirmDialog({ isOpen: true, productId: product.id });
-                  }}
-                >
-                  Delete
-                </Button>
-              </div>
-            ),
-          },
-        ]),
+        {
+          header: "Actions",
+          render: (product) => (
+            <div className="flex gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-blue-600 hover:bg-blue-50 font-medium px-3"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openEditModal(product);
+                }}
+              >
+                Edit
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-red-600 hover:bg-red-50 hover:text-red-700 font-medium px-3"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setConfirmDialog({ isOpen: true, productId: product.id });
+                }}
+              >
+                Delete
+              </Button>
+            </div>
+          ),
+        },
+      ]),
   ];
 
   return (
@@ -345,36 +344,38 @@ export const ProductList = () => {
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="py-1.5 text-sm"
+                className="py-1.5"
               />
             </div>
-            <div className="w-full lg:w-48">
-              <select
-                className="w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-              >
-                <option value="">All Categories</option>
-                {categories.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="w-full lg:w-48">
-              <select
-                className="w-full px-4 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                value={selectedBrand}
-                onChange={(e) => setSelectedBrand(e.target.value)}
-              >
-                <option value="">All Brands</option>
-                {brands.map((b) => (
-                  <option key={b.id} value={b.id}>
-                    {b.name}
-                  </option>
-                ))}
-              </select>
+            <div className="flex gap-2 w-full lg:w-auto">
+              <div className="w-1/2 lg:w-48">
+                <select
+                  className="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                  <option value="">All Categories</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="w-1/2 lg:w-48">
+                <select
+                  className="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                  value={selectedBrand}
+                  onChange={(e) => setSelectedBrand(e.target.value)}
+                >
+                  <option value="">All Brands</option>
+                  {brands.map((b) => (
+                    <option key={b.id} value={b.id}>
+                      {b.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
           <div className="flex gap-2">
@@ -566,8 +567,8 @@ export const ProductList = () => {
               {submitting
                 ? "Saving..."
                 : editingProduct
-                ? "Update Product"
-                : "Create Product"}
+                  ? "Update Product"
+                  : "Create Product"}
             </Button>
           </div>
         </form>
@@ -678,15 +679,13 @@ export const ProductList = () => {
               {(selectedCategory || selectedBrand || searchTerm) && (
                 <p className="text-xs mt-1">
                   {selectedCategory &&
-                    `Category: ${
-                      categories.find(
-                        (c) => c.id.toString() === selectedCategory
-                      )?.name
+                    `Category: ${categories.find(
+                      (c) => c.id.toString() === selectedCategory
+                    )?.name
                     } `}
                   {selectedBrand &&
-                    `Brand: ${
-                      brands.find((b) => b.id.toString() === selectedBrand)
-                        ?.name
+                    `Brand: ${brands.find((b) => b.id.toString() === selectedBrand)
+                      ?.name
                     } `}
                   {searchTerm && `Search: "${searchTerm}"`}
                 </p>
