@@ -11,11 +11,11 @@ export const DashboardLayout = () => {
   useIdleTimeout(5 * 60 * 1000);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div className="flex h-[100dvh] overflow-hidden bg-gray-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header onMenuClick={() => setSidebarOpen(true)} />
-        <main className="flex-1 p-2 md:p-4 overflow-auto">
+        <main className="flex-1 p-1 md:p-4 overflow-auto">
           <Suspense
             fallback={
               <div className="flex h-full items-center justify-center">
