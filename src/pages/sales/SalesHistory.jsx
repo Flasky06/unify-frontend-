@@ -152,14 +152,14 @@ const SalesHistory = () => {
       }
       setToast({
         isOpen: true,
-        message: "Sale voided successfully.",
+        message: "Sale cancelled successfully.",
         type: "success",
       });
     } catch (error) {
       console.error("Failed to void sale", error);
       setToast({
         isOpen: true,
-        message: `Failed to void sale: ${error.message}`,
+        message: `Failed to cancel sale: ${error.message}`,
         type: "error",
       });
     }
@@ -283,7 +283,7 @@ const SalesHistory = () => {
         if (row.status === "CANCELLED")
           return (
             <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 font-medium">
-              VOIDED
+              CANCELLED
             </span>
           );
         if (row.status === "PENDING")
@@ -317,8 +317,8 @@ const SalesHistory = () => {
                 key={status}
                 onClick={() => setStatusFilter(status)}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition ${statusFilter === status
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
               >
                 {status === "ALL"
@@ -592,7 +592,7 @@ const SalesHistory = () => {
                     }
                     className="text-orange-600 border-orange-200 hover:bg-orange-50"
                   >
-                    Void Sale
+                    Cancel Sale
                   </Button>
                 )}
                 <Button onClick={() => setIsDetailsModalOpen(false)}>
@@ -656,8 +656,8 @@ const SalesHistory = () => {
                   key={pm.id}
                   onClick={() => setSelectedPaymentMethod(pm.id)}
                   className={`p-3 rounded-lg border text-sm font-medium transition ${selectedPaymentMethod === pm.id
-                      ? "border-green-600 bg-green-50 text-green-700"
-                      : "border-gray-200 hover:bg-gray-50"
+                    ? "border-green-600 bg-green-50 text-green-700"
+                    : "border-gray-200 hover:bg-gray-50"
                     }`}
                 >
                   {pm.name}
@@ -692,9 +692,9 @@ const SalesHistory = () => {
         isOpen={confirmDialog.isOpen}
         onClose={() => setConfirmDialog({ isOpen: false, saleId: null })}
         onConfirm={() => handleVoidSale(confirmDialog.saleId)}
-        title="Void Sale"
-        message="Are you sure you want to void this sale? This will mark it as cancelled but maintain the record for audit purposes."
-        confirmText="Void"
+        title="Cancel Sale"
+        message="Are you sure you want to cancel this sale? This will mark it as cancelled but maintain the record for audit purposes."
+        confirmText="Cancel Sale"
         variant="warning"
       />
 

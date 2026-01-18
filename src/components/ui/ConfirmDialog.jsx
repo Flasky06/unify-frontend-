@@ -25,7 +25,7 @@ export const ConfirmDialog = ({
         {/* Dialog */}
         <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full p-6 transform transition-all">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-          <p className="text-sm text-gray-600 mb-6">{message}</p>
+          <div className="text-sm text-gray-600 mb-6">{message}</div>
 
           <div className="flex justify-end gap-3">
             <Button type="button" variant="outline" onClick={onClose}>
@@ -41,8 +41,8 @@ export const ConfirmDialog = ({
                 variant === "danger"
                   ? "bg-red-600 hover:bg-red-700 text-white"
                   : variant === "warning"
-                  ? "bg-orange-600 hover:bg-orange-700 text-white"
-                  : ""
+                    ? "bg-orange-600 hover:bg-orange-700 text-white"
+                    : ""
               }
             >
               {confirmText}

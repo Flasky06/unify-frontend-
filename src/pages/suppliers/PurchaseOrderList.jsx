@@ -37,7 +37,7 @@ export const PurchaseOrderList = () => {
   });
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
-    orderId: null,
+    order: null,
     action: null,
   });
   const [toast, setToast] = useState({
@@ -523,15 +523,15 @@ export const PurchaseOrderList = () => {
         <ConfirmDialog
           isOpen={confirmDialog.isOpen}
           onClose={() =>
-            setConfirmDialog({ isOpen: false, orderId: null, action: null })
+            setConfirmDialog({ isOpen: false, order: null, action: null })
           }
           onConfirm={() => {
             if (confirmDialog.action === "cancel") {
-              handleCancelOrder(confirmDialog.orderId);
+              handleCancelOrder(confirmDialog.order?.id);
             } else if (confirmDialog.action === "receive") {
-              handleReceiveOrder(confirmDialog.orderId);
+              handleReceiveOrder(confirmDialog.order?.id);
             }
-            setConfirmDialog({ isOpen: false, orderId: null, action: null });
+            setConfirmDialog({ isOpen: false, order: null, action: null });
           }}
           title={
             confirmDialog.action === "cancel"
@@ -539,9 +539,31 @@ export const PurchaseOrderList = () => {
               : "Receive Stock"
           }
           message={
-            confirmDialog.action === "cancel"
-              ? "Are you sure you want to cancel this purchase order?"
-              : "Are you sure you want to mark this order as received? This will automatically update your stock quantities."
+            confirmDialog.action === "cancel" ? (
+              "Are you sure you want to cancel this purchase order?"
+            ) : (
+              <div className="space-y-3">
+                <p>
+                  Are you sure you want to mark this order as received? This will
+                  automatically update your stock quantities.
+                </p>
+                {confirmDialog.order?.items?.length > 0 && (
+                  <div className="bg-gray-50 p-3 rounded-md max-h-48 overflow-y-auto">
+                    <p className="text-xs font-semibold text-gray-700 uppercase mb-2">
+                      Items to Receive:
+                    </p>
+                    <ul className="space-y-1">
+                      {confirmDialog.order.items.map((item, idx) => (
+                        <li key={idx} className="text-sm flex justify-between">
+                          <span>{item.itemName || item.productName}</span>
+                          <span className="font-medium">x{item.quantity}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )
           }
           confirmText={
             confirmDialog.action === "cancel" ? "Cancel Order" : "Receive Stock"
@@ -658,8 +680,8 @@ export const PurchaseOrderList = () => {
                   <span className="text-gray-900 font-semibold">Balance:</span>
                   <span
                     className={`font-bold ${viewModal.order.balance > 0
-                        ? "text-red-600"
-                        : "text-green-600"
+                      ? "text-red-600"
+                      : "text-green-600"
                       }`}
                   >
                     KES {(viewModal.order.balance || 0).toLocaleString()}
@@ -693,7 +715,7 @@ export const PurchaseOrderList = () => {
                       onClick={() => {
                         setConfirmDialog({
                           isOpen: true,
-                          orderId: viewModal.order.id,
+                          order: viewModal.order,
                           action: "cancel",
                         });
                         setViewModal({ isOpen: false, order: null });
@@ -710,7 +732,7 @@ export const PurchaseOrderList = () => {
                       onClick={() => {
                         setConfirmDialog({
                           isOpen: true,
-                          orderId: viewModal.order.id,
+                          order: viewModal.order,
                           action: "receive",
                         });
                         setViewModal({ isOpen: false, order: null });

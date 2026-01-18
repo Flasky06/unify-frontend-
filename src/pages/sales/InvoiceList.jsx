@@ -475,7 +475,7 @@ export const InvoiceList = () => {
                   handlePayInvoice(selectedSale);
                 }}
               >
-                Pay Invoice
+                Record Payment
               </Button>
               <Button variant="secondary" onClick={() => setDetailsModalOpen(false)}>
                 Close

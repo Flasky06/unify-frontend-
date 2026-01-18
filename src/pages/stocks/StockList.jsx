@@ -99,7 +99,7 @@ const StockList = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
-    
+
     const quantity = parseInt(formData.quantity);
     const shopId = parseInt(formData.shopId);
     const productId = parseInt(formData.productId);
@@ -150,7 +150,7 @@ const StockList = () => {
 
   const handleEdit = (stock) => {
     if (!stock) return;
-    
+
     setEditingStock(stock);
     setFormData({
       shopId: stock.shopId || "",
@@ -159,14 +159,14 @@ const StockList = () => {
       reason: "Manual Update",
     });
     setIsModalOpen(true);
-    
+
     const product = products.find((p) => p.id === stock.productId);
     setSelectedProductForAdd(product || null);
   };
 
   const handleProductSelect = (product) => {
     if (!product) return;
-    
+
     setSelectedProductForAdd(product);
     setFormData((prev) => ({ ...prev, productId: product.id }));
     setShowProductPicker(false);
@@ -239,13 +239,12 @@ const StockList = () => {
       header: "Quantity",
       render: (row) => (
         <span
-          className={`${
-            row.quantity < 10
+          className={`${row.quantity < 10
               ? "text-red-600"
               : row.quantity < 50
-              ? "text-yellow-600"
-              : "text-green-600"
-          }`}
+                ? "text-yellow-600"
+                : "text-green-600"
+            }`}
         >
           {row.quantity}
         </span>
@@ -432,7 +431,7 @@ const StockList = () => {
                     d="M12 4v16m8-8H4"
                   />
                 </svg>
-                Receive Stock
+                Add Stock
               </Button>
             </div>
           </div>

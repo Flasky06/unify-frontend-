@@ -80,7 +80,7 @@ const StockReturnList = () => {
         shopId: selectedShop,
         quantity: parseInt(formData.quantity),
       });
-      showToast("Return processed successfully", "success");
+      showToast("Return logged successfully", "success");
       setIsModalOpen(false);
       fetchReturns();
       setFormData({
@@ -91,7 +91,7 @@ const StockReturnList = () => {
       });
     } catch (error) {
       showToast(
-        error.response?.data?.message || "Failed to process return",
+        error.response?.data?.message || "Failed to log return",
         "error"
       );
     }
@@ -164,7 +164,7 @@ const StockReturnList = () => {
                 d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
               />
             </svg>
-            Process Return
+            Log Return
           </Button>
         </div>
       </div>
@@ -198,11 +198,10 @@ const StockReturnList = () => {
               accessor: "type",
               render: (item) => (
                 <span
-                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    item.type === "CUSTOMER_RETURN"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                  }`}
+                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${item.type === "CUSTOMER_RETURN"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
+                    }`}
                 >
                   {item.type.replace("_", " ")}
                 </span>
@@ -242,7 +241,7 @@ const StockReturnList = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Process Stock Return"
+        title="Log Stock Return"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <Select
@@ -272,17 +271,17 @@ const StockReturnList = () => {
               }
               className="w-full"
             >
-              <option value="CUSTOMER_RETURN">Customer Return (Restock)</option>
-              <option value="SUPPLIER_RETURN">
-                Return to Supplier (Deduct)
+              <option value="CUSTOMER_RETURN">
+                Return From Customer (Stock Increases)
               </option>
-              <option value="DAMAGED">Damaged (Deduct)</option>
-              <option value="EXPIRED">Expired (Deduct)</option>
+              <option value="SUPPLIER_RETURN">
+                Return To Supplier (Stock Decreases)
+              </option>
+              <option value="DAMAGED">Damaged Stock (Stock Decreases)</option>
+              <option value="EXPIRED">Expired Stock (Stock Decreases)</option>
             </Select>
             <p className="text-xs text-gray-500 mt-1">
-              {formData.type === "CUSTOMER_RETURN"
-                ? "Use this when a customer returns an item. Stock will INCREASE."
-                : "Use this for bad stock. Stock will DECREASE."}
+              Select the return type to automatically adjust stock levels.
             </p>
           </div>
 
