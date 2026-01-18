@@ -42,8 +42,8 @@ const Table = ({
         const value = column.accessor
           ? row[column.accessor]
           : column.render
-          ? column.render(row)
-          : "";
+            ? column.render(row)
+            : "";
 
         if (value === null || value === undefined) return false;
 
@@ -105,14 +105,14 @@ const Table = ({
                 {columns.map((column, index) => (
                   <th
                     key={index}
-                    className="px-3 md:px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider bg-gray-50"
+                    className="px-3 md:px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider bg-gray-50"
                     style={{ minWidth: column.width || "auto" }}
                   >
                     {column.header}
                   </th>
                 ))}
                 {showViewAction && (
-                  <th className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
+                  <th className="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
                     Actions
                   </th>
                 )}
@@ -145,20 +145,17 @@ const Table = ({
                   <tr
                     key={rowIndex}
                     onClick={() => onRowClick?.(row)}
-                    className={`${
-                      rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50/50"
-                    } ${
-                      onView || onRowClick
+                    className={`${rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50/50"
+                      } ${onView || onRowClick
                         ? "cursor-pointer hover:bg-blue-50/80 transition-colors duration-150 ease-in-out"
                         : "hover:bg-gray-50"
-                    } ${getRowClassName ? getRowClassName(row) : ""}`}
+                      } ${getRowClassName ? getRowClassName(row) : ""}`}
                   >
                     {columns.map((column, colIndex) => (
                       <td
                         key={colIndex}
-                        className={`px-3 md:px-6 py-2 text-sm text-gray-700 ${
-                          column.truncate ? "" : "whitespace-nowrap"
-                        }`}
+                        className={`px-3 md:px-4 py-2 text-sm text-gray-900 ${column.truncate ? "" : "whitespace-nowrap"
+                          }`}
                         style={{
                           maxWidth: column.truncate
                             ? column.maxWidth || "300px"
@@ -167,11 +164,10 @@ const Table = ({
                       >
                         {column.truncate ? (
                           <div
-                            className={`truncate ${
-                              column.triggerView
-                                ? "cursor-pointer text-blue-600 hover:text-blue-800 font-bold"
-                                : ""
-                            }`}
+                            className={`truncate ${column.triggerView
+                              ? "cursor-pointer text-blue-600 hover:text-blue-800 font-bold"
+                              : ""
+                              }`}
                             title={
                               column.render ? undefined : row[column.accessor]
                             }
@@ -208,7 +204,7 @@ const Table = ({
                       </td>
                     ))}
                     {showViewAction && (
-                      <td className="px-3 md:px-6 py-2.5 text-base font-medium">
+                      <td className="px-3 md:px-4 py-2.5 text-base font-medium">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -281,11 +277,10 @@ const Table = ({
                       )}
                       <button
                         onClick={() => handlePageChange(page)}
-                        className={`px-3 py-1 border rounded ${
-                          currentPage === page
-                            ? "bg-blue-600 text-white border-blue-600"
-                            : "border-gray-300 hover:bg-gray-50"
-                        }`}
+                        className={`px-3 py-1 border rounded ${currentPage === page
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "border-gray-300 hover:bg-gray-50"
+                          }`}
                       >
                         {page}
                       </button>
