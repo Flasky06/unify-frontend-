@@ -22,7 +22,7 @@ const Modal = ({ isOpen, onClose, title, children, size = "md" }) => {
           className={`relative bg-white rounded-none sm:rounded-xl shadow-xl ${sizes[size]} w-full transform transition-all print:shadow-none print:max-w-none`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 print:hidden">
+          <div className="flex items-center justify-between px-2 sm:px-6 py-4 border-b border-gray-200 print:hidden">
             <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
             <button
               onClick={onClose}
@@ -45,7 +45,7 @@ const Modal = ({ isOpen, onClose, title, children, size = "md" }) => {
           </div>
 
           {/* Content */}
-          <div className="px-6 py-4 print:p-0">{children}</div>
+          <div className="px-2 sm:px-6 py-4 print:p-0">{children}</div>
         </div>
       </div>
     </div>
