@@ -3,7 +3,7 @@ import useAuthStore from "../store/authStore";
 import { MySubscription } from "./MySubscription";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
-import { PageHeader } from "../components/layout/PageHeader";
+
 import { userService } from "../services/userService";
 import { businessService } from "../services/businessService";
 
@@ -121,33 +121,7 @@ const Profile = () => {
 
   return (
     <div>
-      <PageHeader
-        title="Profile"
-        subtitle="Manage your account settings"
-        actions={
-          activeTab === "overview" &&
-          !isEditing && (
-            <Button onClick={() => setIsEditing(true)}>
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                />
-              </svg>
-              Edit Profile
-            </Button>
-          )
-        }
-      />
-
-      <div className="mb-6 border-b border-gray-200">
+      <div className="mb-6 border-b border-gray-200 flex justify-between items-end">
         <nav className="-mb-px flex space-x-8">
           <button
             onClick={() => setActiveTab("overview")}
@@ -170,6 +144,27 @@ const Profile = () => {
             </button>
           )}
         </nav>
+
+        {activeTab === "overview" && !isEditing && (
+          <div className="pb-2">
+            <Button onClick={() => setIsEditing(true)} size="sm">
+              <svg
+                className="w-4 h-4 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+              Edit Profile
+            </Button>
+          </div>
+        )}
       </div>
 
       <div className="max-w-4xl">
