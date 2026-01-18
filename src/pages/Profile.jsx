@@ -126,8 +126,8 @@ const Profile = () => {
           <button
             onClick={() => setActiveTab("overview")}
             className={`whitespace-nowrap px-4 py-2 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === "overview"
-                ? "border-blue-500 text-blue-600 bg-blue-50/50 rounded-t-lg"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50 rounded-t-lg"
+              ? "border-blue-500 text-blue-600 bg-blue-50/50 rounded-t-lg"
+              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50 rounded-t-lg"
               }`}
           >
             Overview
@@ -136,8 +136,8 @@ const Profile = () => {
             <button
               onClick={() => setActiveTab("subscription")}
               className={`whitespace-nowrap px-4 py-2 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === "subscription"
-                  ? "border-blue-500 text-blue-600 bg-blue-50/50 rounded-t-lg"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50 rounded-t-lg"
+                ? "border-blue-500 text-blue-600 bg-blue-50/50 rounded-t-lg"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50 rounded-t-lg"
                 }`}
             >
               Subscription
@@ -201,18 +201,18 @@ const Profile = () => {
                     placeholder="+254..."
                   />
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">
                       Email Address
                     </label>
-                    <p className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-sm">
+                    <p className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 font-medium text-sm">
                       {user?.email}
                     </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">
                       Role
                     </label>
-                    <p className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-sm">
+                    <p className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 font-medium text-sm">
                       {user?.role?.replace("_", " ")}
                     </p>
                   </div>
