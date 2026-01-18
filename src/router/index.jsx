@@ -2,11 +2,12 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { lazy } from "react";
 import ProtectedRoute from "../components/ProtectedRoute";
 import PermissionRoute from "../components/PermissionRoute";
+import OnboardingGuard from "../components/OnboardingGuard";
 import { DashboardLayout } from "../components/layout/DashboardLayout";
 import Home from "../pages/Home";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
-import CreateBusiness from "../pages/auth/CreateBusiness";
+import OnboardingWizard from "../pages/auth/OnboardingWizard";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 import Dashboard from "../pages/Dashboard";
@@ -63,10 +64,10 @@ export const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/create-business",
+    path: "/onboarding",
     element: (
       <ProtectedRoute>
-        <CreateBusiness />
+        <OnboardingWizard />
       </ProtectedRoute>
     ),
   },
@@ -82,7 +83,9 @@ export const router = createBrowserRouter([
     path: "/",
     element: (
       <ProtectedRoute>
-        <DashboardLayout />
+        <OnboardingGuard>
+          <DashboardLayout />
+        </OnboardingGuard>
       </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,
@@ -310,7 +313,9 @@ export const router = createBrowserRouter([
     path: "/super-admin",
     element: (
       <ProtectedRoute>
-        <DashboardLayout />
+        <OnboardingGuard>
+          <DashboardLayout />
+        </OnboardingGuard>
       </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,

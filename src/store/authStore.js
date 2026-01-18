@@ -160,6 +160,21 @@ const useAuthStore = create(
         const { user } = get();
         return ["BUSINESS_OWNER", "BUSINESS_MANAGER"].includes(user?.role);
       },
+
+      // Onboarding status helpers
+      hasCompletedOnboarding: () => {
+        const { user } = get();
+        // Check if user has business
+        return !!(user?.businessId || user?.business?.id);
+      },
+
+      needsOnboarding: () => {
+        const { user } = get();
+        // Super admin doesn't need onboarding
+        if (user?.role === "SUPER_ADMIN") return false;
+        // Check if user lacks business
+        return !(user?.businessId || user?.business?.id);
+      },
     }),
     {
       name: "auth-storage",
