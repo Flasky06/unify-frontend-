@@ -81,7 +81,7 @@ const StockMovementReport = () => {
   }
 
   return (
-    <div className="p-1 md:p-6 space-y-4">
+    <div className="p-2 md:p-6 space-y-4">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold text-blue-600">

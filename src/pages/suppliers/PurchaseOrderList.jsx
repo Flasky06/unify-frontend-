@@ -264,7 +264,7 @@ export const PurchaseOrderList = () => {
   ];
 
   return (
-    <div className="flex flex-col w-full px-1 md:px-0">
+    <div className="flex flex-col w-full px-2 md:px-0">
       <div className="flex flex-col gap-4 sm:gap-6 flex-1 min-h-0">
         {/* Filters */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">

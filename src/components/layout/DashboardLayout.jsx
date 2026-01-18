@@ -15,8 +15,8 @@ export const DashboardLayout = () => {
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header onMenuClick={() => setSidebarOpen(true)} />
-        <main className="flex-1 overflow-auto">
-          <div className="p-1 md:p-4 max-w-[1600px] mx-auto w-full">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden">
+          <div className="p-2 md:p-4 max-w-[1600px] mx-auto w-full">
             <Suspense
               fallback={
                 <div className="flex h-full items-center justify-center">

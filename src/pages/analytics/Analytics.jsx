@@ -98,7 +98,7 @@ export const Analytics = () => {
   }, [salesAnalytics, expenseAnalytics]);
 
   return (
-    <div className="p-1 md:p-6">
+    <div className="p-2 md:p-6">
       <div className="flex flex-col gap-6">
         <h1 className="text-2xl font-bold text-gray-800">Business Analytics</h1>
 

@@ -260,7 +260,7 @@ export const UserList = () => {
   ];
 
   return (
-    <div className="flex flex-col w-full px-1 md:px-0">
+    <div className="flex flex-col w-full px-2 md:px-0">
       <div className="flex flex-col gap-2 sm:gap-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
           <div className="w-full sm:max-w-xs">
