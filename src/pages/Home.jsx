@@ -72,7 +72,7 @@ const Home = () => {
               <>
                 <Link
                   to="/login"
-                  className="px-4 py-2 text-blue-600 font-bold hover:text-blue-700 transition text-sm sm:text-base border border-blue-600 rounded-lg bg-white"
+                  className="px-4 py-2 bg-blue-600 text-white font-bold hover:bg-blue-700 transition text-sm sm:text-base rounded-lg shadow-sm"
                 >
                   Sign In
                 </Link>
@@ -82,10 +82,10 @@ const Home = () => {
         </nav>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20 md:pt-24 md:pb-32">
-          <div className="text-left md:text-center w-full max-w-4xl mx-auto">
-            <div className="flex justify-start md:justify-center mb-8">
+          <div className="text-center w-full max-w-4xl mx-auto">
+            <div className="flex justify-center mb-8">
               {/* Removed animate-fadeIn to prevent layout jump */}
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold border border-blue-100 whitespace-normal text-left md:text-center">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold border border-blue-100 whitespace-normal text-center">
                 <svg
                   className="w-4 h-4 flex-shrink-0"
                   fill="currentColor"
@@ -97,7 +97,7 @@ const Home = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-                <span className="text-left">Trusted by growing retail businesses in Kenya</span>
+                <span>Trusted by growing retail businesses in Kenya</span>
               </span>
             </div>
             <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6 tracking-tight leading-tight">
@@ -113,7 +113,7 @@ const Home = () => {
               </span>{" "}
               built for Kenyan businesses
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-start md:justify-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
               {isAuthenticated ? (
                 <Link
                   to="/dashboard"
