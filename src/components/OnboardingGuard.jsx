@@ -40,15 +40,21 @@ const OnboardingGuard = ({ children }) => {
         );
     }
 
-    // Check if user has business (businessId or business object)
+    // Only business owners need to complete onboarding
+    // Super admins, business managers, shop managers, and sales reps bypass onboarding
+    if (user?.role !== "BUSINESS_OWNER") {
+        return children;
+    }
+
+    // Check if business owner has business (businessId or business object)
     const hasBusiness = user?.businessId || user?.business?.id;
 
-    // If user doesn't have business or shops, redirect to onboarding
+    // If business owner doesn't have business or shops, redirect to onboarding
     if (!hasBusiness || !hasShops) {
         return <Navigate to="/onboarding" replace />;
     }
 
-    // User has completed onboarding, allow access
+    // Business owner has completed onboarding, allow access
     return children;
 };
 
