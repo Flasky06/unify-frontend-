@@ -49,13 +49,13 @@ const Home = () => {
     <div className="min-h-[100dvh] bg-white overflow-x-hidden"> {/* Added overflow-x-hidden */}
       {/* Hero Section */}
       <div className="bg-gradient-to-b from-blue-50 to-white relative"> {/* Removed overflow-hidden from here to avoid conflicts, handled by parent */}
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center relative z-10">
+        <nav className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6 flex justify-between items-center relative z-10">
           <Link to="/" className="flex items-center gap-2 flex-shrink-0">
             {/* Adjusted logo size from 152px to nice header size */}
             <img
               src={mflowLogo}
               alt="mflow pos"
-              className="h-28 md:h-[152px] w-auto max-w-full object-contain"
+              className="h-36 md:h-[152px] w-auto max-w-full object-contain"
               height="152"
               width="auto"
             />
