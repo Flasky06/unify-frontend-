@@ -87,7 +87,7 @@ const Home = () => {
           </div>
         </nav>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20 md:pt-12 md:pb-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 md:pt-8 md:pb-32">
           <div className="text-center w-full max-w-4xl mx-auto">
             <div className="flex justify-center mb-8">
               {/* Removed animate-fadeIn to prevent layout jump */}
