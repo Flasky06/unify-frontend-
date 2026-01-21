@@ -72,16 +72,22 @@ const Home = () => {
               <>
                 <Link
                   to="/login"
-                  className="px-4 py-2 bg-blue-600 text-white font-bold hover:bg-blue-700 transition text-sm sm:text-base rounded-lg shadow-sm"
+                  className="px-6 sm:px-4 py-2 bg-blue-600 text-white font-bold hover:bg-blue-700 transition text-sm sm:text-base rounded-lg shadow-sm whitespace-nowrap"
                 >
                   Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  className="hidden sm:inline-block px-4 py-2 text-blue-600 font-bold hover:text-blue-700 transition text-sm sm:text-base border border-blue-600 rounded-lg bg-white whitespace-nowrap"
+                >
+                  Create Account
                 </Link>
               </>
             )}
           </div>
         </nav>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20 md:pt-24 md:pb-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20 md:pt-12 md:pb-32">
           <div className="text-center w-full max-w-4xl mx-auto">
             <div className="flex justify-center mb-8">
               {/* Removed animate-fadeIn to prevent layout jump */}
