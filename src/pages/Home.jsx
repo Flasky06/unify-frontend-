@@ -676,7 +676,7 @@ const Home = () => {
 
             {/* Email Contact */}
             <a
-              href="mailto:support@mflowpos.com?subject=Inquiry about mflow"
+              href="mailto:info@mflowpos.com?subject=Inquiry about mflow"
               className="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 group text-center"
             >
               <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-3 group-hover:bg-purple-600 transition duration-300 mx-auto">
@@ -698,7 +698,7 @@ const Home = () => {
                 Email Us
               </h3>
               <p className="text-purple-600 font-semibold text-sm mb-1 break-all px-1">
-                support@mflowpos.com
+                info@mflowpos.com
               </p>
               <p className="text-xs text-gray-600">
                 We'll respond within 24 hours
@@ -769,10 +769,10 @@ const Home = () => {
                 <li className="flex items-start gap-3">
                   <span className="text-blue-500">Email:</span>
                   <a
-                    href="mailto:support@mflowpos.com"
+                    href="mailto:info@mflowpos.com"
                     className="hover:text-white transition"
                   >
-                    support@mflowpos.com
+                    info@mflowpos.com
                   </a>
                 </li>
                 <li className="flex items-start gap-3">
