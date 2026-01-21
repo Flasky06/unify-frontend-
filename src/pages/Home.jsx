@@ -48,34 +48,35 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="bg-gradient-to-b from-blue-50 to-white min-h-screen md:min-h-[80vh]">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <Link to="/" className="flex items-center gap-2">
+      <div className="bg-gradient-to-b from-blue-50 to-white relative overflow-hidden">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center relative z-10">
+          <Link to="/" className="flex items-center gap-2 flex-shrink-0">
+            {/* Adjusted logo size from 152px to nice header size */}
             <img
               src={mflowLogo}
               alt="mflow pos"
-              className="h-[152px] w-auto"
+              className="h-12 w-auto"
             />
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {isAuthenticated ? (
               <Link
                 to="/dashboard"
-                className="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition shadow-sm text-sm"
               >
-                Go to Dashboard
+                Dashboard
               </Link>
             ) : (
               <>
                 <Link
                   to="/login"
-                  className="font-medium text-gray-500 hover:text-gray-900 transition"
+                  className="font-medium text-gray-600 hover:text-blue-600 transition text-sm sm:text-base mr-2"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
-                  className="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                  className="px-4 py-2 sm:px-6 sm:py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base whitespace-nowrap"
                 >
                   Start Free Trial
                 </Link>
@@ -84,10 +85,10 @@ const Home = () => {
           </div>
         </nav>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-16">
-          <div className="text-center w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20 md:pt-24 md:pb-32">
+          <div className="text-center w-full max-w-4xl mx-auto">
             <div className="flex justify-center mb-8">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold border border-blue-100">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold border border-blue-100 animate-fadeIn">
                 <svg
                   className="w-4 h-4"
                   fill="currentColor"
@@ -102,20 +103,20 @@ const Home = () => {
                 Trusted by growing retail businesses in Kenya
               </span>
             </div>
-            <h1 className="text-3xl md:text-6xl font-extrabold text-gray-900 mb-8 tracking-tight leading-tight">
-              Grow Your Business with{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+            <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6 tracking-tight leading-tight">
+              Grow Your Business with
+              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
                 mflow pos
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto">
               The complete{" "}
-              <span className="font-semibold text-gray-800">
+              <span className="font-bold text-blue-600">
                 POS and inventory management system
               </span>{" "}
               built for Kenyan businesses
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
               {isAuthenticated ? (
                 <Link
                   to="/dashboard"
@@ -127,7 +128,7 @@ const Home = () => {
                 <>
                   <Link
                     to="/register"
-                    className="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-200 transform hover:-translate-y-1"
+                    className="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-200 transform hover:-translate-y-1 w-full sm:w-auto"
                   >
                     Start Your 7-Day Free Trial
                   </Link>
@@ -144,6 +145,7 @@ const Home = () => {
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 mb-16"
       >
         <div className="text-center mb-10">
+          {/* ... pricing header content ... */}
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 bg-white/80 inline-block px-6 py-2 rounded-full backdrop-blur-sm border border-gray-100 shadow-sm">
             Simple, Transparent Pricing
           </h2>
@@ -152,9 +154,9 @@ const Home = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
           {/* Monthly Plan */}
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-xl flex flex-col transform hover:-translate-y-1 transition duration-300 text-center md:text-left">
+          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-xl flex flex-col transform hover:-translate-y-1 transition duration-300 text-center md:text-left h-full">
             <h3 className="text-xl font-bold text-gray-900 mb-2">Monthly</h3>
             <div className="flex items-baseline mb-4 justify-center md:justify-start">
               <span className="text-4xl font-extrabold text-gray-900">
@@ -173,7 +175,7 @@ const Home = () => {
                 "Sales Analytics",
                 "Email Support",
               ].map((feature) => (
-                <li key={feature} className="flex items-center text-gray-600 justify-center md:justify-start">
+                <li key={feature} className="flex items-center text-gray-600 justify-start"> {/* Forced justify-start for alignment */}
                   <svg
                     className="w-5 h-5 text-green-500 mr-2 flex-shrink-0"
                     fill="none"
@@ -187,20 +189,20 @@ const Home = () => {
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  {feature}
+                  <span className="text-left">{feature}</span>
                 </li>
               ))}
             </ul>
             <Link
               to="/register?plan=MONTHLY"
-              className="block w-full py-3 px-4 bg-white border-2 border-blue-600 text-blue-600 font-bold rounded-xl text-center hover:bg-blue-50 transition text-lg"
+              className="block w-full py-3 px-4 bg-white border-2 border-blue-600 text-blue-600 font-bold rounded-xl text-center hover:bg-blue-50 transition text-lg mt-auto"
             >
               Choose Monthly
             </Link>
           </div>
 
           {/* Quarterly Plan */}
-          <div className="bg-blue-600 rounded-2xl p-6 shadow-2xl transform md:scale-105 relative flex flex-col z-20 text-center md:text-left">
+          <div className="bg-blue-600 rounded-2xl p-6 shadow-2xl transform md:scale-105 relative flex flex-col z-20 text-center md:text-left h-full">
             <div className="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-lg">
               POPULAR
             </div>
@@ -226,7 +228,7 @@ const Home = () => {
                 "Stock Transfers",
                 "Employee Permissions",
               ].map((feature) => (
-                <li key={feature} className="flex items-center text-blue-50 justify-center md:justify-start">
+                <li key={feature} className="flex items-center text-blue-50 justify-start">
                   <svg
                     className="w-5 h-5 text-blue-300 mr-2 flex-shrink-0"
                     fill="none"
@@ -240,20 +242,20 @@ const Home = () => {
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  {feature}
+                  <span className="text-left">{feature}</span>
                 </li>
               ))}
             </ul>
             <Link
               to="/register?plan=QUARTERLY"
-              className="block w-full py-3 px-4 bg-white text-blue-600 font-bold rounded-xl text-center hover:bg-gray-50 transition shadow-lg text-lg"
+              className="block w-full py-3 px-4 bg-white text-blue-600 font-bold rounded-xl text-center hover:bg-gray-50 transition shadow-lg text-lg mt-auto"
             >
               Choose Quarterly
             </Link>
           </div>
 
           {/* Annual Plan */}
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-xl flex flex-col transform hover:-translate-y-1 transition duration-300 text-center md:text-left">
+          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-xl flex flex-col transform hover:-translate-y-1 transition duration-300 text-center md:text-left h-full">
             <h3 className="text-lg font-bold text-gray-900 mb-2">Annually</h3>
             <div className="flex items-baseline mb-1 justify-center md:justify-start">
               <span className="text-3xl font-bold text-gray-900">
@@ -276,7 +278,7 @@ const Home = () => {
                 "Data Migration Support",
                 "SLA Guarantee",
               ].map((feature) => (
-                <li key={feature} className="flex items-center text-gray-600 justify-center md:justify-start">
+                <li key={feature} className="flex items-center text-gray-600 justify-start">
                   <svg
                     className="w-4 h-4 text-green-500 mr-2"
                     fill="none"
@@ -290,19 +292,23 @@ const Home = () => {
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  {feature}
+                  <span className="text-left">{feature}</span>
                 </li>
               ))}
             </ul>
             <Link
               to="/register?plan=ANNUALLY"
-              className="block w-full py-2 px-4 bg-white border-2 border-blue-600 text-blue-600 font-bold rounded-xl text-center hover:bg-blue-50 transition"
+              className="block w-full py-2 px-4 bg-white border-2 border-blue-600 text-blue-600 font-bold rounded-xl text-center hover:bg-blue-50 transition mt-auto"
             >
               Choose Annually
             </Link>
           </div>
         </div>
       </section>
+
+      {/* Features Grid ... kept as is mostly but checking closing tags */}
+      {/* ... (Features section would go here, skipping for brevity in replacement if unmatched) ... */}
+
 
       {/* Features Grid */}
       <section id="features" className="bg-gray-50 py-16">
@@ -670,7 +676,7 @@ const Home = () => {
 
             {/* Email Contact */}
             <a
-              href="mailto:bonnienjuguna106@gmail.com?subject=Inquiry about mflow"
+              href="mailto:support@mflowpos.com?subject=Inquiry about mflow"
               className="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 group text-center"
             >
               <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-3 group-hover:bg-purple-600 transition duration-300 mx-auto">
@@ -692,7 +698,7 @@ const Home = () => {
                 Email Us
               </h3>
               <p className="text-purple-600 font-semibold text-sm mb-1 break-all px-1">
-                bonnienjuguna106@gmail.com
+                support@mflowpos.com
               </p>
               <p className="text-xs text-gray-600">
                 We'll respond within 24 hours
@@ -706,7 +712,7 @@ const Home = () => {
       <footer className="bg-gray-900 text-gray-300 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-around gap-12 mb-12">
-            <div className="md:max-w-xs">
+            <div className="md:max-w-xs text-left"> {/* Added text-left for mobile */}
               <div className="flex">
                 <img
                   src={mflowWhiteLogo}
@@ -714,7 +720,7 @@ const Home = () => {
                   className="h-36 w-auto"
                 />
               </div>
-              <p className="text-gray-600 max-w-sm">
+              <p className="text-gray-600 max-w-sm mt-2">
                 Empowering Kenyan SMEs and MSMEs with modern Point of Sale Solution. Cloud-based, mobile-responsive, and built for growth.
               </p>
             </div>
@@ -763,10 +769,10 @@ const Home = () => {
                 <li className="flex items-start gap-3">
                   <span className="text-blue-500">Email:</span>
                   <a
-                    href="mailto:bonnienjuguna106@gmail.com"
+                    href="mailto:support@mflowpos.com"
                     className="hover:text-white transition"
                   >
-                    bonnienjuguna106@gmail.com
+                    support@mflowpos.com
                   </a>
                 </li>
                 <li className="flex items-start gap-3">

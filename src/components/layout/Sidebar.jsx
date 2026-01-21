@@ -569,10 +569,11 @@ export const Sidebar = ({ isOpen, onClose }) => {
       `}
       >
         {/* Header with Close Button */}
-        <div className="px-3 py-3 border-b border-gray-700 flex items-center justify-between">
+        <div className="px-5 py-4 border-b border-gray-700 flex items-center justify-between">
           <div className="flex flex-col gap-1">
-            <h2 className="text-lg font-bold text-white">mflow pos</h2>
-            <p className="text-[10px] text-gray-400 uppercase tracking-wider">
+            <img src={mflowLogo} alt="mflow pos" className="h-10 w-auto" />
+            {/* Optional: Keep subtitle if needed, or remove if logo covers it. Kept for now but smaller */}
+            <p className="text-[10px] text-gray-400 uppercase tracking-wider mt-1">
               {isSuperAdmin()
                 ? "Admin Panel"
                 : user?.businessName ||
