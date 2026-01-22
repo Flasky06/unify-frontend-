@@ -7,7 +7,8 @@ import Input from "../../components/ui/Input";
 import { expenseService } from "../../services/expenseService";
 import { expenseCategoryService } from "../../services/expenseCategoryService";
 import { shopService } from "../../services/shopService";
-import { paymentMethodService } from "../../services/paymentMethodService"; // Import added
+import { paymentMethodService } from "../../services/paymentMethodService";
+import { supplierService } from "../../services/supplierService";
 import { ConfirmDialog } from "../../components/ui/ConfirmDialog";
 import Toast from "../../components/ui/Toast";
 import useAuthStore from "../../store/authStore";
@@ -17,7 +18,9 @@ export const ExpenseList = () => {
   const [expenses, setExpenses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [shops, setShops] = useState([]);
-  const [paymentMethods, setPaymentMethods] = useState([]); // New State
+
+  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [suppliers, setSuppliers] = useState([]); // Suppliers State
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
@@ -54,6 +57,8 @@ export const ExpenseList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
   const [printModalOpen, setPrintModalOpen] = useState(false);
+  const [showPayeeInput, setShowPayeeInput] = useState(true);
+  const [showNameInput, setShowNameInput] = useState(true);
 
   // Quick Add State
   const [quickAddCategoryModalOpen, setQuickAddCategoryModalOpen] =
@@ -68,17 +73,22 @@ export const ExpenseList = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [expensesData, categoriesData, shopsData, paymentMethodsData] =
+      const [expensesData, categoriesData, shopsData, paymentMethodsData, suppliersData] =
         await Promise.all([
           expenseService.getAll(),
           expenseCategoryService.getAll(),
           shopService.getAll(),
-          paymentMethodService.getAll(), // Fetch PMs
+          paymentMethodService.getAll(),
+          supplierService.getAll(),
         ]);
       setExpenses(expensesData || []);
       setCategories(categoriesData || []);
       setShops(shopsData || []);
+      setExpenses(expensesData || []);
+      setCategories(categoriesData || []);
+      setShops(shopsData || []);
       setPaymentMethods(paymentMethodsData || []);
+      setSuppliers(suppliersData || []);
     } catch (err) {
       console.error("Failed to fetch data", err);
     } finally {
@@ -293,6 +303,8 @@ export const ExpenseList = () => {
     });
     setIsModalOpen(true);
     setError(null);
+    setShowPayeeInput(true);
+    setShowNameInput(true);
   };
 
   const openEditModal = (expense) => {
@@ -308,6 +320,12 @@ export const ExpenseList = () => {
     });
     setIsModalOpen(true);
     setError(null);
+    const isSupplier = suppliers.some(s => s.name === (expense.payee || ""));
+    setShowPayeeInput(!isSupplier && !!expense.payee);
+
+    // Check if name is in unique names list
+    const isHistorical = uniqueExpenseNames.includes(expense.name || "");
+    setShowNameInput(!isHistorical && !!expense.name);
   };
 
   const closeModal = () => {
@@ -322,6 +340,8 @@ export const ExpenseList = () => {
       payee: "",
       paymentMethodId: "",
     });
+    setShowPayeeInput(false);
+    setShowNameInput(false);
   };
 
   const columns = [
@@ -578,20 +598,68 @@ export const ExpenseList = () => {
             </div>
           )}
 
-          <Input
-            label="Expense Name"
-            value={formData.name}
-            onChange={handleNameChange} // Use the new handler
-            placeholder="e.g., Shop Rent, Vehicle Fuel"
-            required
-            list="expense-names-list"
-            autoComplete="off"
-          />
-          <datalist id="expense-names-list">
-            {uniqueExpenseNames.map((name) => (
-              <option key={name} value={name} />
-            ))}
-          </datalist>
+          {showNameInput ? (
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <label className="block text-sm font-medium text-gray-700">
+                  Expense Name
+                </label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowNameInput(false);
+                    setFormData({ ...formData, name: "" });
+                  }}
+                  className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  Select from History
+                </button>
+              </div>
+              <Input
+                value={formData.name}
+                onChange={handleNameChange} // Keep the autofill logic
+                placeholder="e.g., Shop Rent, Vehicle Fuel"
+                required
+                list="expense-names-list"
+                autoComplete="off"
+              />
+              <datalist id="expense-names-list">
+                {uniqueExpenseNames.map((name) => (
+                  <option key={name} value={name} />
+                ))}
+              </datalist>
+            </div>
+          ) : (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Expense Name
+              </label>
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                value={uniqueExpenseNames.includes(formData.name) ? formData.name : ""}
+                onChange={(e) => {
+                  if (e.target.value === "MANUAL_ENTRY") {
+                    setShowNameInput(true);
+                    setFormData({ ...formData, name: "" });
+                  } else {
+                    // Manually trigger handleNameChange logic for consistency
+                    handleNameChange({ target: { value: e.target.value } });
+                  }
+                }}
+                required
+              >
+                <option value="">Select Expense Name</option>
+                {uniqueExpenseNames.map((name) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
+                <option value="MANUAL_ENTRY" className="font-semibold text-blue-600">
+                  + Enter Manually
+                </option>
+              </select>
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-4">
             <Input
@@ -618,14 +686,61 @@ export const ExpenseList = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Input
-              label="Payee (Who?)"
-              value={formData.payee}
-              onChange={(e) =>
-                setFormData({ ...formData, payee: e.target.value })
-              }
-              placeholder="e.g. KPLC"
-            />
+            {showPayeeInput ? (
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Payee (Who?)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowPayeeInput(false);
+                      setFormData({ ...formData, payee: "" });
+                    }}
+                    className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                  >
+                    Select from Suppliers
+                  </button>
+                </div>
+                <Input
+                  value={formData.payee}
+                  onChange={(e) =>
+                    setFormData({ ...formData, payee: e.target.value })
+                  }
+                  placeholder="e.g. KPLC"
+                  autoFocus
+                />
+              </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Payee (Who?)
+                </label>
+                <select
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  value={suppliers.some(s => s.name === formData.payee) ? formData.payee : ""}
+                  onChange={(e) => {
+                    if (e.target.value === "MANUAL_ENTRY") {
+                      setShowPayeeInput(true);
+                      setFormData({ ...formData, payee: "" });
+                    } else {
+                      setFormData({ ...formData, payee: e.target.value });
+                    }
+                  }}
+                >
+                  <option value="">Select Supplier</option>
+                  {suppliers.map((supplier) => (
+                    <option key={supplier.id} value={supplier.name}>
+                      {supplier.name}
+                    </option>
+                  ))}
+                  <option value="MANUAL_ENTRY" className="font-semibold text-blue-600">
+                    + Enter Manually
+                  </option>
+                </select>
+              </div>
+            )}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Account From
@@ -679,7 +794,7 @@ export const ExpenseList = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Shop (Optional)
+              Shop (Required)
             </label>
             <select
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
@@ -687,8 +802,9 @@ export const ExpenseList = () => {
               onChange={(e) =>
                 setFormData({ ...formData, shopId: e.target.value })
               }
+              required
             >
-              <option value="">No Shop</option>
+              <option value="">Select Shop</option>
               {shops.map((shop) => (
                 <option key={shop.id} value={shop.id}>
                   {shop.name}

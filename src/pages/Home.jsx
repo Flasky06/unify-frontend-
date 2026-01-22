@@ -48,14 +48,18 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
+      <SEO
+        title="Home"
+        description="mflow pos is the complete point of sale and inventory management system built for SMEs and MSMEs in Kenya. Track sales, stock, and expenses easily."
+        url="/"
+      />
       {/* Fixed Navbar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-md">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="text-2xl md:text-3xl tracking-tight">
-              <span className="text-blue-600 font-extrabold">m</span>
-              <span className="text-gray-900 font-medium">flow pos</span>
-            </span>
+          <Link to="/" className="flex items-center gap-2 group">
+            <h1 className="text-2xl font-bold text-gray-900 tracking-wide">
+              <span className="text-blue-600">M</span>flow POS
+            </h1>
           </Link>
           <div className="flex items-center gap-3">
             {isAuthenticated ? (
@@ -103,8 +107,8 @@ const Home = () => {
             </div>
             <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6 tracking-tight leading-tight">
               Grow Your Business with
-              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                mflow pos
+              <span className="block mt-2">
+                <span className="text-blue-600">M</span>flow POS
               </span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">

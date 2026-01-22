@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import useAuthStore from "../../store/authStore";
 import mlogo from "../../assets/mlogo.png";
 
+
 export const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
   const { user, isSuperAdmin, hasPermission } = useAuthStore();
@@ -570,11 +571,8 @@ export const Sidebar = ({ isOpen, onClose }) => {
       >
         {/* Header with Close Button */}
         <div className="px-2 py-1 border-b border-gray-700 flex items-center justify-between">
-          <div className="flex flex-col gap-1 w-full items-start"> {/* Align Left for mobile/sidebar */}
-            <div className="flex items-center">
-              <img src={mlogo} alt="m" className="h-10 w-auto" />
-              <span className="text-2xl font-bold text-white ml-1">flow pos</span>
-            </div>
+          <div className="flex w-full items-center justify-start pl-1">
+            <h1 className="text-2xl font-bold text-white tracking-wide"><span className="text-blue-500">M</span>flow POS</h1>
           </div>
           {/* Close button - only visible on mobile */}
           <button

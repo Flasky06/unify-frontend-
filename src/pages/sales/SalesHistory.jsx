@@ -36,7 +36,7 @@ const SalesHistory = () => {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedShopId, setSelectedShopId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("ALL"); // ALL, COMPLETED, PENDING, CANCELLED
+  const [statusFilter, setStatusFilter] = useState("ALL");
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
