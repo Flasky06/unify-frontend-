@@ -12,6 +12,7 @@ import { serviceItemService } from "../services/serviceItemService";
 import { paymentMethodService } from "../services/paymentMethodService";
 import Toast from "../components/ui/Toast";
 import SEO from "../components/common/SEO";
+import ReceiptModal from "../components/sales/ReceiptModal";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -44,6 +45,9 @@ const Dashboard = () => {
   });
 
 
+  // Receipt Printing State
+  const [completeSale, setCompleteSale] = useState(null);
+  const [isReceiptModalOpen, setReceiptModalOpen] = useState(false);
 
   const processSale = async (status = "COMPLETED") => {
     if (!selectedShopId || cart.length === 0) return;
@@ -77,7 +81,7 @@ const Dashboard = () => {
         saleNote: customerDetails.note,
       };
 
-      await saleService.createSale(saleData);
+      const result = await saleService.createSale(saleData);
 
       setToast({
         isOpen: true,
@@ -87,6 +91,10 @@ const Dashboard = () => {
             : "Sale processed successfully!",
         type: "success",
       });
+
+      // Show Receipt Modal
+      setCompleteSale(result);
+      setReceiptModalOpen(true);
 
       // Reset State
       setCart([]);
@@ -946,6 +954,13 @@ const Dashboard = () => {
           </div>
         </div>
       </Modal>
+
+      {/* Receipt Modal */}
+      <ReceiptModal
+        isOpen={isReceiptModalOpen}
+        onClose={() => setReceiptModalOpen(false)}
+        sale={completeSale}
+      />
 
       {/* Toast Notification */}
       <Toast
