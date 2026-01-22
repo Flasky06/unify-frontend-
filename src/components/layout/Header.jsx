@@ -9,7 +9,7 @@ export const Header = ({ onMenuClick }) => {
         <img
           src={mflowLogo}
           alt="mflow pos"
-          className="h-10 w-auto lg:hidden"
+          className="h-16 w-auto lg:hidden"
         />
         <div className="hidden lg:block" /> {/* Spacer for desktop */}
 

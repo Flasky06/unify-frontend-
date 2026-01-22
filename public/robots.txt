@@ -3,4 +3,4 @@ Allow: /
 Disallow: /dashboard/
 Disallow: /admin/
 
-Sitemap: https://mflow.co.ke/sitemap.xml
+Sitemap: https://mflowpos.com/sitemap.xml

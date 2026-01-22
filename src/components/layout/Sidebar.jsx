@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import useAuthStore from "../../store/authStore";
-import mflowLogo from "../../assets/mflow-white.png";
+import mlogo from "../../assets/mlogo.png";
 
 export const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
@@ -569,10 +569,12 @@ export const Sidebar = ({ isOpen, onClose }) => {
       `}
       >
         {/* Header with Close Button */}
-        <div className="px-5 py-4 border-b border-gray-700 flex items-center justify-between">
+        <div className="px-2 py-1 border-b border-gray-700 flex items-center justify-between">
           <div className="flex flex-col gap-1 w-full items-start"> {/* Align Left for mobile/sidebar */}
-            <img src={mflowLogo} alt="mflow pos" className="h-32 w-auto object-contain" /> {/* h-32 as requested */}
-            {/* Removed subtitle as large logo likely contains text or shouldn't have small text under it in this layout */}
+            <div className="flex items-center">
+              <img src={mlogo} alt="m" className="h-10 w-auto" />
+              <span className="text-2xl font-bold text-white ml-1">flow pos</span>
+            </div>
           </div>
           {/* Close button - only visible on mobile */}
           <button

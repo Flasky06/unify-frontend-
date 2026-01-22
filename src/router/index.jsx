@@ -11,6 +11,7 @@ import OnboardingWizard from "../pages/auth/OnboardingWizard";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 import VerifyEmail from "../pages/auth/VerifyEmail";
+import ActivateAccount from "../pages/auth/ActivateAccount";
 import Dashboard from "../pages/Dashboard";
 const AdminDashboard = lazy(() => import("../pages/super-admin/SuperAdminDashboard"));
 const AdminUsers = lazy(() => import("../pages/super-admin/AdminUsers"));
@@ -67,6 +68,10 @@ export const router = createBrowserRouter([
   {
     path: "/verify-email",
     element: <VerifyEmail />,
+  },
+  {
+    path: "/activate",
+    element: <ActivateAccount />,
   },
   {
     path: "/onboarding",

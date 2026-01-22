@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import SEO from "../components/common/SEO";
 import useAuthStore from "../store/authStore";
 import { useState } from "react";
 import mflowLogo from "../assets/mflow.png";
@@ -584,8 +585,8 @@ const Home = () => {
                   {faq.question}
                 </h3>
                 <svg
-                  className={`w-5 h-5 text-blue-600 flex-shrink-0 transform transition-transform duration-300 ${openFaqIndex === index ? "rotate-180" : ""
-                    }`}
+                  className={`w - 5 h - 5 text - blue - 600 flex - shrink - 0 transform transition - transform duration - 300 ${openFaqIndex === index ? "rotate-180" : ""
+                    } `}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

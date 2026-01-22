@@ -11,6 +11,7 @@ import { saleService } from "../services/saleService";
 import { serviceItemService } from "../services/serviceItemService";
 import { paymentMethodService } from "../services/paymentMethodService";
 import Toast from "../components/ui/Toast";
+import SEO from "../components/common/SEO";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -447,6 +448,11 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col w-full h-full overflow-hidden">
+      <SEO
+        title="Dashboard"
+        description="Manage your business operations, sales, and inventory from the mflow pos dashboard."
+        url="/dashboard"
+      />
       {/* Header & Controls */}
       <div className="bg-white p-4 rounded-lg shadow mb-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center">

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { registerSchema } from "../../schemas/authSchemas";
+import SEO from "../../components/common/SEO";
 
 const Register = () => {
   const { register, isLoading, error } = useAuth();
@@ -61,6 +62,11 @@ const Register = () => {
 
   return (
     <div className="min-h-[100dvh] flex items-center justify-center bg-gray-50 px-4 py-8">
+      <SEO
+        title="Register"
+        description="Create your mflow pos account today. Start managing your retail business efficiently."
+        url="/register"
+      />
       <div className="max-w-5xl w-full">
         <div className="grid lg:grid-cols-2 gap-8 items-stretch">
           {/* Left Side - Features (Hidden on mobile) */}

@@ -30,7 +30,7 @@ export const UserList = () => {
 
   const [formData, setFormData] = useState({
     email: "",
-    password: "",
+    // password: "", // Managed via invite flow
     role: "BUSINESS_MANAGER",
     phoneNo: "",
     shopId: null,
@@ -149,7 +149,7 @@ export const UserList = () => {
     setEditingUser(null);
     setFormData({
       email: "",
-      password: "",
+      // password: "",
       role: "BUSINESS_MANAGER",
       phoneNo: "",
       shopId: null,
@@ -212,7 +212,7 @@ export const UserList = () => {
               setEditingUser(user);
               setFormData({
                 email: user.email,
-                password: "",
+                // password: "",
                 role: user.role,
                 phoneNo: user.phoneNo || "",
                 shopId: user.shopId || null,
@@ -332,17 +332,7 @@ export const UserList = () => {
             required
           />
 
-          <Input
-            label="Password"
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            required={!editingUser}
-            placeholder={
-              editingUser ? "Leave blank to keep current password" : ""
-            }
-          />
+          {/* Password field removed - users set their own password via invitation link */}
 
           <Input
             label="Phone"

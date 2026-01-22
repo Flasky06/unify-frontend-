@@ -1,6 +1,8 @@
 import { useFormik } from "formik";
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
+import { api } from "../../lib/api";
+import SEO from "../../components/common/SEO";
 import { useAuth } from "../../hooks/useAuth";
 import { loginSchema } from "../../schemas/authSchemas";
 
@@ -52,6 +54,11 @@ const Login = () => {
 
   return (
     <div className="min-h-[100dvh] flex items-center justify-center bg-gray-50 px-4 py-8">
+      <SEO
+        title="Login"
+        description="Sign in to your mflow pos account to manage your business."
+        url="/login"
+      />
       <div className="max-w-5xl w-full">
         <div className="grid lg:grid-cols-2 gap-8 items-center">
           {/* Left Side - Welcome Panel (Hidden on mobile) */}
