@@ -15,9 +15,9 @@ const Home = () => {
 
   const faqs = [
     {
-      question: "Is mflow hard to learn?",
+      question: "Do I need special hardware?",
       answer:
-        "No. mflow is designed to feel familiar. If you can use WhatsApp or write in a notebook, you can use mflow. Most businesses are fully set up in under a day.",
+        "No. Mflow POS runs on any device with a web browser. You can use your existing smartphone, tablet, laptop, or desktop computer.",
     },
     {
       question: "Can I use mflow for my specific business?",
@@ -40,9 +40,9 @@ const Home = () => {
         "Yes. Instantly generate detailed sales, expense, and profit reports. You can view, print, or save them as PDF for your records.",
     },
     {
-      question: "What kind of support do you offer?",
+      question: "Can I control what my staff sees?",
       answer:
-        "We provide priority support via phone and email. Our team is always ready to help you resolve any issues quickly.",
+        "Yes. You can assign specific roles (e.g., Sales Rep, Manager) to your employees. This ensures they only access what they need, keeping your profits and settings secure.",
     },
   ];
 
