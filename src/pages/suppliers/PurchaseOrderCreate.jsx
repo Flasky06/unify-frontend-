@@ -410,7 +410,7 @@ export const PurchaseOrderCreate = () => {
                   <th className="px-1 md:px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase w-20 md:w-24">
                     Qty
                   </th>
-                  <th className="px-1 md:px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase w-28 md:w-32">
+                  <th className="px-1 md:px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase w-32 md:w-32">
                     Unit Price
                   </th>
                   <th className="hidden md:table-cell px-1 md:px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase w-32">
@@ -429,7 +429,7 @@ export const PurchaseOrderCreate = () => {
                     <tr key={index}>
                       <td className="px-1 md:px-3 py-2">
                         <select
-                          className="w-full text-sm border-gray-300 rounded focus:ring-blue-500 p-1"
+                          className="w-full text-sm border border-gray-400 rounded focus:ring-blue-500 p-1"
                           value={item.productId}
                           onChange={(e) =>
                             handleItemChange(index, "productId", e.target.value)
@@ -452,7 +452,7 @@ export const PurchaseOrderCreate = () => {
                           onChange={(e) =>
                             handleItemChange(index, "quantity", e.target.value)
                           }
-                          className="h-8 text-sm w-full p-1"
+                          className="h-8 text-sm w-full p-1 border-gray-300"
                         />
                       </td>
                       <td className="px-1 md:px-3 py-2">
@@ -464,11 +464,11 @@ export const PurchaseOrderCreate = () => {
                           onChange={(e) =>
                             handleItemChange(index, "unitPrice", e.target.value)
                           }
-                          className="h-8 text-sm w-full p-1"
+                          className="h-8 text-sm w-full p-1 border-gray-300"
                         />
                         {/* Mobile-only total display under price */}
                         <div className="md:hidden text-xs text-gray-500 mt-1 font-medium">
-                          Tot: {item.total.toLocaleString()}
+                          {item.total.toLocaleString()}
                         </div>
                       </td>
                       <td className="hidden md:table-cell px-1 md:px-3 py-2 text-right font-medium text-gray-700">
