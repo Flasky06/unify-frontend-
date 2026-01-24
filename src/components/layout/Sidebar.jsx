@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import useAuthStore from "../../store/authStore";
-import mlogo from "../../assets/mlogo.png";
 
 
 export const Sidebar = ({ isOpen, onClose }) => {
